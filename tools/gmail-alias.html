@@ -1,0 +1,69 @@
+!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gmail Alias Generator</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header>
+    <h1>Gmail Alias Generator</h1>
+    <nav><a href="../index.html">← Home</a></nav>
+  </header>
+
+  <main>
+    <div style="max-width:400px;margin:40px auto;padding:20px;background:#fff;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+      <input type="email" id="gmail" placeholder="আপনার Gmail লিখুন" style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;outline:none;font-size:14px;" />
+      <input type="text" id="tag" placeholder="Alias Tag (যেমন: shop, test)" style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;outline:none;font-size:14px;" />
+      <button onclick="generateAlias()" style="width:100%;padding:12px;background:#4CAF50;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:15px;">Generate Alias</button>
+
+      <div id="resultBox" style="display:none;margin-top:15px;font-weight:bold;">
+        ✅ আপনার Gmail Alias: <span id="result" style="color:blue;word-break:break-word;"></span>
+        <button onclick="copyAlias()" style="padding:6px 10px;background:#2196F3;color:white;border:none;border-radius:5px;cursor:pointer;font-size:13px;margin-left:10px;">Copy</button>
+        <span id="copyMsg" style="color:green;font-size:13px;margin-left:10px;display:none;">✔ কপি হয়ে গেছে!</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Developed by Nurul nc — <a href="https://instagram.com/nurulnc100" target="_blank">Instagram</a>
+  </footer>
+
+  <script>
+  function generateAlias() {
+      let gmail = document.getElementById("gmail").value.trim();
+      let tag = document.getElementById("tag").value.trim();
+      let resultBox = document.getElementById("resultBox");
+      let copyMsg = document.getElementById("copyMsg");
+
+      copyMsg.style.display = "none";
+
+      if (!gmail.endsWith("@gmail.com")) {
+          alert("❌ সঠিক Gmail লিখুন");
+          return;
+      }
+      if (tag === "") {
+          alert("❌ Alias Tag দিন");
+          return;
+      }
+
+      let username = gmail.split("@")[0];
+      let alias = username + "+" + tag + "@gmail.com";
+
+      document.getElementById("result").innerText = alias;
+      resultBox.style.display = "inline-block";
+  }
+
+  function copyAlias() {
+      let aliasText = document.getElementById("result").innerText;
+      navigator.clipboard.writeText(aliasText).then(() => {
+          document.getElementById("copyMsg").style.display = "inline";
+          setTimeout(() => {
+              document.getElementById("copyMsg").style.display = "none";
+          }, 2000);
+      });
+  }
+  </script>
+</body>
+</html>
