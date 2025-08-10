@@ -1,17 +1,46 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<b:theme version="2" xmlns:b="http://www.google.com/2005/gml/b">
-  <b:skin><![CDATA[
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unlimited Gmail Generator</title>
+  <style>
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #2196F3;
+    }
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #f0f4f7, #d9e4ec);
       margin: 0;
       padding: 0;
     }
+    header {
+      background: var(--primary-color);
+      padding: 15px;
+      text-align: center;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    nav {
+      text-align: center;
+      background: #fff;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--primary-color);
+      font-weight: bold;
+      margin: 0 10px;
+    }
     .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      min-height: 70vh;
     }
     .card {
       background: rgba(255,255,255,0.9);
@@ -34,7 +63,7 @@
     }
     button {
       padding: 12px;
-      background: #4CAF50;
+      background: var(--primary-color);
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -55,7 +84,7 @@
     }
     .copy-btn {
       padding: 6px 10px;
-      background: #2196F3;
+      background: var(--secondary-color);
       color: white;
       border: none;
       border-radius: 5px;
@@ -68,62 +97,85 @@
       margin-top: 5px;
       display: none;
     }
-  ]]></b:skin>
+    footer {
+      background: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    footer a {
+      color: yellow;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
 
-  <b:template-skin>
-    <b:default-markup><![CDATA[
-      <div class="container">
-        <div class="card">
-          <h2>📧 Gmail Alias Generator</h2>
-          <input type="email" id="gmail" placeholder="আপনার Gmail লিখুন">
-          <input type="text" id="tag" placeholder="Alias Tag (যেমন: shop, test)">
-          <button onclick="generateAlias()">Generate Alias</button>
-          <div id="resultBox" style="display:none;">
-            <p class="alias-result">✅ আপনার Gmail Alias:</p>
-            <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
-              <span id="result" class="alias-text"></span>
-              <button onclick="copyAlias()" class="copy-btn">Copy</button>
-            </div>
-            <p id="copyMsg" class="copy-msg">✔ কপি হয়ে গেছে!</p>
-          </div>
-        </div>
+<header>Unlimited Gmail Generator</header>
+<nav>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+</nav>
+
+<div class="container">
+  <div class="card">
+    <h2>📧 Gmail Alias Generator</h2>
+    <input type="email" id="gmail" placeholder="আপনার Gmail লিখুন">
+    <input type="text" id="tag" placeholder="Alias Tag (যেমন: shop, test)">
+    <button onclick="generateAlias()">Generate Alias</button>
+    <div id="resultBox" style="display:none;">
+      <p class="alias-result">✅ আপনার Gmail Alias:</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+        <span id="result" class="alias-text"></span>
+        <button onclick="copyAlias()" class="copy-btn">Copy</button>
       </div>
+      <p id="copyMsg" class="copy-msg">✔ কপি হয়ে গেছে!</p>
+    </div>
+  </div>
+</div>
 
-      <script>
-      function generateAlias() {
-          let gmail = document.getElementById("gmail").value.trim();
-          let tag = document.getElementById("tag").value.trim();
-          let resultBox = document.getElementById("resultBox");
-          let copyMsg = document.getElementById("copyMsg");
+<footer>
+  Developed by Nurul nc — 
+  <a href="https://instagram.com/nurulnc100" target="_blank">Instagram</a>
+</footer>
 
-          copyMsg.style.display = "none";
+<script>
+function generateAlias() {
+    let gmail = document.getElementById("gmail").value.trim();
+    let tag = document.getElementById("tag").value.trim();
+    let resultBox = document.getElementById("resultBox");
+    let copyMsg = document.getElementById("copyMsg");
 
-          if (!gmail.endsWith("@gmail.com")) {
-              alert("❌ সঠিক Gmail লিখুন");
-              return;
-          }
-          if (tag === "") {
-              alert("❌ Alias Tag দিন");
-              return;
-          }
+    copyMsg.style.display = "none";
 
-          let username = gmail.split("@")[0];
-          let alias = username + "+" + tag + "@gmail.com";
+    if (!gmail.endsWith("@gmail.com")) {
+        alert("❌ সঠিক Gmail লিখুন");
+        return;
+    }
+    if (tag === "") {
+        alert("❌ Alias Tag দিন");
+        return;
+    }
 
-          document.getElementById("result").innerText = alias;
-          resultBox.style.display = "block";
-      }
+    let username = gmail.split("@")[0];
+    let alias = username + "+" + tag + "@gmail.com";
 
-      function copyAlias() {
-          let aliasText = document.getElementById("result").innerText;
-          navigator.clipboard.writeText(aliasText).then(() => {
-              document.getElementById("copyMsg").style.display = "block";
-              setTimeout(() => {
-                  document.getElementById("copyMsg").style.display = "none";
-              }, 2000);
-          });
-      }
-      </script>
-    ]]></b:default-markup>
-  </b:template-skin>
-</b:theme>
+    document.getElementById("result").innerText = alias;
+    resultBox.style.display = "block";
+}
+
+function copyAlias() {
+    let aliasText = document.getElementById("result").innerText;
+    navigator.clipboard.writeText(aliasText).then(() => {
+        document.getElementById("copyMsg").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("copyMsg").style.display = "none";
+        }, 2000);
+    });
+}
+</script>
+
+</body>
+</html>
