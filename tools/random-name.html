@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Random Name Generator</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header>
+    <h1>Random Name Generator</h1>
+    <nav><a href="../index.html">← Home</a></nav>
+  </header>
+
+  <main>
+    <div style="max-width:400px;margin:40px auto;padding:20px;background:#fff;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);text-align:center;">
+      <button onclick="generateName()" style="width:100%;padding:12px;background:#4CAF50;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:15px;">Generate Random Name</button>
+      <p id="randomName" style="margin-top:20px;font-weight:bold;color:#2196F3;"></p>
+    </div>
+  </main>
+
+  <footer>
+    Developed by Nurul nc — <a href="https://instagram.com/nurulnc100" target="_blank">Instagram</a>
+  </footer>
+
+  <script>
+  const names = [
+    "Nurul Amin", "Fatima", "Rafiq", "Anika", "Jahid", "Sadia", "Kamal", "Shahida",
+    "Arif", "Laila", "Tanvir", "Maya", "Shuvo", "Nabila", "Rahim", "Sumaiya", "Sajib"
+  ];
+
+  function generateName() {
+    const randomIndex = Math.floor(Math.random() * names.length);
+    document.getElementById("randomName").innerText = names[randomIndex];
+  }
+  </script>
+</body>
+</html>
