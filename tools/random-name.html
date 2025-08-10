@@ -23,16 +23,699 @@
     Developed by Nurul nc — <a href="https://instagram.com/nurulnc100" target="_blank">Instagram</a>
   </footer>
 
-  <script>
-  const names = [
-    "Nurul Amin", "Fatima", "Rafiq", "Anika", "Jahid", "Sadia", "Kamal", "Shahida",
-    "Arif", "Laila", "Tanvir", "Maya", "Shuvo", "Nabila", "Rahim", "Sumaiya", "Sajib"
-  ];
+<style>
+body {
+  font-family: Arial, sans-serif;
+  max-width: 680px;
+  margin: 30px auto;
+  padding: 20px;
+  background:#f7f9fc;
+  border-radius:10px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+  color:#1b1b1b;
+}
+h1 {color:#1a73e8;text-align:center;}
+.controls {display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:15px;}
+input[type=text]{padding:10px;border-radius:8px;border:1px solid #ccd;min-width:220px}
+button{padding:10px 14px;border-radius:8px;border:none;background:#1a73e8;color:white;cursor:pointer;font-weight:600}
+#display{margin-top:20px;background:white;padding:18px;border-radius:8px;font-size:20px;border:1px solid #e1e7ee;word-break:break-word;display:flex;justify-content:space-between;align-items:center}
+.smallbtn{background:#e9f0ff;color:#1a73e8;border:1px solid #c6dafc;padding:8px 10px;border-radius:8px;cursor:pointer}
+.count{text-align:center;margin-top:8px;color:#555}
+@media (max-width:520px){
+  #display{flex-direction:column;gap:10px;align-items:flex-start}
+  .controls{flex-direction:column;align-items:stretch}
+  input[type=text]{min-width:unset;width:100%}
+}
+</style>
+</head>
+<body>
+<h1>Random Bangladeshi Name Generator</h1>
+<p style="text-align:center;color:#444">500 Romanized Bangladeshi names (mixed male & female) — offline, embedded list.</p>
 
-  function generateName() {
-    const randomIndex = Math.floor(Math.random() * names.length);
-    document.getElementById("randomName").innerText = names[randomIndex];
+<div class="controls">
+  <input type="text" id="filter" placeholder="Filter names (optional)" />
+  <button id="gen">Generate</button>
+  <button id="copy" class="smallbtn">Copy</button>
+  <button id="download" class="smallbtn">Download .txt</button>
+  <button id="showAll" class="smallbtn">Show All</button>
+</div>
+
+<div id="display" style="display:none;">
+  <span id="name">Name appears here</span>
+  <div>
+    <button id="prev" class="smallbtn">Prev</button>
+    <button id="next" class="smallbtn">Next</button>
+  </div>
+</div>
+<div class="count" id="count"></div>
+
+<script>
+const names = [
+        "Abdullah",
+        "Abdullah Hossain",
+        "Abdullah Haque",
+        "Mahmud",
+        "Mahmud Hossain",
+        "Mahmud Haque",
+        "Rafi",
+        "Rafi Hossain",
+        "Rafi Haque",
+        "Rahat",
+        "Rahat Hossain",
+        "Rahat Haque",
+        "Mahin",
+        "Mahin Hossain",
+        "Mahin Haque",
+        "Imran",
+        "Imran Hossain",
+        "Imran Haque",
+        "Shawon",
+        "Shawon Hossain",
+        "Shawon Haque",
+        "Zubayer",
+        "Zubayer Hossain",
+        "Zubayer Haque",
+        "Sakib",
+        "Sakib Hossain",
+        "Sakib Haque",
+        "Sharif",
+        "Sharif Hossain",
+        "Sharif Haque",
+        "Tanvir",
+        "Tanvir Hossain",
+        "Tanvir Haque",
+        "Mustafiz",
+        "Mustafiz Hossain",
+        "Mustafiz Haque",
+        "Rizvi",
+        "Rizvi Hossain",
+        "Rizvi Haque",
+        "Fahim",
+        "Fahim Hossain",
+        "Fahim Haque",
+        "Hasan",
+        "Hasan Hossain",
+        "Hasan Haque",
+        "Nahid",
+        "Nahid Hossain",
+        "Nahid Haque",
+        "Akash",
+        "Akash Hossain",
+        "Akash Haque",
+        "Sohel",
+        "Sohel Hossain",
+        "Sohel Haque",
+        "Tanzim",
+        "Tanzim Hossain",
+        "Tanzim Haque",
+        "Sadik",
+        "Sadik Hossain",
+        "Sadik Haque",
+        "AlMamun",
+        "AlMamun Hossain",
+        "AlMamun Haque",
+        "Niazi",
+        "Niazi Hossain",
+        "Niazi Haque",
+        "Siam",
+        "Siam Hossain",
+        "Siam Haque",
+        "Jasim",
+        "Jasim Hossain",
+        "Jasim Haque",
+        "Imam",
+        "Imam Hossain",
+        "Imam Haque",
+        "Subrata",
+        "Subrata Hossain",
+        "Subrata Haque",
+        "Rajib",
+        "Rajib Hossain",
+        "Rajib Haque",
+        "Tapan",
+        "Tapan Hossain",
+        "Tapan Haque",
+        "Riyad",
+        "Riyad Hossain",
+        "Riyad Haque",
+        "Masud",
+        "Masud Hossain",
+        "Masud Haque",
+        "Farhan",
+        "Farhan Hossain",
+        "Farhan Haque",
+        "Rashed",
+        "Rashed Hossain",
+        "Rashed Haque",
+        "Masum",
+        "Masum Hossain",
+        "Masum Haque",
+        "Rubel",
+        "Rubel Hossain",
+        "Rubel Haque",
+        "Nasir",
+        "Nasir Hossain",
+        "Nasir Haque",
+        "Sumon",
+        "Sumon Hossain",
+        "Sumon Haque",
+        "Shamim",
+        "Shamim Hossain",
+        "Shamim Haque",
+        "Hasib",
+        "Hasib Hossain",
+        "Hasib Haque",
+        "Rifat",
+        "Rifat Hossain",
+        "Rifat Haque",
+        "Mahfuz",
+        "Mahfuz Hossain",
+        "Mahfuz Haque",
+        "Ashiq",
+        "Ashiq Hossain",
+        "Ashiq Haque",
+        "Shakil",
+        "Shakil Hossain",
+        "Shakil Haque",
+        "Rakib",
+        "Rakib Hossain",
+        "Rakib Haque",
+        "Sohan",
+        "Sohan Hossain",
+        "Sohan Haque",
+        "Ruhul",
+        "Ruhul Hossain",
+        "Ruhul Haque",
+        "Nabi",
+        "Nabi Hossain",
+        "Nabi Haque",
+        "Tahmid",
+        "Tahmid Hossain",
+        "Tahmid Haque",
+        "Sabbir",
+        "Sabbir Hossain",
+        "Sabbir Haque",
+        "Mohsin",
+        "Mohsin Hossain",
+        "Mohsin Haque",
+        "Selim",
+        "Selim Hossain",
+        "Selim Haque",
+        "Saif",
+        "Saif Hossain",
+        "Saif Haque",
+        "Riaz",
+        "Riaz Hossain",
+        "Riaz Haque",
+        "Shams",
+        "Shams Hossain",
+        "Shams Haque",
+        "Salman",
+        "Salman Hossain",
+        "Salman Haque",
+        "Shahin",
+        "Shahin Hossain",
+        "Shahin Haque",
+        "Mosharraf",
+        "Mosharraf Hossain",
+        "Mosharraf Haque",
+        "Aziz",
+        "Aziz Hossain",
+        "Aziz Haque",
+        "Mobarak",
+        "Mobarak Hossain",
+        "Mobarak Haque",
+        "Sajjad",
+        "Sajjad Hossain",
+        "Sajjad Haque",
+        "Nasim",
+        "Nasim Hossain",
+        "Nasim Haque",
+        "Shariful",
+        "Shariful Hossain",
+        "Shariful Haque",
+        "Ikram",
+        "Ikram Hossain",
+        "Ikram Haque",
+        "Imtiaz",
+        "Imtiaz Hossain",
+        "Imtiaz Haque",
+        "Saber",
+        "Saber Hossain",
+        "Saber Haque",
+        "Mahir",
+        "Mahir Hossain",
+        "Mahir Haque",
+        "Rafiqul",
+        "Rafiqul Hossain",
+        "Rafiqul Haque",
+        "Ehsan",
+        "Ehsan Hossain",
+        "Ehsan Haque",
+        "Ibrahim",
+        "Ibrahim Hossain",
+        "Ibrahim Haque",
+        "Amin",
+        "Amin Hossain",
+        "Amin Haque",
+        "Mahbub",
+        "Mahbub Hossain",
+        "Mahbub Haque",
+        "Zakir",
+        "Zakir Hossain",
+        "Zakir Haque",
+        "Faisal",
+        "Faisal Hossain",
+        "Faisal Haque",
+        "Anis",
+        "Anis Hossain",
+        "Anis Haque",
+        "Arif",
+        "Arif Hossain",
+        "Arif Haque",
+        "Badrul",
+        "Badrul Hossain",
+        "Badrul Haque",
+        "Kamal",
+        "Kamal Hossain",
+        "Kamal Haque",
+        "Dipu",
+        "Dipu Hossain",
+        "Dipu Haque",
+        "Enamul",
+        "Enamul Hossain",
+        "Enamul Haque",
+        "Foysal",
+        "Foysal Hossain",
+        "Foysal Haque",
+        "Gias",
+        "Gias Hossain",
+        "Gias Haque",
+        "Hemayet",
+        "Hemayet Hossain",
+        "Hemayet Haque",
+        "Ihtisham",
+        "Ihtisham Hossain",
+        "Ihtisham Haque",
+        "Jamal",
+        "Jamal Hossain",
+        "Jamal Haque",
+        "Kawsar",
+        "Kawsar Hossain",
+        "Kawsar Haque",
+        "Liton",
+        "Liton Hossain",
+        "Liton Haque",
+        "Mizan",
+        "Mizan Hossain",
+        "Mizan Haque",
+        "Noman",
+        "Noman Hossain",
+        "Noman Haque",
+        "Omar",
+        "Omar Hossain",
+        "Omar Haque",
+        "Pavel",
+        "Pavel Hossain",
+        "Pavel Haque",
+        "Qadir",
+        "Qadir Hossain",
+        "Qadir Haque",
+        "Rasel",
+        "Rasel Hossain",
+        "Rasel Haque",
+        "Sultan",
+        "Sultan Hossain",
+        "Sultan Haque",
+        "Tanvirul",
+        "Tanvirul Hossain",
+        "Tanvirul Haque",
+        "Uzzal",
+        "Uzzal Hossain",
+        "Uzzal Haque",
+        "Vashkar",
+        "Vashkar Hossain",
+        "Vashkar Haque",
+        "Wasim",
+        "Wasim Hossain",
+        "Wasim Haque",
+        "Yakub",
+        "Yakub Hossain",
+        "Yakub Haque",
+        "Zahid",
+        "Zahid Hossain",
+        "Zahid Haque",
+        "Joy",
+        "Joy Hossain",
+        "Joy Haque",
+        "Rafsan",
+        "Rafsan Hossain",
+        "Rafsan Haque",
+        "Munir",
+        "Munir Hossain",
+        "Munir Haque",
+        "Nurul",
+        "Nurul Hossain",
+        "Nurul Haque",
+        "Iftekhar",
+        "Iftekhar Hossain",
+        "Iftekhar Haque",
+        "Javed",
+        "Javed Hossain",
+        "Javed Haque",
+        "Khaled",
+        "Khaled Hossain",
+        "Khaled Haque",
+        "Liaqat",
+        "Liaqat Hossain",
+        "Liaqat Haque",
+        "Morshed",
+        "Morshed Hossain",
+        "Morshed Haque",
+        "Nazmul",
+        "Nazmul Hossain",
+        "Nazmul Haque",
+        "Obaid",
+        "Obaid Hossain",
+        "Obaid Haque",
+        "Parvez",
+        "Parvez Hossain",
+        "Parvez Haque",
+        "Quamrul",
+        "Quamrul Hossain",
+        "Quamrul Haque",
+        "Rashedul",
+        "Rashedul Hossain",
+        "Rashedul Haque",
+        "Saiful",
+        "Saiful Hossain",
+        "Saiful Haque",
+        "Tariq",
+        "Tariq Hossain",
+        "Tariq Haque",
+        "Umair",
+        "Umair Hossain",
+        "Umair Haque",
+        "Vivek",
+        "Vivek Hossain",
+        "Vivek Haque",
+        "Wahab",
+        "Wahab Hossain",
+        "Wahab Haque",
+        "Yasin",
+        "Yasin Hossain",
+        "Yasin Haque",
+        "Zubair",
+        "Zubair Hossain",
+        "Zubair Haque",
+        "Adnan",
+        "Adnan Hossain",
+        "Adnan Haque",
+        "Moushumi",
+        "Moushumi Akter",
+        "Moushumi Begum",
+        "Farhana",
+        "Farhana Akter",
+        "Farhana Begum",
+        "Rubina",
+        "Rubina Akter",
+        "Rubina Begum",
+        "Rima",
+        "Rima Akter",
+        "Rima Begum",
+        "Rini",
+        "Rini Akter",
+        "Rini Begum",
+        "Tania",
+        "Tania Akter",
+        "Tania Begum",
+        "Tanzila",
+        "Tanzila Akter",
+        "Tanzila Begum",
+        "Sumaiya",
+        "Sumaiya Akter",
+        "Sumaiya Begum",
+        "Sadia",
+        "Sadia Akter",
+        "Sadia Begum",
+        "Ayesha",
+        "Ayesha Akter",
+        "Ayesha Begum",
+        "Mehzabin",
+        "Mehzabin Akter",
+        "Mehzabin Begum",
+        "Nusrat",
+        "Nusrat Akter",
+        "Nusrat Begum",
+        "Mahi",
+        "Mahi Akter",
+        "Mahi Begum",
+        "Mala",
+        "Mala Akter",
+        "Mala Begum",
+        "Sharmila",
+        "Sharmila Akter",
+        "Sharmila Begum",
+        "Jannat",
+        "Jannat Akter",
+        "Jannat Begum",
+        "Shamima",
+        "Shamima Akter",
+        "Shamima Begum",
+        "Rokeya",
+        "Rokeya Akter",
+        "Rokeya Begum",
+        "Asma",
+        "Asma Akter",
+        "Asma Begum",
+        "Nazma",
+        "Nazma Akter",
+        "Nazma Begum",
+        "Shirin",
+        "Shirin Akter",
+        "Shirin Begum",
+        "Munni",
+        "Munni Akter",
+        "Munni Begum",
+        "Rumana",
+        "Rumana Akter",
+        "Rumana Begum",
+        "Taslima",
+        "Taslima Akter",
+        "Taslima Begum",
+        "Jessa",
+        "Jessa Akter",
+        "Jessa Begum",
+        "Sabrina",
+        "Sabrina Akter",
+        "Sabrina Begum",
+        "Rubi",
+        "Rubi Akter",
+        "Rubi Begum",
+        "Shefali",
+        "Shefali Akter",
+        "Shefali Begum",
+        "Shiu",
+        "Shiu Akter",
+        "Shiu Begum",
+        "Trisha",
+        "Trisha Akter",
+        "Trisha Begum",
+        "Puja",
+        "Puja Akter",
+        "Puja Begum",
+        "Shampa",
+        "Shampa Akter",
+        "Shampa Begum",
+        "Lina",
+        "Lina Akter",
+        "Lina Begum",
+        "Moumita",
+        "Moumita Akter",
+        "Moumita Begum",
+        "Farida",
+        "Farida Akter",
+        "Farida Begum",
+        "Rifat",
+        "Rifat Akter",
+        "Rifat Begum",
+        "Bushra",
+        "Bushra Akter",
+        "Bushra Begum",
+        "Muna",
+        "Muna Akter",
+        "Muna Begum",
+        "Sharmin",
+        "Sharmin Akter",
+        "Sharmin Begum",
+        "Tahmina",
+        "Tahmina Akter",
+        "Tahmina Begum",
+        "Anika",
+        "Anika Akter",
+        "Anika Begum",
+        "Mim",
+        "Mim Akter",
+        "Mim Begum",
+        "Nabila",
+        "Nabila Akter",
+        "Nabila Begum",
+        "Rifatunnahar",
+        "Rifatunnahar Akter",
+        "Rifatunnahar Begum",
+        "Sumona",
+        "Sumona Akter",
+        "Sumona Begum",
+        "Razia",
+        "Razia Akter",
+        "Razia Begum",
+        "Salma",
+        "Salma Akter",
+        "Salma Begum",
+        "Sultana",
+        "Sultana Akter",
+        "Sultana Begum",
+        "Nahar",
+        "Nahar Akter",
+        "Nahar Begum",
+        "Shamsun",
+        "Shamsun Akter",
+        "Shamsun Begum",
+        "Joya",
+        "Joya Akter",
+        "Joya Begum",
+        "Parvin",
+        "Parvin Akter",
+        "Parvin Begum",
+        "Fariha",
+        "Fariha Akter",
+        "Fariha Begum",
+        "Mahima",
+        "Mahima Akter",
+        "Mahima Begum",
+        "Lamia",
+        "Lamia Akter",
+        "Lamia Begum",
+        "Ruksana",
+        "Ruksana Akter",
+        "Ruksana Begum",
+        "Shahana",
+        "Shahana Akter",
+        "Shahana Begum",
+        "Rafiqul",
+        "Basir",
+        "Delwar",
+        "Ebad",
+        "Firoz",
+        "Gautam",
+        "Hilal",
+        "Irfan",
+        "Jubair",
+        "Kibria",
+        "Liton",
+        "Muntasir",
+        "Nazrul",
+        "Orin",
+        "Papon",
+        "Rupok",
+        "Saikat",
+        "Taufiq",
+        "Umme",
+        "Vicky"
+];
+
+let currentIndex = -1;
+let lastList = names;
+
+const genBtn = document.getElementById('gen');
+const copyBtn = document.getElementById('copy');
+const display = document.getElementById('display');
+const nameEl = document.getElementById('name');
+const filterInput = document.getElementById('filter');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const downloadBtn = document.getElementById('download');
+const showAllBtn = document.getElementById('showAll');
+const countEl = document.getElementById('count');
+
+function updateCount() {
+  countEl.textContent = `Total names available: ${lastList.length}`;
+}
+
+function getRandomIndex(list) {
+  return Math.floor(Math.random() * list.length);
+}
+
+function showNameAt(i) {
+  if (!lastList.length) return;
+  currentIndex = (i + lastList.length) % lastList.length;
+  nameEl.textContent = lastList[currentIndex];
+  display.style.display = 'flex';
+}
+
+genBtn.addEventListener('click', () => {
+  const q = filterInput.value.trim().toLowerCase();
+  if (q) {
+    lastList = names.filter(n => n.toLowerCase().includes(q));
+  } else {
+    lastList = names;
   }
-  </script>
+  if (!lastList.length) {
+    alert('No names found for that filter.');
+    return;
+  }
+  const idx = getRandomIndex(lastList);
+  showNameAt(idx);
+  updateCount();
+});
+
+copyBtn.addEventListener('click', () => {
+  if (!nameEl.textContent) return alert('Generate a name first.');
+  navigator.clipboard.writeText(nameEl.textContent).then(() => {
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => copyBtn.textContent = 'Copy', 1400);
+  });
+});
+
+prevBtn.addEventListener('click', () => {
+  if (!lastList.length) return;
+  showNameAt(currentIndex - 1);
+});
+
+nextBtn.addEventListener('click', () => {
+  if (!lastList.length) return;
+  showNameAt(currentIndex + 1);
+});
+
+downloadBtn.addEventListener('click', () => {
+  const blob = new Blob([names.join('\n')], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'bangladeshi_names_500.txt';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+showAllBtn.addEventListener('click', () => {
+  const w = window.open('', '_blank');
+  w.document.write('<pre>' + names.join('\n') + '</pre>');
+  w.document.title = 'All Names (500)';
+});
+
+filterInput.addEventListener('input', () => {
+  const q = filterInput.value.trim().toLowerCase();
+  if (q) {
+    lastList = names.filter(n => n.toLowerCase().includes(q));
+  } else {
+    lastList = names;
+  }
+  updateCount();
+});
+
+updateCount();
+</script>
 </body>
 </html>
