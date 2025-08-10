@@ -1,69 +1,238 @@
-!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gmail Alias Generator</title>
-  <link rel="stylesheet" href="../style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Modern Gmail Alias Generator</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 480px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 25px 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    color: #222;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1a73e8;
+  }
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  input[type="text"], select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1.8px solid #ccc;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus, select:focus {
+    border-color: #1a73e8;
+    outline: none;
+  }
+  .buttons-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .preset-btn {
+    background: #e8f0fe;
+    border: 1px solid #a5c5f9;
+    color: #1a73e8;
+    padding: 8px 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    flex: 1 0 45%;
+    text-align: center;
+  }
+  .preset-btn:hover {
+    background: #c3d9ff;
+  }
+  #aliasOutputContainer {
+    position: relative;
+    background: #f1f3f4;
+    padding: 14px 18px;
+    font-size: 18px;
+    border-radius: 8px;
+    user-select: all;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #202124;
+  }
+  #aliasOutput {
+    word-break: break-word;
+    flex-grow: 1;
+  }
+  button#copyBtn {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 15px;
+    transition: background-color 0.25s ease;
+  }
+  button#copyBtn:hover {
+    background: #1558b0;
+  }
+  button#clearBtn {
+    background: #e0e0e0;
+    border: none;
+    color: #555;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 10px;
+    transition: background-color 0.25s ease;
+  }
+  button#clearBtn:hover {
+    background: #cfcfcf;
+  }
+  #tooltip {
+    position: absolute;
+    top: -35px;
+    right: 0;
+    background: #4caf50;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  #tooltip.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  @media (max-width: 400px) {
+    .preset-btn {
+      flex: 1 0 100%;
+    }
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1>Gmail Alias Generator</h1>
-    <nav><a href="../index.html">← Home</a></nav>
-  </header>
 
-  <main>
-    <div style="max-width:400px;margin:40px auto;padding:20px;background:#fff;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
-      <input type="email" id="gmail" placeholder="আপনার Gmail লিখুন" style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;outline:none;font-size:14px;" />
-      <input type="text" id="tag" placeholder="Alias Tag (যেমন: shop, test)" style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;outline:none;font-size:14px;" />
-      <button onclick="generateAlias()" style="width:100%;padding:12px;background:#4CAF50;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:15px;">Generate Alias</button>
+<h1>Gmail Alias Generator</h1>
 
-      <div id="resultBox" style="display:none;margin-top:15px;font-weight:bold;">
-        ✅ আপনার Gmail Alias: <span id="result" style="color:blue;word-break:break-word;"></span>
-        <button onclick="copyAlias()" style="padding:6px 10px;background:#2196F3;color:white;border:none;border-radius:5px;cursor:pointer;font-size:13px;margin-left:10px;">Copy</button>
-        <span id="copyMsg" style="color:green;font-size:13px;margin-left:10px;display:none;">✔ কপি হয়ে গেছে!</span>
-      </div>
-    </div>
-  </main>
+<label for="emailInput">Your Gmail Address</label>
+<input type="text" id="emailInput" placeholder="example@gmail.com" autocomplete="off" />
 
-  <footer>
-    Developed by Nurul nc — <a href="https://instagram.com/nurulnc100" target="_blank">Instagram</a>
-  </footer>
+<label for="aliasInput">Alias Text</label>
+<input type="text" id="aliasInput" placeholder="e.g. shopping" list="aliasList" autocomplete="off" />
 
-  <script>
-  function generateAlias() {
-      let gmail = document.getElementById("gmail").value.trim();
-      let tag = document.getElementById("tag").value.trim();
-      let resultBox = document.getElementById("resultBox");
-      let copyMsg = document.getElementById("copyMsg");
+<datalist id="aliasList">
+  <option value="shopping"></option>
+  <option value="work"></option>
+  <option value="newsletter"></option>
+  <option value="social"></option>
+  <option value="family"></option>
+  <option value="friends"></option>
+  <option value="spam"></option>
+</datalist>
 
-      copyMsg.style.display = "none";
+<div class="buttons-row" aria-label="Predefined aliases">
+  <button type="button" class="preset-btn" data-alias="shopping">shopping</button>
+  <button type="button" class="preset-btn" data-alias="work">work</button>
+  <button type="button" class="preset-btn" data-alias="newsletter">newsletter</button>
+  <button type="button" class="preset-btn" data-alias="social">social</button>
+  <button type="button" class="preset-btn" data-alias="family">family</button>
+  <button type="button" class="preset-btn" data-alias="friends">friends</button>
+  <button type="button" class="preset-btn" data-alias="spam">spam</button>
+</div>
 
-      if (!gmail.endsWith("@gmail.com")) {
-          alert("❌ সঠিক Gmail লিখুন");
-          return;
-      }
-      if (tag === "") {
-          alert("❌ Alias Tag দিন");
-          return;
-      }
+<div id="aliasOutputContainer" style="display:none;">
+  <span id="aliasOutput"></span>
+  <div>
+    <button id="copyBtn" aria-label="Copy alias email">Copy</button>
+    <button id="clearBtn" aria-label="Clear inputs">Clear</button>
+  </div>
+  <div id="tooltip">Copied!</div>
+</div>
 
-      let username = gmail.split("@")[0];
-      let alias = username + "+" + tag + "@gmail.com";
+<script>
+  const emailInput = document.getElementById('emailInput');
+  const aliasInput = document.getElementById('aliasInput');
+  const aliasOutputContainer = document.getElementById('aliasOutputContainer');
+  const aliasOutput = document.getElementById('aliasOutput');
+  const copyBtn = document.getElementById('copyBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const tooltip = document.getElementById('tooltip');
+  const presetButtons = document.querySelectorAll('.preset-btn');
 
-      document.getElementById("result").innerText = alias;
-      resultBox.style.display = "inline-block";
+  // Validate Gmail format
+  function isValidGmail(email) {
+    return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
   }
 
-  function copyAlias() {
-      let aliasText = document.getElementById("result").innerText;
-      navigator.clipboard.writeText(aliasText).then(() => {
-          document.getElementById("copyMsg").style.display = "inline";
-          setTimeout(() => {
-              document.getElementById("copyMsg").style.display = "none";
-          }, 2000);
-      });
+  // Generate alias email and update UI
+  function updateAlias() {
+    const email = emailInput.value.trim();
+    const alias = aliasInput.value.trim();
+
+    if (email && alias && isValidGmail(email)) {
+      const [user, domain] = email.split('@');
+      aliasOutput.textContent = `${user}+${alias}@${domain}`;
+      aliasOutputContainer.style.display = 'flex';
+    } else {
+      aliasOutputContainer.style.display = 'none';
+      aliasOutput.textContent = '';
+    }
   }
-  </script>
+
+  // Copy alias to clipboard with tooltip
+  function copyToClipboard() {
+    if (!aliasOutput.textContent) return;
+    navigator.clipboard.writeText(aliasOutput.textContent).then(() => {
+      tooltip.classList.add('show');
+      setTimeout(() => tooltip.classList.remove('show'), 1500);
+    }).catch(() => {
+      alert('Copy failed! Please copy manually.');
+    });
+  }
+
+  // Clear inputs and output
+  function clearAll() {
+    emailInput.value = '';
+    aliasInput.value = '';
+    aliasOutput.textContent = '';
+    aliasOutputContainer.style.display = 'none';
+    emailInput.focus();
+  }
+
+  // Preset button click handler
+  presetButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      aliasInput.value = button.getAttribute('data-alias');
+      updateAlias();
+      aliasInput.focus();
+    });
+  });
+
+  // Event listeners for live update
+  emailInput.addEventListener('input', updateAlias);
+  aliasInput.addEventListener('input', updateAlias);
+
+  copyBtn.addEventListener('click', copyToClipboard);
+  clearBtn.addEventListener('click', clearAll);
+</script>
+
 </body>
 </html>
