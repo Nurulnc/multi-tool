@@ -1,181 +1,47 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unlimited Gmail Generator</title>
-  <style>
-    :root {
-      --primary-color: #4CAF50;
-      --secondary-color: #2196F3;
-    }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #f0f4f7, #d9e4ec);
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: var(--primary-color);
-      padding: 15px;
-      text-align: center;
-      color: white;
-      font-size: 20px;
-      font-weight: bold;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    nav {
-      text-align: center;
-      background: #fff;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    nav a {
-      text-decoration: none;
-      color: var(--primary-color);
-      font-weight: bold;
-      margin: 0 10px;
-    }
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 70vh;
-    }
-    .card {
-      background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(10px);
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 14px;
-      outline: none;
-    }
-    button {
-      padding: 12px;
-      background: var(--primary-color);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
-      transition: 0.3s;
-    }
-    button:hover {
-      background: #45a049;
-    }
-    .alias-result {
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    .alias-text {
-      color: blue;
-      word-break: break-all;
-    }
-    .copy-btn {
-      padding: 6px 10px;
-      background: var(--secondary-color);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-    .copy-msg {
-      color: green;
-      font-size: 13px;
-      margin-top: 5px;
-      display: none;
-    }
-    footer {
-      background: var(--primary-color);
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin-top: 20px;
-      font-size: 14px;
-    }
-    footer a {
-      color: yellow;
-      text-decoration: none;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Multi Tool Website</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header>
+    <h1>Multi Tool Website</h1>
+    <p>নিচ থেকে টুল সিলেক্ট করুন</p>
+  </header>
 
-<header>Unlimited Gmail Generator</header>
-<nav>
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-</nav>
-
-<div class="container">
-  <div class="card">
-    <h2>📧 Gmail Alias Generator</h2>
-    <input type="email" id="gmail" placeholder="আপনার Gmail লিখুন">
-    <input type="text" id="tag" placeholder="Alias Tag (যেমন: shop, test)">
-    <button onclick="generateAlias()">Generate Alias</button>
-    <div id="resultBox" style="display:none;">
-      <p class="alias-result">✅ আপনার Gmail Alias:</p>
-      <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
-        <span id="result" class="alias-text"></span>
-        <button onclick="copyAlias()" class="copy-btn">Copy</button>
-      </div>
-      <p id="copyMsg" class="copy-msg">✔ কপি হয়ে গেছে!</p>
+  <main>
+    <div class="tool-grid">
+      <!-- ২০ টা টুল কার্ড, ডামি নাম দিয়ে -->
+      <a href="tools/gmail-alias.html" class="tool-card">Gmail Alias Generator</a>
+      <a href="tools/random-name.html" class="tool-card">Random Name Generator</a>
+      <a href="tools/tool3.html" class="tool-card">Tool 3 (Random Name Generator)</a>
+      <a href="tools/tool4.html" class="tool-card">Tool 4 (Random Name Generator)</a>
+      <a href="tools/tool5.html" class="tool-card">Tool 5 (Random Name Generator)</a>
+      <a href="tools/tool6.html" class="tool-card">Tool 6 (Random Name Generator)</a>
+      <a href="tools/tool7.html" class="tool-card">Tool 7 (Random Name Generator)</a>
+      <a href="tools/tool8.html" class="tool-card">Tool 8 (Random Name Generator)</a>
+      <a href="tools/tool9.html" class="tool-card">Tool 9 (Random Name Generator)</a>
+      <a href="tools/tool10.html" class="tool-card">Tool 10 (Random Name Generator)</a>
+      <a href="tools/tool11.html" class="tool-card">Tool 11 (Random Name Generator)</a>
+      <a href="tools/tool12.html" class="tool-card">Tool 12 (Random Name Generator)</a>
+      <a href="tools/tool13.html" class="tool-card">Tool 13 (Random Name Generator)</a>
+      <a href="tools/tool14.html" class="tool-card">Tool 14 (Random Name Generator)</a>
+      <a href="tools/tool15.html" class="tool-card">Tool 15 (Random Name Generator)</a>
+      <a href="tools/tool16.html" class="tool-card">Tool 16 (Random Name Generator)</a>
+      <a href="tools/tool17.html" class="tool-card">Tool 17 (Random Name Generator)</a>
+      <a href="tools/tool18.html" class="tool-card">Tool 18 (Random Name Generator)</a>
+      <a href="tools/tool19.html" class="tool-card">Tool 19 (Random Name Generator)</a>
+      <a href="tools/tool20.html" class="tool-card">Tool 20 (Random Name Generator)</a>
     </div>
-  </div>
-</div>
+  </main>
 
-<footer>
-  Developed by Nurul nc — 
-  <a href="https://instagram.com/nurulnc100" target="_blank">Instagram</a>
-</footer>
+  <footer>
+    Developed by Nurul nc — <a href="https://instagram.com/nurulnc100" target="_blank">Instagram</a>
+  </footer>
 
-<script>
-function generateAlias() {
-    let gmail = document.getElementById("gmail").value.trim();
-    let tag = document.getElementById("tag").value.trim();
-    let resultBox = document.getElementById("resultBox");
-    let copyMsg = document.getElementById("copyMsg");
-
-    copyMsg.style.display = "none";
-
-    if (!gmail.endsWith("@gmail.com")) {
-        alert("❌ সঠিক Gmail লিখুন");
-        return;
-    }
-    if (tag === "") {
-        alert("❌ Alias Tag দিন");
-        return;
-    }
-
-    let username = gmail.split("@")[0];
-    let alias = username + "+" + tag + "@gmail.com";
-
-    document.getElementById("result").innerText = alias;
-    resultBox.style.display = "block";
-}
-
-function copyAlias() {
-    let aliasText = document.getElementById("result").innerText;
-    navigator.clipboard.writeText(aliasText).then(() => {
-        document.getElementById("copyMsg").style.display = "block";
-        setTimeout(() => {
-            document.getElementById("copyMsg").style.display = "none";
-        }, 2000);
-    });
-}
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
