@@ -1,246 +1,259 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>2Fa Generator</title>
-  <link rel="stylesheet" href="../style.css" />
-  <style>
-    /* Tool Container */
-    .tool-card {
-      max-width: 420px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    .tool-card label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .tool-card input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-
-    .tool-buttons {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .tool-buttons button {
-      flex: 1;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 8px;
-      background: #4CAF50;
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .tool-buttons button:hover {
-      background: #43a047;
-    }
-
-    #totp-code {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-top: 15px;
-    }
-
-    .progress-container {
-      height: 6px;
-      background: #eee;
-      border-radius: 999px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: #4CAF50;
-      transition: width 0.5s;
-    }
-
-    #totp-qr-container img {
-      border: 1px solid #ddd;
-      padding: 4px;
-      border-radius: 8px;
-      background: #fafafa;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2FA (TOTP) Generator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: linear-gradient(135deg,#dbeafe,#e0e7ff);
+  display:flex;justify-content:center;align-items:center;
+  min-height:100vh;
+  padding:20px;
+}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  max-width:420px;
+  width:100%;
+  box-shadow:0 8px 24px rgba(0,0,0,0.08);
+}
+h1{
+  font-size:22px;
+  margin-bottom:6px;
+  text-align:center;
+  color:#1e293b;
+}
+.sub{
+  font-size:14px;
+  text-align:center;
+  color:#64748b;
+  margin-bottom:20px;
+}
+label{
+  font-size:14px;
+  font-weight:600;
+  margin-top:12px;
+  display:block;
+  color:#334155;
+}
+input{
+  width:100%;
+  padding:10px;
+  font-size:15px;
+  margin-top:5px;
+  border:1px solid #e2e8f0;
+  border-radius:8px;
+}
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+}
+.actions button{
+  flex:1;
+}
+button{
+  padding:10px;
+  font-size:14px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+.primary{
+  background:#0ea5e9;
+  color:#fff;
+}
+.primary:hover{background:#0284c7;}
+.secondary{
+  background:#f1f5f9;
+  color:#0f172a;
+}
+.secondary:hover{background:#e2e8f0;}
+.code-box{
+  text-align:center;
+  margin-top:18px;
+}
+.code{
+  font-size:36px;
+  font-weight:700;
+  letter-spacing:8px;
+  color:#0ea5e9;
+}
+.countdown{
+  font-size:14px;
+  color:#64748b;
+  margin-top:5px;
+}
+.progress{
+  height:8px;
+  background:#f1f5f9;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:8px;
+}
+.bar{
+  height:100%;
+  background:linear-gradient(90deg,#22c55e,#3b82f6);
+  width:0%;
+  transition:width 1s linear;
+}
+.qr{
+  text-align:center;
+  margin-top:15px;
+}
+.qr img{
+  max-width:100%;
+  border-radius:8px;
+}
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#16a34a;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:8px;
+  font-size:14px;
+  display:none;
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1>2Fa Generator</h1>
-    <nav><a href="../index.html">← Home</a></nav>
-  </header>
+<div class="card">
+  <h1>2FA Generator</h1>
+  <div class="sub">Google Authenticator / Authy style TOTP</div>
+  
+  <label>Secret (Base32)</label>
+  <input id="secret" type="text" value="JBSWY3DPEHPK3PXP">
+  
+  <div class="actions">
+    <button class="primary" id="genSecret">Random Secret</button>
+    <button class="secondary" id="showQR">Show QR</button>
+  </div>
+  
+  <div class="code-box">
+    <div class="code" id="code">------</div>
+    <div class="countdown">Expires in <span id="expires">--</span> sec</div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <button class="primary" style="margin-top:10px;" id="copyCode">Copy Code</button>
+  </div>
+  
+  <div class="qr" id="qrContainer"></div>
+</div>
+<div class="toast" id="toast">Copied!</div>
 
-  <main>
-    <div class="tool-card">
-      <!-- 2FA Tool -->
-      <label for="totp-secret">Secret (Base32)</label>
-      <input id="totp-secret" type="text" placeholder="JBSWY3DPEHPK3PXP" />
-
-      <div class="tool-buttons">
-        <button id="totp-gen">Random Secret</button>
-        <button id="totp-qr">Show QR</button>
-        <button id="totp-copy">Copy Code</button>
-      </div>
-
-      <div>
-        <div id="totp-code">------</div>
-        <div>Expires in <span id="totp-expires">--</span> sec</div>
-        <div class="progress-container">
-          <div id="totp-bar" class="progress-bar"></div>
-        </div>
-      </div>
-
-      <div id="totp-qr-container" style="margin-top:12px;"></div>
-    </div>
-  </main>
-
-  <footer>
-    Developed by <a href="https://instagram.com/nurulnc100" target="_blank">Nurul Nc</a>
-  </footer>
-
-  <script>
-  (function(){
-    const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-    function base32Decode(str){
-      str = (str||"").replace(/\s+/g,'').replace(/=+$/,'').toUpperCase();
-      let bits=0,value=0, out=[];
-      for (let i=0;i<str.length;i++){
-        const idx = BASE32_ALPHABET.indexOf(str[i]);
-        if (idx === -1) continue;
-        value = (value << 5) | idx;
-        bits += 5;
-        if (bits >= 8){
-          out.push((value >>> (bits - 8)) & 0xFF);
-          bits -= 8;
-        }
-      }
-      return new Uint8Array(out);
+<script>
+// Base32 functions
+const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+function base32Decode(str){
+  str = str.replace(/\s+/g, '').replace(/=+$/,'').toUpperCase();
+  let bits = 0, value = 0;
+  const output = [];
+  for (let i=0;i<str.length;i++){
+    const idx = BASE32_ALPHABET.indexOf(str[i]);
+    if (idx === -1) continue;
+    value = (value << 5) | idx;
+    bits += 5;
+    if (bits >= 8){
+      output.push((value >>> (bits - 8)) & 0xFF);
+      bits -= 8;
     }
-    function base32Encode(bytes){
-      let bits=0,value=0,out="";
-      for (let i=0;i<bytes.length;i++){
-        value = (value << 8) | bytes[i];
-        bits += 8;
-        while(bits >= 5){
-          out += BASE32_ALPHABET[(value >>> (bits - 5)) & 31];
-          bits -= 5;
-        }
-      }
-      if (bits > 0) out += BASE32_ALPHABET[(value << (5 - bits)) & 31];
-      return out;
+  }
+  return new Uint8Array(output);
+}
+function base32Encode(bytes){
+  let bits = 0, value = 0, output = "";
+  for (let i=0;i<bytes.length;i++){
+    value = (value << 8) | bytes[i];
+    bits += 8;
+    while (bits >= 5){
+      output += BASE32_ALPHABET[(value >>> (bits - 5)) & 31];
+      bits -= 5;
     }
+  }
+  if (bits > 0){
+    output += BASE32_ALPHABET[(value << (5 - bits)) & 31];
+  }
+  return output;
+}
 
-    async function totp(secretBase32, digits=6, period=30){
-      const keyBytes = base32Decode(secretBase32);
-      if (!keyBytes || keyBytes.length === 0) throw new Error("Invalid base32 secret");
-      const cryptoKey = await crypto.subtle.importKey("raw", keyBytes, {name:"HMAC", hash:"SHA-1"}, false, ["sign"]);
-      const counter = Math.floor(Date.now()/1000/period);
-      const buf = new ArrayBuffer(8);
-      const dv = new DataView(buf);
-      dv.setUint32(4, counter);
-      const sig = new Uint8Array(await crypto.subtle.sign("HMAC", cryptoKey, buf));
-      const offset = sig[sig.length - 1] & 0x0f;
-      const binary = ((sig[offset] & 0x7f) << 24) |
-                     ((sig[offset+1] & 0xff) << 16) |
-                     ((sig[offset+2] & 0xff) << 8) |
-                     (sig[offset+3] & 0xff);
-      return (binary % (10 ** digits)).toString().padStart(digits, "0");
-    }
+// TOTP
+async function totp(secretBase32, digits=6, period=30){
+  const keyBytes = base32Decode(secretBase32);
+  const cryptoKey = await crypto.subtle.importKey("raw", keyBytes, { name: "HMAC", hash: "SHA-1" }, false, ["sign"]);
+  const counter = Math.floor(Date.now()/1000/period);
+  const buf = new ArrayBuffer(8);
+  const dv = new DataView(buf);
+  dv.setUint32(4, counter);
+  const hmac = new Uint8Array(await crypto.subtle.sign("HMAC", cryptoKey, buf));
+  const offset = hmac[hmac.length - 1] & 0x0f;
+  const binary = ((hmac[offset] & 0x7f) << 24) |
+                 ((hmac[offset+1] & 0xff) << 16) |
+                 ((hmac[offset+2] & 0xff) << 8) |
+                 (hmac[offset+3] & 0xff);
+  return (binary % (10 ** digits)).toString().padStart(digits, "0");
+}
 
-    const secretEl = document.getElementById("totp-secret");
-    const codeEl = document.getElementById("totp-code");
-    const expiresEl = document.getElementById("totp-expires");
-    const barEl = document.getElementById("totp-bar");
-    const qrContainer = document.getElementById("totp-qr-container");
-    const btnGen = document.getElementById("totp-gen");
-    const btnQR = document.getElementById("totp-qr");
-    const btnCopy = document.getElementById("totp-copy");
+// Elements
+const codeEl = document.getElementById("code");
+const expiresEl = document.getElementById("expires");
+const barEl = document.getElementById("bar");
+const secretEl = document.getElementById("secret");
+const qrContainer = document.getElementById("qrContainer");
+const toast = document.getElementById("toast");
 
-    let intervalId = null;
-    const PERIOD = 30;
+function showToast(msg){
+  toast.textContent = msg;
+  toast.style.display = "block";
+  setTimeout(()=>toast.style.display="none", 1500);
+}
 
-    async function updateOnce(){
-      const secret = (secretEl.value||"").trim();
-      if (!secret){
-        codeEl.textContent = "------";
-        expiresEl.textContent = "--";
-        barEl.style.width = "0%";
-        return;
-      }
-      const now = Math.floor(Date.now()/1000);
-      const elapsed = now % PERIOD;
-      const remaining = PERIOD - elapsed;
-      expiresEl.textContent = remaining;
-      barEl.style.width = ((elapsed / PERIOD) * 100) + "%";
-      try {
-        const otp = await totp(secret, 6, PERIOD);
-        codeEl.textContent = otp;
-      } catch {
-        codeEl.textContent = "Error";
-      }
-    }
+async function updateCode(){
+  const period = 30;
+  const now = Math.floor(Date.now()/1000);
+  const elapsed = now % period;
+  const remaining = period - elapsed;
+  expiresEl.textContent = remaining;
+  barEl.style.width = (elapsed/period)*100 + "%";
+  try {
+    const otp = await totp(secretEl.value.trim(), 6, period);
+    codeEl.textContent = otp;
+  } catch {
+    codeEl.textContent = "Error";
+  }
+}
+setInterval(updateCode, 1000);
+updateCode();
 
-    function startLoop(){
-      if (intervalId) return;
-      updateOnce();
-      intervalId = setInterval(updateOnce, 1000);
-    }
-
-    btnGen.addEventListener("click", ()=>{
-      const bytes = new Uint8Array(20);
-      crypto.getRandomValues(bytes);
-      secretEl.value = base32Encode(bytes);
-      qrContainer.innerHTML = "";
-      updateOnce();
-    });
-
-    btnQR.addEventListener("click", ()=>{
-      const secret = (secretEl.value||"").trim();
-      if (!secret){
-        qrContainer.innerHTML = "<div style='color:red'>Please provide a Base32 secret first</div>";
-        return;
-      }
-      const label = encodeURIComponent("MyService:User");
-      const issuer = encodeURIComponent("MyService");
-      const otpauth = `otpauth://totp/${label}?secret=${secret}&issuer=${issuer}`;
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(otpauth)}`;
-      qrContainer.innerHTML = `<img src="${qrUrl}" alt="QR code"><div style="font-size:12px;margin-top:6px;color:#555">Scan with Google Authenticator</div>`;
-    });
-
-    btnCopy.addEventListener("click", async ()=>{
-      const text = codeEl.textContent.trim();
-      if (!text || text === "------" || text === "Error") return;
-      try {
-        await navigator.clipboard.writeText(text);
-        const prev = btnCopy.textContent;
-        btnCopy.textContent = "Copied!";
-        setTimeout(()=> btnCopy.textContent = prev, 1400);
-      } catch {
-        alert("Copy failed — please copy manually: " + text);
-      }
-    });
-
-    startLoop();
-  })();
-  </script>
+// Events
+document.getElementById("copyCode").addEventListener("click", async ()=>{
+  try {
+    await navigator.clipboard.writeText(codeEl.textContent);
+    showToast("Code copied!");
+  } catch {
+    alert("Copy failed");
+  }
+});
+document.getElementById("genSecret").addEventListener("click", ()=>{
+  const bytes = new Uint8Array(20);
+  crypto.getRandomValues(bytes);
+  secretEl.value = base32Encode(bytes);
+  qrContainer.innerHTML = "";
+});
+document.getElementById("showQR").addEventListener("click", ()=>{
+  const secret = secretEl.value.trim();
+  const label = encodeURIComponent("MyService:User");
+  const issuer = encodeURIComponent("MyService");
+  const otpauth = `otpauth://totp/${label}?secret=${secret}&issuer=${issuer}`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(otpauth)}`;
+  qrContainer.innerHTML = `<img src="${qrUrl}" alt="QR Code"><div style="font-size:12px;margin-top:5px;">Scan in Google Authenticator</div>`;
+});
+</script>
 </body>
 </html>
