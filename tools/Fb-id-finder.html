@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Profile ID Extractor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1877f2, #4267b2);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        
+        header {
+            background: linear-gradient(to right, #1877f2, #4267b2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .input-container {
+            display: flex;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        
+        .input-container:focus-within {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.2);
+        }
+        
+        .input-container i {
+            background: #f0f2f5;
+            color: #1877f2;
+            font-size: 1.5rem;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+        }
+        
+        button {
+            background: linear-gradient(to right, #1877f2, #4267b2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .result-section {
+            background: #f0f2f5;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .result-section.hidden {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .profile-id {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1877f2;
+            word-break: break-all;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .examples {
+            margin-top: 40px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .examples h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .example-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .example {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .example-url {
+            color: #1877f2;
+            font-weight: 500;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        
+        .example-result {
+            font-weight: 600;
+            color: #4267b2;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f0f8ff;
+            border-radius: 15px;
+        }
+        
+        .instructions h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .step-number {
+            background: #1877f2;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            margin-top: auto;
+            width: 100%;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .profile-id {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-facebook"></i> Facebook Profile ID Extractor</h1>
+            <p class="subtitle">Paste any Facebook profile URL and instantly get the unique profile ID</p>
+        </header>
+        
+        <div class="content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="profile-url">Enter Facebook Profile URL:</label>
+                    <div class="input-container">
+                        <i class="fab fa-facebook"></i>
+                        <input type="url" id="profile-url" placeholder="https://www.facebook.com/username or https://www.facebook.com/profile.php?id=123456789" autocomplete="off">
+                    </div>
+                </div>
+                
+                <button id="extract-btn">
+                    <i class="fas fa-magic"></i> Extract Profile ID
+                </button>
+            </div>
+            
+            <div class="result-section hidden" id="result-section">
+                <h3 class="result-title">Extracted Profile ID:</h3>
+                <div class="profile-id" id="profile-id">Waiting for input...</div>
+            </div>
+            
+            <div class="examples">
+                <h3>Examples:</h3>
+                <div class="example-list">
+                    <div class="example">
+                        <h4>Username Format</h4>
+                        <div class="example-url">https://facebook.com/mark.zuckerberg</div>
+                        <div class="example-result">ID: mark.zuckerberg</div>
+                    </div>
+                    <div class="example">
+                        <h4>Numeric ID Format</h4>
+                        <div class="example-url">https://m.facebook.com/profile.php?id=100044368838009</div>
+                        <div class="example-result">ID: 100044368838009</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How It Works</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <p>Copy a Facebook profile URL from your browser</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <p>Paste it in the input field above</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <p>Click "Extract Profile ID" button</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <p>Get the profile ID instantly!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Facebook Profile ID Extractor Tool &copy; 2023</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const extractBtn = document.getElementById('extract-btn');
+            const profileUrlInput = document.getElementById('profile-url');
+            const profileIdDisplay = document.getElementById('profile-id');
+            const resultSection = document.getElementById('result-section');
+            
+            extractBtn.addEventListener('click', extractProfileId);
+            
+            // Also allow extraction when pressing Enter
+            profileUrlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    extractProfileId();
+                }
+            });
+            
+            function extractProfileId() {
+                const url = profileUrlInput.value.trim();
+                
+                if (!url) {
+                    showResult('Please enter a Facebook profile URL', true);
+                    return;
+                }
+                
+                // Try to extract the profile ID
+                try {
+                    let profileId = '';
+                    
+                    // Check for numeric ID format (profile.php?id=12345)
+                    const numericIdPattern = /profile\.php\?id=(\d+)/i;
+                    const numericIdMatch = url.match(numericIdPattern);
+                    
+                    // Check for username format (facebook.com/username)
+                    const usernamePattern = /facebook\.com\/([^\/?]+)/i;
+                    const usernameMatch = url.match(usernamePattern);
+                    
+                    if (numericIdMatch && numericIdMatch[1]) {
+                        profileId = numericIdMatch[1];
+                    } else if (usernameMatch && usernameMatch[1]) {
+                        profileId = usernameMatch[1];
+                    } else {
+                        showResult('Invalid Facebook profile URL format', true);
+                        return;
+                    }
+                    
+                    showResult(profileId);
+                } catch (error) {
+                    showResult('Error processing the URL. Please try again.', true);
+                }
+            }
+            
+            function showResult(id, isError = false) {
+                profileIdDisplay.textContent = id;
+                resultSection.classList.remove('hidden');
+                
+                if (isError) {
+                    profileIdDisplay.style.color = '#e74c3c';
+                } else {
+                    profileIdDisplay.style.color = '#1877f2';
+                    
+                    // Copy to clipboard automatically when successful
+                    navigator.clipboard.writeText(id).then(() => {
+                        // Optional: show a copied message
+                    });
+                }
+            }
+            
+            // Initialize with an example URL
+            profileUrlInput.value = 'https://www.facebook.com/zuck';
+        });
+    </script>
+</body>
+</html>
