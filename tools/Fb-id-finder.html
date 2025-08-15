@@ -165,6 +165,16 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
         
+        .error-message {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #e74c3c;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
         .examples {
             margin-top: 40px;
             background: #f9f9f9;
@@ -200,6 +210,7 @@
             font-weight: 500;
             margin: 10px 0;
             word-break: break-all;
+            font-size: 0.9rem;
         }
         
         .example-result {
@@ -258,6 +269,24 @@
             width: 100%;
         }
         
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
         @media (max-width: 600px) {
             .container {
                 margin-top: 20px;
@@ -306,7 +335,8 @@
             
             <div class="result-section hidden" id="result-section">
                 <h3 class="result-title">Extracted Profile ID:</h3>
-                <div class="profile-id" id="profile-id">Waiting for input...</div>
+                <div class="profile-id" id="profile-id"></div>
+                <div class="error-message hidden" id="error-message"></div>
             </div>
             
             <div class="examples">
@@ -349,8 +379,10 @@
         </div>
     </div>
     
+    <div class="notification" id="notification">Profile ID copied to clipboard!</div>
+    
     <footer>
-        <p>Facebook Profile ID Extractor Tool &copy; 2025</p>
+        <p>Facebook Profile ID Extractor Tool &copy; 2023</p>
     </footer>
 
     <script>
@@ -358,7 +390,9 @@
             const extractBtn = document.getElementById('extract-btn');
             const profileUrlInput = document.getElementById('profile-url');
             const profileIdDisplay = document.getElementById('profile-id');
+            const errorMessage = document.getElementById('error-message');
             const resultSection = document.getElementById('result-section');
+            const notification = document.getElementById('notification');
             
             extractBtn.addEventListener('click', extractProfileId);
             
@@ -373,7 +407,7 @@
                 const url = profileUrlInput.value.trim();
                 
                 if (!url) {
-                    showResult('Please enter a Facebook profile URL', true);
+                    showError('Please enter a Facebook profile URL');
                     return;
                 }
                 
@@ -386,7 +420,7 @@
                     const numericIdMatch = url.match(numericIdPattern);
                     
                     // Check for username format (facebook.com/username)
-                    const usernamePattern = /facebook\.com\/([^\/?]+)/i;
+                    const usernamePattern = /(?:facebook|fb)\.com\/([^\/?]+)/i;
                     const usernameMatch = url.match(usernamePattern);
                     
                     if (numericIdMatch && numericIdMatch[1]) {
@@ -394,30 +428,58 @@
                     } else if (usernameMatch && usernameMatch[1]) {
                         profileId = usernameMatch[1];
                     } else {
-                        showResult('Invalid Facebook profile URL format', true);
+                        showError('Invalid Facebook profile URL format');
                         return;
                     }
                     
-                    showResult(profileId);
+                    showProfileId(profileId);
                 } catch (error) {
-                    showResult('Error processing the URL. Please try again.', true);
+                    showError('Error processing the URL. Please try again.');
                 }
             }
             
-            function showResult(id, isError = false) {
+            function showProfileId(id) {
+                // Hide error message if shown
+                errorMessage.classList.add('hidden');
+                
+                // Update profile ID display
                 profileIdDisplay.textContent = id;
+                
+                // Show result section
                 resultSection.classList.remove('hidden');
                 
-                if (isError) {
-                    profileIdDisplay.style.color = '#e74c3c';
-                } else {
-                    profileIdDisplay.style.color = '#1877f2';
-                    
-                    // Copy to clipboard automatically when successful
-                    navigator.clipboard.writeText(id).then(() => {
-                        // Optional: show a copied message
-                    });
-                }
+                // Copy to clipboard
+                navigator.clipboard.writeText(id).then(() => {
+                    showNotification();
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+                
+                // Scroll to result
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            function showError(message) {
+                // Hide profile ID if shown
+                profileIdDisplay.textContent = '';
+                
+                // Update error message
+                errorMessage.textContent = message;
+                errorMessage.classList.remove('hidden');
+                
+                // Show result section
+                resultSection.classList.remove('hidden');
+                
+                // Scroll to result
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            function showNotification() {
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
             }
             
             // Initialize with an example URL
