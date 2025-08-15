@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporary Email Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 20px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #emailDisplay {
+            font-size: 18px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            word-break: break-all;
+            text-align: center;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Temporary Email Generator</h1>
+        <p>Generate a disposable email address for temporary use:</p>
+        
+        <button id="generateBtn">Generate Temporary Email</button>
+        
+        <div class="loading" id="loading">
+            <p>Generating email address...</p>
+        </div>
+        
+        <div id="emailDisplay"></div>
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', generateTempEmail);
+
+        async function generateTempEmail() {
+            const apiKey = "fda347ff2amsh47c3467081afabfp12ee9fjsn06f11622b3d9";
+            const url = "https://temp-mail44.p.rapidapi.com/api/v3/email/new";
+            
+            const options = {
+                method: 'POST',
+                headers: {
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': 'temp-mail44.p.rapidapi.com'
+                }
+            };
+            
+            // Show loading, hide previous results
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('emailDisplay').textContent = '';
+            document.getElementById('error').textContent = '';
+            
+            try {
+                const response = await fetch(url, options);
+                
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data && data.email) {
+                    document.getElementById('emailDisplay').textContent = data.email;
+                    document.getElementById('emailDisplay').style.display = 'block';
+                } else {
+                    throw new Error('No email address received from API');
+                }
+            } catch (error) {
+                document.getElementById('error').textContent = `Error: ${error.message}`;
+                console.error('Error:', error);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
