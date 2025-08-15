@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Checker Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            font-weight: bold;
+        }
+        .valid {
+            color: green;
+        }
+        .invalid {
+            color: red;
+        }
+        .card-type {
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Credit Card Checker</h1>
+    <input type="text" id="cardNumber" placeholder="Enter credit card number" maxlength="19">
+    <button onclick="validateCard()">Check Validity</button>
+    <div id="result"></div>
+    <div id="cardType" class="card-type"></div>
+
+    <script>
+        function luhnCheck(cardNumber) {
+            let sum = 0;
+            let shouldDouble = false;
+            
+            for (let i = cardNumber.length - 1; i >= 0; i--) {
+                let digit = parseInt(cardNumber.charAt(i));
+                
+                if (shouldDouble) {
+                    digit *= 2;
+                    if (digit > 9) digit -= 9;
+                }
+                
+                sum += digit;
+                shouldDouble = !shouldDouble;
+            }
+            
+            return sum % 10 === 0;
+        }
+
+        function getCardType(cardNumber) {
+            const cardPatterns = {
+                "Visa": /^4[0-9]{12}(?:[0-9]{3})?$/,
+                "MasterCard": /^5[1-5][0-9]{14}$/,
+                "American Express": /^3[47][0-9]{13}$/,
+                "Discover": /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+                "JCB": /^(?:2131|1800|35\d{3})\d{11}$/,
+                "Diners Club": /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/
+            };
+            
+            for (const [cardType, pattern] of Object.entries(cardPatterns)) {
+                if (pattern.test(cardNumber)) {
+                    return cardType;
+                }
+            }
+            return "Unknown";
+        }
+
+        function validateCard() {
+            const cardNumber = document.getElementById("cardNumber").value.replace(/\s+/g, '');
+            const resultDiv = document.getElementById("result");
+            const cardTypeDiv = document.getElementById("cardType");
+            
+            if (!/^\d+$/.test(cardNumber)) {
+                resultDiv.innerHTML = "❌ Invalid characters (only digits allowed)";
+                resultDiv.className = "invalid";
+                cardTypeDiv.innerHTML = "";
+                return;
+            }
+            
+            if (cardNumber.length < 13 || cardNumber.length > 19) {
+                resultDiv.innerHTML = "❌ Invalid card length";
+                resultDiv.className = "invalid";
+                cardTypeDiv.innerHTML = "";
+                return;
+            }
+            
+            const isValid = luhnCheck(cardNumber);
+            const cardType = getCardType(cardNumber);
+            
+            if (isValid) {
+                resultDiv.innerHTML = "✅ Valid Credit Card";
+                resultDiv.className = "valid";
+            } else {
+                resultDiv.innerHTML = "❌ Invalid Credit Card (Luhn check failed)";
+                resultDiv.className = "invalid";
+            }
+            
+            cardTypeDiv.innerHTML = `Card Type: ${cardType}`;
+        }
+
+        // Auto-format card number (add spaces every 4 digits)
+        document.getElementById("cardNumber").addEventListener("input", function(e) {
+            let value = e.target.value.replace(/\s+/g, '');
+            if (value.length > 0) {
+                value = value.match(new RegExp('.{1,4}', 'g')).join(' ');
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
