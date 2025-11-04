@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>.TXT to Excel Converter</title>
+  <!-- SheetJS Library (XLSX) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    .upload-area {
+      border: 3px dashed #764ba2;
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .upload-area:hover {
+      background-color: #f8f5ff;
+      border-color: #5a3d8a;
+    }
+
+    .upload-area.dragover {
+      background-color: #f0e6ff;
+      border-color: #5a3d8a;
+    }
+
+    .upload-area p {
+      color: #666;
+      margin-top: 10px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .btn {
+      background: #764ba2;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background: #5a3d8a;
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .preview {
+      margin-top: 20px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      background: #f9f9f9;
+      font-family: monospace;
+      font-size: 0.9rem;
+      display: none;
+      white-space: pre;
+    }
+
+    .delimiter-options {
+      margin: 15px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .delimiter-options label {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #888;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      .delimiter-options {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>.TXT → Excel Converter</h1>
+    
+    <div class="upload-area" id="uploadArea">
+      <p>ফাইল এখানে টেনে আনুন অথবা ক্লিক করে আপলোড করুন</p>
+      <input type="file" id="fileInput" accept=".txt" />
+    </div>
+
+    <div class="delimiter-options">
+      <label><input type="radio" name="delimiter" value="tab" checked> ট্যাব (Tab)</label>
+      <label><input type="radio" name="delimiter" value="comma"> কমা (,)</label>
+      <label><input type="radio" name="delimiter" value="semicolon"> সেমিকোলন (;)</label>
+      <label><input type="radio" name="delimiter" value="space"> স্পেস (একাধিক স্পেস সহ)</label>
+    </div>
+
+    <button class="btn" id="convertBtn" disabled>Convert to Excel (.xlsx)</button>
+
+    <div id="preview" class="preview"></div>
+
+    <div class="footer">
+      তৈরি করেছেন: আপনার AI সহকারী | কোনো সার্ভার লাগবে না
+    </div>
+  </div>
+
+  <script>
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const convertBtn = document.getElementById('convertBtn');
+    const preview = document.getElementById('preview');
+    let fileContent = '';
+
+    // Click to upload
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    // Drag & Drop Prevention
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      uploadArea.addEventListener(eventName, e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+    });
+
+    // Drag Highlight
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
+    });
+
+    // Handle Drop
+    uploadArea.addEventListener('drop', e => {
+      const files = e.dataTransfer.files;
+      handleFiles(files);
+    });
+
+    // Handle File Input Change
+    fileInput.addEventListener('change', () => {
+      handleFiles(fileInput.files);
+    });
+
+    function handleFiles(files) {
+      if (files.length === 0) return;
+      const file = files[0];
+      if (!file.name.toLowerCase().endsWith('.txt')) {
+        alert('দয়া করে শুধুমাত্র .txt ফাইল আপলোড করুন!');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        fileContent = e.target.result;
+        const displayText = fileContent.length > 1000 
+          ? fileContent.slice(0, 1000) + '\n...\n(আরও আছে)' 
+          : fileContent;
+        preview.textContent = displayText;
+        preview.style.display = 'block';
+        convertBtn.disabled = false;
+        uploadArea.querySelector('p').textContent = `আপলোড হয়েছে: ${file.name}`;
+      };
+      reader.readAsText(file, 'UTF-8');
+    }
+
+    // Convert Button Click
+    convertBtn.addEventListener('click', () => {
+      if (!fileContent.trim()) {
+        alert('কোনো তথ্য পাওয়া যায়নি!');
+        return;
+      }
+
+      const delimiter = document.querySelector('input[name="delimiter"]:checked').value;
+      let separator = '\t';
+
+      if (delimiter === 'comma') separator = ',';
+      else if (delimiter === 'semicolon') separator = ';';
+      else if (delimiter === 'space') separator = /\s+/;
+
+      // Parse lines
+      const lines = fileContent.trim().split('\n').filter(line => line.trim() !== '');
+      const data = lines.map(line => {
+        if (delimiter === 'space') {
+          return line.trim().split(separator).filter(cell => cell !== '');
+        } else {
+          return line.split(separator);
+        }
+      }).filter(row => row.length > 0);
+
+      if (data.length === 0) {
+        alert('ফাইলে কোনো বৈধ ডেটা পাওয়া যায়নি!');
+        return;
+      }
+
+      // Create Excel Workbook
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+      // Generate filename
+      const defaultName = fileInput.files[0]?.name.replace('.txt', '') || 'converted';
+      const fileName = prompt("Excel ফাইলের নাম দিন:", defaultName) || defaultName;
+
+      // Download
+      XLSX.writeFile(wb, `${fileName}.xlsx`);
+
+      // Reset UI
+      setTimeout(() => {
+        convertBtn.disabled = true;
+        preview.style.display = 'none';
+        uploadArea.querySelector('p').textContent = 'ফাইল এখানে টেনে আনুন অথবা ক্লিক করে আপলোড করুন';
+        fileInput.value = '';
+      }, 1000);
+    });
+  </script>
+
+</body>
+</html>
