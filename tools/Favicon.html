@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nurulnc.site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="color"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+        #faviconCanvas {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #downloadLink {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        a {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        a:hover {
+            background-color: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nurulnc.site</h1>
+        <p>This tool will help you create a favicon easily. Enter text or upload an image.</p>
+        
+        <div class="input-group">
+            <label for="textInput">Text (optional):</label>
+            <input type="text" id="textInput" placeholder="Enter your text, like 'G'">
+        </div>
+        
+        <div class="input-group">
+            <label for="bgColor">Background Color:</label>
+            <input type="color" id="bgColor" value="#4CAF50">
+        </div>
+        
+        <div class="input-group">
+            <label for="textColor">Text Color:</label>
+            <input type="color" id="textColor" value="#FFFFFF">
+        </div>
+        
+        <div class="input-group">
+            <label for="imageInput">Upload Image (optional):</label>
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+        
+        <button onclick="generateFavicon()">Generate Favicon</button>
+        
+        <div id="preview">
+            <h3>Preview:</h3>
+            <canvas id="faviconCanvas" width="32" height="32"></canvas>
+        </div>
+        
+        <div id="downloadLink">
+            <a id="download" href="#" download="favicon.ico">Download Favicon (.ico)</a>
+        </div>
+    </div>
+
+    <script>
+        function generateFavicon() {
+            const canvas = document.getElementById('faviconCanvas');
+            const ctx = canvas.getContext('2d');
+            const textInput = document.getElementById('textInput').value;
+            const bgColor = document.getElementById('bgColor').value;
+            const textColor = document.getElementById('textColor').value;
+            const imageInput = document.getElementById('imageInput');
+            
+            // Clear background
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, 32, 32);
+            
+            if (imageInput.files && imageInput.files[0]) {
+                // If image uploaded
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        // Resize image to 32x32
+                        ctx.drawImage(img, 0, 0, 32, 32);
+                        createDownloadLink();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            } else if (textInput) {
+                // Draw text
+                ctx.fillStyle = textColor;
+                ctx.font = 'bold 20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(textInput.charAt(0).toUpperCase(), 16, 16); // First character
+                createDownloadLink();
+            } else {
+                alert('Please enter text or upload an image!');
+            }
+        }
+        
+        function createDownloadLink() {
+            const canvas = document.getElementById('faviconCanvas');
+            const downloadLink = document.getElementById('downloadLink');
+            const download = document.getElementById('download');
+            
+            // Convert canvas to ICO format simply (as PNG, but named ICO)
+            // For real ICO, use a library, but this is simple
+            const dataURL = canvas.toDataURL('image/png');
+            download.href = dataURL;
+            download.download = 'favicon.png'; // Actually PNG, for ICO need advanced library
+            downloadLink.style.display = 'block';
+            
+            // Note: For actual ICO, convert canvas to ICO blob. Here it's simple PNG.
+        }
+    </script>
+</body>
+</html>
