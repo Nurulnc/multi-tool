@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>URL শর্টনার</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 18px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+      color: #5a67d8;
+      font-size: 2rem;
+    }
+
+    p {
+      color: #718096;
+      margin-bottom: 1.8rem;
+      font-size: 1.1rem;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    #fullUrl {
+      flex: 1;
+      padding: 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      min-width: 250px;
+      transition: border 0.3s;
+    }
+
+    #fullUrl:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      padding: 14px 24px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #5a67d8;
+      transform: translateY(-2px);
+    }
+
+    .result {
+      margin-top: 1.5rem;
+      padding: 1.2rem;
+      background: #f0f4ff;
+      border-radius: 12px;
+      border: 1px solid #c3dafe;
+      display: none;
+    }
+
+    #shortUrl {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border: 1px solid #a0aec0;
+      border-radius: 8px;
+      background: white;
+      font-size: 1rem;
+      color: #2d3748;
+    }
+
+    .copy-btn {
+      background: #48bb78;
+    }
+
+    .copy-btn:hover {
+      background: #38a169;
+    }
+
+    .loading {
+      color: #667eea;
+      font-style: italic;
+    }
+
+    .error {
+      color: #e53e3e;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔗 URL শর্টনার</h1>
+    <p>আপনার লম্বা লিংককে মুহূর্তে ছোট করুন</p>
+
+    <div class="input-group">
+      <input type="url" id="fullUrl" placeholder="এখানে URL দিন... উদাঃ https://example.com" required />
+      <button onclick="shortenUrl()">শর্ট করুন</button>
+    </div>
+
+    <div id="error" class="error"></div>
+
+    <div id="result" class="result">
+      <p><strong>আপনার শর্ট লিংক:</strong></p>
+      <input type="text" id="shortUrl" readonly />
+      <button class="copy-btn" onclick="copyUrl()">কপি করুন</button>
+    </div>
+  </div>
+
+  <script>
+    async function shortenUrl() {
+      const fullUrl = document.getElementById('fullUrl').value.trim();
+      const result = document.getElementById('result');
+      const error = document.getElementById('error');
+      const shortInput = document.getElementById('shortUrl');
+
+      // Reset
+      result.style.display = 'none';
+      error.textContent = '';
+      if (!fullUrl) {
+        error.textContent = 'অনুগ্রহ করে একটি URL দিন';
+        return;
+      }
+
+      // Validate URL
+      let url;
+      try {
+        url = new URL(fullUrl);
+      } catch {
+        error.textContent = 'অবৈধ URL! সঠিক ফরম্যাটে দিন।';
+        return;
+      }
+
+      // Show loading
+      error.textContent = 'শর্ট করা হচ্ছে...';
+      error.className = 'loading';
+
+      try {
+        // Using TinyURL API (No API key needed)
+        const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(fullUrl)}`);
+        
+        if (!response.ok) throw new Error('নেটওয়ার্ক সমস্যা');
+
+        const shortUrl = await response.text();
+
+        if (shortUrl.includes('Error') || !shortUrl.startsWith('http')) {
+          throw new Error('URL শর্ট করা যায়নি');
+        }
+
+        shortInput.value = shortUrl;
+        result.style.display = 'block';
+        error.textContent = '';
+      } catch (err) {
+        error.textContent = err.message || 'কিছু ভুল হয়েছে, আবার চেষ্টা করুন';
+        error.className = 'error';
+      }
+    }
+
+    function copyUrl() {
+      const shortUrl = document.getElementById('shortUrl');
+      shortUrl.select();
+      shortUrl.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      
+      const btn = event.target;
+      const original = btn.textContent;
+      btn.textContent = 'কপি হয়েছে!';
+      btn.style.background = '#38a169';
+      
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.style.background = '#48bb78';
+      }, 2000);
+    }
+
+    // Enter key support
+    document.getElementById('fullUrl').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') shortenUrl();
+    });
+  </script>
+</body>
+</html>
