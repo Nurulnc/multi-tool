@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Duplicate String Remover/Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* Light blue background */
+            color: #333;
+        }
+        .header {
+            background-color: #4682b4; /* Steel blue */
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #87ceeb; /* Sky blue border */
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+        .nav button {
+            background: none;
+            border: 1px solid #fff;
+            color: white;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .nav button:hover {
+            background-color: #fff;
+            color: #4682b4;
+        }
+        .main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .description {
+            text-align: center;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .actions {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .actions button {
+            background-color: #87ceeb;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .actions button:hover {
+            background-color: #4682b4;
+            color: white;
+        }
+        .file-upload {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .file-upload input[type="file"] {
+            margin: 0 5px;
+        }
+        .regex-filter {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .regex-filter input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        .regex-filter input[type="text"] {
+            width: 300px;
+            padding: 5px;
+            border: 1px solid #87ceeb;
+            border-radius: 4px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 2px solid #87ceeb;
+            border-radius: 4px;
+            font-family: monospace;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        .input-section, .output-section {
+            margin-bottom: 20px;
+        }
+        .footer {
+            background-color: #4682b4;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 3px solid #87ceeb;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .footer-links button {
+            background: none;
+            border: 1px solid #fff;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .footer-links button:hover {
+            background-color: #fff;
+            color: #4682b4;
+        }
+        /* Social buttons in header */
+        .social {
+            display: flex;
+            gap: 10px;
+        }
+        .social button {
+            background-color: #1877f2; /* Facebook blue */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .close-btn {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">Nurulnc.site</div>
+        </div>
+        <div class="social">
+            <button>Recommend</button>
+            <button>Share</button>
+            <button class="close-btn">X</button>
+        </div>
+    </div>
+
+    <div class="main">
+        <h1 class="title">Online Duplicate String Remover/Finder</h1>
+        <p class="description">Find or remove duplicate entries from a group of strings that is separated by break lines. Execute by pressing the button(s).</p>
+
+        <div class="file-upload">
+            <label for="fileInput">Upload Text Files (Batch):</label>
+            <input type="file" id="fileInput" multiple accept=".txt" onchange="loadFiles(event)">
+        </div>
+
+        <div class="regex-filter">
+            <input type="checkbox" id="useRegex"> Use Regex Filter: 
+            <input type="text" id="regexPattern" placeholder="e.g., ^A.*" title="Enter a regex pattern to filter lines">
+        </div>
+
+        <div class="input-section">
+            <textarea id="input" placeholder="Enter strings here, one per line...">Apple
+banana
+Banana
+Cat
+dog
+Cat
+Dog
+dog
+Apple
+cat</textarea>
+        </div>
+
+        <div class="actions">
+            <button onclick="removeDuplicates()">Remove Duplicates</button>
+            <button onclick="findDuplicates()">Find Duplicates</button>
+            <button onclick="clearAll()">Clear</button>
+            <button onclick="exportToCSV()">Export to CSV</button>
+        </div>
+
+        <div class="output-section">
+            <textarea id="output" placeholder="Output will appear here..." readonly></textarea>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Copyright © Nurulnc.site</p>
+  
+    </div>
+
+    <script>
+        let cachedLines = []; // Cache filtered lines for performance
+
+        function getLines(textareaId) {
+            const textarea = document.getElementById(textareaId);
+            return textarea.value.trim().split('\n').filter(line => line.trim() !== '');
+        }
+
+        function filterByRegex(lines) {
+            const useRegex = document.getElementById('useRegex').checked;
+            if (!useRegex) return lines;
+            const pattern = document.getElementById('regexPattern').value;
+            if (!pattern) return lines;
+            let regex;
+            try {
+                regex = new RegExp(pattern, 'i'); // Case-insensitive regex
+            } catch (e) {
+                alert('Invalid regex pattern!');
+                return [];
+            }
+            return lines.filter(line => regex.test(line));
+        }
+
+        function setOutput(lines) {
+            document.getElementById('output').value = Array.isArray(lines) ? lines.join('\n') : lines;
+        }
+
+        async function loadFiles(event) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+            let combinedContent = '';
+            await Promise.all(files.map(file => {
+                return new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        combinedContent += e.target.result + '\n--- FILE SEPARATOR ---\n';
+                        resolve();
+                    };
+                    reader.readAsText(file);
+                });
+            }));
+            document.getElementById('input').value = combinedContent;
+        }
+
+        function processDuplicates(isRemove) {
+            let lines = getLines('input');
+            if (lines.length === 0) return;
+
+            // Filter once and cache
+            if (cachedLines.length === 0 || cachedLines.length !== lines.length) {
+                cachedLines = filterByRegex(lines);
+            }
+            lines = cachedLines;
+
+            const lowerMap = new Map(); // Optimized: Map for O(1) lookups
+            const results = [];
+            const seen = new Set();
+
+            lines.forEach((line, index) => {
+                const lowerLine = line.toLowerCase();
+                if (!seen.has(lowerLine)) {
+                    seen.add(lowerLine);
+                    if (isRemove) {
+                        results.push(line); // Keep first occurrence
+                    }
+                } else if (!isRemove) {
+                    // For find, collect unique duplicates
+                    if (!lowerMap.has(lowerLine)) {
+                        lowerMap.set(lowerLine, line); // Store original case
+                    }
+                }
+            });
+
+            if (!isRemove) {
+                results.push(...Array.from(lowerMap.values()));
+            }
+
+            // Sort once at end for perf
+            results.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+            if (isRemove && results.length === 0) {
+                setOutput('No unique items after filtering.');
+            } else if (!isRemove && results.length === 0) {
+                setOutput('No duplicates found.');
+            } else {
+                setOutput(results);
+            }
+        }
+
+        function removeDuplicates() {
+            processDuplicates(true);
+        }
+
+        function findDuplicates() {
+            processDuplicates(false);
+        }
+
+        function clearAll() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').value = '';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('useRegex').checked = false;
+            document.getElementById('regexPattern').value = '';
+            cachedLines = []; // Clear cache
+        }
+
+        function exportToCSV() {
+            const output = document.getElementById('output').value;
+            if (!output.trim()) {
+                alert('No output to export!');
+                return;
+            }
+            const lines = output.split('\n').filter(line => line.trim() !== '');
+            let csvContent = 'data:text/csv;charset=utf-8,"String"\n';
+            lines.forEach(line => {
+                csvContent += `"${line.replace(/"/g, '""')}"\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'results.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
