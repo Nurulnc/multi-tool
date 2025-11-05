@@ -1,274 +1,123 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ছবিতে Play Button</title>
-    <meta name="theme-color" content="#007bff">
-    <style>
-        :root {
-            --primary: #007bff;
-            --success: #28a745;
-            --dark: #1a1a1a;
-            --light: #f8f9fa;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            background: white;
-            width: 92vw;
-            max-width: 480px;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            margin: 12px;
-        }
-        header {
-            background: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 20px 16px;
-            font-size: clamp(1.2rem, 5vw, 1.6rem);
-            font-weight: 600;
-        }
-        .upload-area {
-            padding: 32px 20px;
-            text-align: center;
-        }
-        .upload-box {
-            border: 4px dashed var(--primary);
-            border-radius: 20px;
-            padding: 40px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f8fdff;
-        }
-        .upload-box:hover {
-            background: #e3f2ff;
-            border-color: #0056b3;
-            transform: translateY(-4px);
-        }
-        .upload-box:active {
-            transform: translateY(0);
-        }
-        .upload-icon {
-            width: 68px;
-            height: 68px;
-            margin: 0 auto 16px;
-        }
-        .upload-text {
-            font-size: clamp(0.9rem, 4vw, 1rem);
-            color: #444;
-        }
-        #preview {
-            position: relative;
-            margin: 20px;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            display: none;
-        }
-        #preview img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .play-btn {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 18vw;
-            height: 18vw;
-            max-width: 90px;
-            max-height: 90px;
-            background: rgba(0,0,0,0.65);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-            transition: all 0.3s ease;
-        }
-        .play-btn:hover {
-            background: rgba(0,0,0,0.85);
-            transform: translate(-50%, -50%) scale(1.15);
-        }
-        .play-btn::before {
-            content: '';
-            border-left: 0.35em solid white;
-            border-top: 0.22em solid transparent;
-            border-bottom: 0.22em solid transparent;
-            margin-left: 0.15em;
-            width: 0;
-            height: 0;
-            transform: scale(4);
-        }
-        .actions {
-            padding: 0 20px 28px;
-            display: grid;
-            gap: 12px;
-        }
-        .btn {
-            padding: 14px 20px;
-            border: none;
-            border-radius: 12px;
-            font-size: clamp(0.95rem, 4vw, 1.1rem);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-        .btn:active {
-            transform: scale(0.96);
-        }
-        .footer {
-            text-align: center;
-            padding: 16px;
-            color: rgba(255,255,255,0.8);
-            font-size: 0.85rem;
-        }
-        /* মোবাইল অপটিমাইজেশন */
-        @media (max-width: 480px) {
-            .container { margin: 8px; border-radius: 20px; }
-            .upload-box { padding: 36px 16px; }
-        }
-        @media (orientation: landscape) and (max-height: 500px) {
-            body { padding: 8px; }
-            .container { width: 96vw; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Play Button যোগ করো</title>
+<style>
+  body,html{margin:0;height:100%;font-family:sans-serif;background:#f0f0f0;display:flex;align-items:center;justify-content:center;}
+  .box{max-width:420px;width:90%;background:#fff;padding:20px;border-radius:20px;box-shadow:0 10px 30px #0002;text-align:center;}
+  h2{color:#333;margin:0 0 20px;font-size:1.4rem;}
+  .drop{border:4px dashed #3498db;padding:40px;border-radius:16px;cursor:pointer;transition:.3s;background:#f8fbff;}
+  .drop:hover{background:#e3f2ff;border-color:#2980b9;}
+  .drop.drag{background:#d0ebff;}
+  .icon{font-size:50px;color:#3498db;margin-bottom:10px;}
+  .preview{margin:25px 0;position:relative;display:none;border-radius:16px;overflow:hidden;box-shadow:0 8px 25px #0003;}
+  .preview img{width:100%;display:block;}
+  .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70px;height:70px;background:rgba(0,0,0,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .play::before{content:"";border-left:20px solid #fff;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:6px;}
+  button{margin:10px auto;padding:14px 0;width:100%;border:none;border-radius:12px;font-size:1rem;color:#fff;cursor:pointer;}
+  #change{background:#9b59b6;}
+  #down{background:#27ae60;}
+  button:active{transform:scale(0.96);}
+  .ctrl{margin-top:15px;font-size:0.9rem;color:#555;}
+  .ctrl label{display:inline-block;margin:5px 8px;}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <header>ছবিতে Play Button যোগ করুন</header>
+<div class="box">
+  <h2>ছবিতে Play Button যোগ করুন</h2>
 
-        <div class="upload-area">
-            <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-                <input type="file" id="fileInput" accept="image/*" hidden>
-                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="17 8 12 3 7 8"/>
-                    <line x1="12" y1="3" x2="12" y2="15"/>
-                </svg>
-                <div class="upload-text">ছবি আপলোড করুন<br><small>টাচ করুন অথবা টেনে আনুন</small></div>
-            </div>
-        </div>
+  <div class="drop" id="drop">
+    <div class="icon">↑</div>
+    <div>ছবি এখানে টেনে আনো<br>অথবা ক্লিক করে দাও</div>
+    <input type="file" id="file" accept="image/*" hidden>
+  </div>
 
-        <div id="preview">
-            <img id="output" src="" alt="প্রিভিউ">
-            <div class="play-btn"></div>
-        </div>
+  <div class="preview" id="prev">
+    <img id="img">
+    <div class="play"></div>
+  </div>
 
-        <div class="actions">
-            <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()" id="changeBtn" style="display:none;">
-                অন্য ছবি বেছে নিন
-            </button>
-            <button class="btn btn-success" id="downloadBtn" onclick="downloadImage()" style="display:none;">
-                ডাউনলোড করুন (Play Button সহ)
-            </button>
-        </div>
-    </div>
+  <button id="change" style="display:none">অন্য ছবি দিন</button>
+  <button id="down" style="display:none">ডাউনলোড করুন</button>
 
-    <div class="footer">মোবাইল + ডেস্কটপ — দুটোতেই কাজ করে!</div>
+  <div class="ctrl">
+    <label>সাইজ: <input type="range" id="size" min="40" max="120" value="70"></label><br>
+    <label>অন্ধকার: <input type="range" id="opa" min="30" max="90" value="70"></label>
+  </div>
+</div>
 
-    <script>
-        const fileInput = document.getElementById('fileInput');
-        const preview = document.getElementById('preview');
-        const output = document.getElementById('output');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const changeBtn = document.getElementById('changeBtn');
+<script>
+const drop = document.getElementById('drop');
+const file = document.getElementById('file');
+const prev = document.getElementById('prev');
+const img  = document.getElementById('img');
+const play = document.querySelector('.play');
+const change = document.getElementById('change');
+const down  = document.getElementById('down');
+const size  = document.getElementById('size');
+const opa   = document.getElementById('opa');
 
-        // ড্র্যাগ-ড্রপ সাপোর্ট
-        ['dragover', 'dragenter'].forEach(evt => {
-            document.querySelector('.upload-box').addEventListener(evt, e => {
-                e.preventDefault();
-                e.currentTarget.style.background = '#d0e8ff';
-            });
-        });
-        ['dragleave', 'dragend'].forEach(evt => {
-            document.querySelector('.upload-box').addEventListener(evt, e => {
-                e.currentTarget.style.background = '#f8fdff';
-            });
-        });
-        document.querySelector('.upload-box').addEventListener('drop', e => {
-            e.preventDefault();
-            e.currentTarget.style.background = '#f8fdff';
-            if (e.dataTransfer.files.length) {
-                fileInput.files = e.dataTransfer.files;
-                loadImage();
-            }
-        });
+// ক্লিক করে ফাইল সিলেক্ট
+drop.onclick = () => file.click();
+change.onclick = () => file.click();
 
-        fileInput.addEventListener('change', loadImage);
+// ড্র্যাগ-ড্রপ
+['dragover','dragenter'].forEach(e=>drop.addEventListener(e, p=> (p.preventDefault(), drop.classList.add('drag'))));
+['dragleave','dragend','drop'].forEach(e=>drop.addEventListener(e, p=> (p.preventDefault(), drop.classList.remove('drag'))));
+drop.ondrop = e => { if(e.dataTransfer.files[0]) load(e.dataTransfer.files[0]); }
 
-        function loadImage() {
-            const file = fileInput.files[0];
-            if (!file) return;
+// ফাইল লোড
+file.onchange = () => { if(file.files[0]) load(file.files[0]); }
 
-            const reader = new FileReader();
-            reader.onload = e => {
-                output.src = e.target.result;
-                preview.style.display = 'block';
-                downloadBtn.style.display = 'block';
-                changeBtn.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
+function load(f){
+  const r = new FileReader();
+  r.onload = e => {
+    img.src = e.target.result;
+    prev.style.display = 'block';
+    change.style.display = down.style.display = 'block';
+    updatePlay();
+  }
+  r.readAsDataURL(f);
+}
 
-        function downloadImage() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const img = new Image();
-            img.src = output.src;
+// Play Button আপডেট
+function updatePlay(){
+  play.style.width = play.style.height = size.value + 'px';
+  play.style.background = `rgba(0,0,0,${opa.value/100})`;
+}
+size.oninput = opa.oninput = updatePlay;
 
-            img.onload = () => {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
+// ডাউনলোড
+down.onclick = () => {
+  const c = document.createElement('canvas');
+  const x = c.getContext('2d');
+  const i = new Image();
+  i.src = img.src;
+  i.onload = () => {
+    c.width = i.width; c.height = i.height;
+    x.drawImage(i,0,0);
+    // Play আঁকা
+    const s = Math.min(c.width,c.height) * (size.value/400);
+    const cx = c.width/2, cy = c.height/2;
+    x.fillStyle = `rgba(0,0,0,${opa.value/100})`;
+    x.beginPath(); x.arc(cx,cy,s,0,Math.PI*2); x.fill();
+    x.fillStyle = '#fff';
+    x.beginPath();
+    x.moveTo(cx-s/3, cy-s/2.2);
+    x.lineTo(cx-s/3, cy+s/2.2);
+    x.lineTo(cx+s/3.5, cy);
+    x.closePath(); x.fill();
 
-                // Play Button (রেসপন্সিভ সাইজ)
-                const btnSize = Math.min(canvas.width, canvas.height) * 0.18;
-                const cx = canvas.width / 2;
-                const cy = canvas.height / 2;
+    const a = document.createElement('a');
+    a.download = 'video-thumb.png';
+    a.href = c.toDataURL();
+    a.click();
+  }
+}
+</script>
 
-                ctx.fillStyle = 'rgba(0,0,0,0.65)';
-                ctx.beginPath();
-                ctx.arc(cx, cy, btnSize / 2, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.fillStyle = 'white';
-                ctx.beginPath();
-                ctx.moveTo(cx - btnSize / 6, cy - btnSize / 4);
-                ctx.lineTo(cx - btnSize / 6, cy + btnSize / 4);
-                ctx.lineTo(cx + btnSize / 5, cy);
-                ctx.closePath();
-                ctx.fill();
-
-                // ডাউনলোড
-                const a = document.createElement('a');
-                a.download = 'my-video-thumbnail.png';
-                a.href = canvas.toDataURL('image/png');
-                a.click();
-            };
-        }
-    </script>
 </body>
-  </html>
+</html>
