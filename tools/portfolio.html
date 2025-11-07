@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>আমার পোর্টফোলিও | Freelance Worker</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      color: #fff;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00d4ff;
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      transition: 0.3s;
+    }
+
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #00d4ff;
+      bottom: -5px;
+      left: 0;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 5% 50px;
+      text-align: center;
+    }
+
+    .profile-container {
+      max-width: 400px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .profile-img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid rgba(0, 212, 255, 0.4);
+      box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2);
+      margin-bottom: 1.5rem;
+      transition: 0.3s;
+    }
+
+    .profile-img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+    }
+
+    .profile-name {
+      font-size: 2.3rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, #00d4ff, #66e0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .profile-title {
+      font-size: 1.4rem;
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    /* Social Icons under Image */
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-icons a {
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 212, 255, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #fff;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      backdrop-filter: blur(5px);
+    }
+
+    .social-icons a:hover {
+      background: #00d4ff;
+      transform: translateY(-8px) scale(1.15);
+      box-shadow: 0 12px 25px rgba(0, 212, 255, 0.4);
+    }
+
+    /* About Section */
+    .about {
+      padding: 100px 5%;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      width: 80px;
+      height: 4px;
+      background: #00d4ff;
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+
+    .about-content {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .about-text {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .about-text p {
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .skills {
+      margin-top: 1.5rem;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      background: rgba(0, 212, 255, 0.2);
+      color: #00d4ff;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      margin: 0.4rem;
+      border: 1px solid rgba(0, 212, 255, 0.5);
+      transition: 0.3s;
+    }
+
+    .skill-tag:hover {
+      background: #00d4ff;
+      color: #fff;
+      transform: translateY(-3px);
+    }
+
+    /* Services */
+    .services {
+      padding: 100px 5%;
+      text-align: center;
+    }
+
+    .service-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .service-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      padding: 2rem;
+      border-radius: 20px;
+      width: 300px;
+      transition: 0.4s;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .service-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 20px 40px rgba(0, 212, 255, 0.15);
+      background: rgba(0, 212, 255, 0.15);
+    }
+
+    .service-card i {
+      font-size: 2.8rem;
+      color: #00d4ff;
+      margin-bottom: 1rem;
+    }
+
+    /* Contact */
+    .contact {
+      padding: 100px 5%;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .contact form {
+      max-width: 600px;
+      margin: 2rem auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact input, .contact textarea {
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      font-size: 1rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .contact input::placeholder, .contact textarea::placeholder {
+      color: #bbb;
+    }
+
+    .btn {
+      background: #00d4ff;
+      color: white;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .btn:hover {
+      background: #00a8cc;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0,0,0,0.4);
+      font-size: 0.9rem;
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .about-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      .profile-img {
+        width: 150px;
+        height: 150px;
+      }
+      .profile-name {
+        font-size: 1.9rem;
+      }
+      .service-card {
+        width: 100%;
+        max-width: 350px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a href="#" class="logo">আমার পোর্টফোলিও</a>
+    <nav>
+      <ul>
+        <li><a href="#home">হোম</a></li>
+        <li><a href="#about">আমার সম্পর্কে</a></li>
+        <li><a href="#services">সার্ভিস</a></li>
+        <li><a href="#contact">যোগাযোগ</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="profile-container">
+      <!-- আপনার ছবি এখানে দিন -->
+      <img src="https://raw.githubusercontent.com/Nurulnc/multi-tool/main/FB_IMG_1762528908431.jpg" alt="আমার ছবি" class="profile-img" id="profilePic">
+      
+      <h1 class="profile-name">Nurul Amin Chowdhury</h1>
+      <p class="profile-title">Freelance Worker</p>
+      
+      <!-- Social Icons under Image -->
+      <div class="social-icons">
+        <a href="https://Instagram.com/nurulnc100" target="_blank" title="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://Facebook.com/nurulnc.official" target="_blank" title="Facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://x.com/nurul_nc" target="_blank" title="Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="container">
+      <h2 class="section-title fade-in">আমার সম্পর্কে</h2>
+      <div class="about-content">
+        <div class="about-text fade-in">
+          <p>আমি একজন <strong>পেশাদার ফ্রিল্যান্স ওয়ার্কার</strong>। অনলাইন প্ল্যাটফর্মে কাজ করে আসছি বেশ কয়েক বছর ধরে। ক্লায়েন্টের সাথে সরাসরি কাজ করতে পছন্দ করি এবং প্রতিটি প্রজেক্টে ১০০% কমিটমেন্ট দিই।</p>
+          
+          <p>আমার কাজের মূল লক্ষ্য: <strong>সময়মতো ডেলিভারি, উচ্চমানের কাজ, এবং ক্লায়েন্টের সন্তুষ্টি</strong>।</p>
+
+          <div class="skills">
+            <span class="skill-tag">ফ্রিল্যান্সিং</span>
+            <span class="skill-tag">প্রজেক্ট ম্যানেজমেন্ট</span>
+            <span class="skill-tag">ক্লায়েন্ট কমিউনিকেশন</span>
+            <span class="skill-tag">ডেডলাইন মেইনটেইন</span>
+            <span class="skill-tag">রিভিশন হ্যান্ডলিং</span>
+            <span class="skill-tag">মাল্টি-টাস্কিং</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services" id="services">
+    <div class="container">
+      <h2 class="section-title fade-in">আমার সার্ভিস</h2>
+      <div class="service-grid">
+        <div class="service-card fade-in">
+          <i class="fas fa-laptop-code"></i>
+          <h3>ফ্রিল্যান্স প্রজেক্ট</h3>
+          <p>যেকোনো ধরনের অনলাইন কাজ গ্রহণ করি</p>
+        </div>
+        <div class="service-card fade-in">
+          <i class="fas fa-envelope-open-text"></i>
+          <h3>ক্লায়েন্ট সাপোর্ট</h3>
+          <p>২৪/৭ যোগাযোগ ও সাপোর্ট</p>
+        </div>
+        <div class="service-card fade-in">
+          <i class="fas fa-clock"></i>
+          <h3>সময়মতো ডেলিভারি</h3>
+          <p>প্রতিশ্রুত সময়ে কাজ সম্পন্ন</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <h2 class="section-title fade-in">যোগাযোগ করুন</h2>
+      <form class="fade-in">
+        <input type="text" placeholder="আপনার নাম" required />
+        <input type="email" placeholder="আপনার ইমেইল" required />
+        <textarea rows="5" placeholder="প্রজেক্টের বিবরণ লিখুন..." required></textarea>
+        <button type="submit" class="btn">মেসেজ পাঠান</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Nurul Amin Chowdhury। সর্বস্বত্ব সংরক্ষিত।</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Fade In on Scroll
+    const fadeElems = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    fadeElems.forEach(el => observer.observe(el));
+
+    // Form Submit
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('ধন্যবাদ! আপনার মেসেজ পাঠানো হয়েছে। আমি শিগগিরই যোগাযোগ করব।');
+      this.reset();
+    });
+  </script>
+</body>
+    </html>
