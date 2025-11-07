@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>গাড়ি রেস! Power Ups 🔥</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom, #87CEEB, #228B22);
+      color: white;
+      text-align: center;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .game-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 10px;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 10px 0;
+      text-shadow: 0 0 15px #fff;
+      color: #ff4444;
+    }
+
+    #score {
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    #gameCanvas {
+      background: #222;
+      border: 5px solid #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      display: block;
+      margin: 0 auto 10px;
+      width: 100%;
+      max-width: 700px;
+      height: 500px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 20px;
+      gap: 10px;
+    }
+
+    .touch-btn {
+      flex: 1;
+      padding: 20px;
+      font-size: 2rem;
+      background: rgba(255,255,255,0.2);
+      border: 3px solid #fff;
+      border-radius: 15px;
+      color: white;
+      font-weight: bold;
+      backdrop-filter: blur(5px);
+      transition: 0.2s;
+    }
+
+    .touch-btn:active {
+      background: rgba(255,255,255,0.5);
+      transform: scale(0.95);
+    }
+
+    #start-btn {
+      padding: 15px 40px;
+      font-size: 1.4rem;
+      background: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    #start-btn:hover, #start-btn:active {
+      background: #cc0000;
+    }
+
+    #game-over {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 30px;
+      border-radius: 20px;
+      font-size: 1.8rem;
+      display: none;
+      z-index: 100;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      #gameCanvas { height: 400px; }
+      .touch-btn { font-size: 1.8rem; padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>গাড়ি রেস! Power Ups 🔥</h1>
+    <div id="score">স্কোর: 0</div>
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="controls">
+      <div id="left-btn" class="touch-btn">←</div>
+      <div id="right-btn" class="touch-btn">→</div>
+    </div>
+
+    <button id="start-btn">শুরু করো</button>
+
+    <div id="game-over">
+      <div>গেম ওভার! 💥</div>
+      <div id="final-score">স্কোর: 0</div>
+      <button onclick="location.reload()" style="margin-top:15px;padding:10px 20px;background:#4CAF50;color:white;border:none;border-radius:10px;cursor:pointer;font-size:1.2rem;">আবার খেলো</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // ক্যানভাস সাইজ
+    canvas.width = Math.min(700, window.innerWidth - 40);
+    canvas.height = 500;
+
+    const scoreDisplay = document.getElementById('score');
+    const startBtn = document.getElementById('start-btn');
+    const gameOverScreen = document.getElementById('game-over');
+    const finalScoreDisplay = document.getElementById('final-score');
+    const leftBtn = document.getElementById('left-btn');
+    const rightBtn = document.getElementById('right-btn');
+
+    // গেম ভ্যারিয়েবল
+    let score = 0;
+    let gameActive = false;
+    let gameSpeed = 3;
+    let playerX = canvas.width / 2 - 25;
+    let currentLane = 1;
+    const lanes = [
+      canvas.width * 0.2,
+      canvas.width * 0.5,
+      canvas.width * 0.8
+    ];
+    let enemies = [];
+    let powerUps = [];
+    let keys = {};
+    let touchLeft = false;
+    let touchRight = false;
+    let shieldActive = 0; // শিল্ডের সময় (সেকেন্ড)
+    let speedBoostActive = false;
+    let speedBoostTimer = 0;
+
+    // কন্ট্রোল
+    document.addEventListener('keydown', (e) => { keys[e.key] = true; });
+    document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+    leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); touchLeft = true; });
+    leftBtn.addEventListener('touchend', () => { touchLeft = false; });
+    rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); touchRight = true; });
+    rightBtn.addEventListener('touchend', () => { touchRight = false; });
+
+    leftBtn.addEventListener('mousedown', () => touchLeft = true);
+    leftBtn.addEventListener('mouseup', () => touchLeft = false);
+    rightBtn.addEventListener('mousedown', () => touchRight = true);
+    rightBtn.addEventListener('mouseup', () => touchRight = false);
+
+    startBtn.addEventListener('click', startGame);
+
+    function startGame() {
+      gameActive = true;
+      score = 0;
+      gameSpeed = 3;
+      currentLane = 1;
+      playerX = lanes[1];
+      enemies = [];
+      powerUps = [];
+      shieldActive = 0;
+      speedBoostActive = false;
+      startBtn.disabled = true;
+      startBtn.textContent = 'চলছে...';
+      gameOverScreen.style.display = 'none';
+      updateScore();
+      gameLoop();
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = `স্কোর: ${score}`;
+      finalScoreDisplay.textContent = `স্কোর: ${score}`;
+    }
+
+    function movePlayer() {
+      let moved = false;
+
+      if (keys['ArrowLeft'] && currentLane > 0) {
+        currentLane--;
+        playerX = lanes[currentLane];
+        moved = true;
+      }
+      if (keys['ArrowRight'] && currentLane < 2) {
+        currentLane++;
+        playerX = lanes[currentLane];
+        moved = true;
+      }
+
+      if (touchLeft && currentLane > 0) {
+        currentLane--;
+        playerX = lanes[currentLane];
+        touchLeft = false;
+        moved = true;
+      }
+      if (touchRight && currentLane < 2) {
+        currentLane++;
+        playerX = lanes[currentLane];
+        touchRight = false;
+        moved = true;
+      }
+    }
+
+    function createEnemy() {
+      if (Math.random() < 0.03) {
+        const lane = Math.floor(Math.random() * 3);
+        enemies.push({ x: lanes[lane], y: -80, type: 'enemy' });
+      }
+    }
+
+    function createPowerUp() {
+      if (Math.random() < 0.015) { // কম সম্ভাবনা
+        const lane = Math.floor(Math.random() * 3);
+        const types = ['shield', 'speed', 'coin'];
+        const type = types[Math.floor(Math.random() * types.length)];
+        powerUps.push({ x: lanes[lane], y: -60, type: type });
+      }
+    }
+
+    function moveEnemies() {
+      for (let i = enemies.length - 1; i >= 0; i--) {
+        enemies[i].y += gameSpeed;
+        if (enemies[i].y > canvas.height) {
+          enemies.splice(i, 1);
+          score += 10;
+          updateScore();
+          gameSpeed += 0.1;
+        }
+      }
+    }
+
+    function movePowerUps() {
+      for (let i = powerUps.length - 1; i >= 0; i--) {
+        powerUps[i].y += gameSpeed;
+        if (powerUps[i].y > canvas.height) {
+          powerUps.splice(i, 1);
+        }
+      }
+    }
+
+    function collectPowerUp(powerUp) {
+      switch (powerUp.type) {
+        case 'shield':
+          shieldActive = 300; // 5 সেকেন্ড (60fps)
+          score += 50;
+          break;
+        case 'speed':
+          speedBoostActive = true;
+          speedBoostTimer = 300; // 5 সেকেন্ড
+          gameSpeed *= 1.5;
+          break;
+        case 'coin':
+          score += 25;
+          break;
+      }
+      updateScore();
+      powerUps = powerUps.filter(p => p !== powerUp);
+    }
+
+    function updatePowerUps() {
+      for (let powerUp of powerUps) {
+        if (Math.abs(powerUp.x - playerX) < 45 && 
+            Math.abs(powerUp.y - (canvas.height - 100)) < 70) {
+          collectPowerUp(powerUp);
+        }
+      }
+    }
+
+    function updateShield() {
+      if (shieldActive > 0) {
+        shieldActive--;
+      }
+    }
+
+    function updateSpeedBoost() {
+      if (speedBoostActive && speedBoostTimer > 0) {
+        speedBoostTimer--;
+      } else if (speedBoostActive) {
+        speedBoostActive = false;
+        gameSpeed /= 1.5;
+      }
+    }
+
+    function checkCollision() {
+      for (let enemy of enemies) {
+        if (Math.abs(enemy.x - playerX) < 45 && 
+            Math.abs(enemy.y - (canvas.height - 100)) < 70) {
+          if (shieldActive > 0) {
+            // শিল্ড আছে - শুধু শিল্ড ভাঙে
+            shieldActive = 0;
+            enemies = enemies.filter(e => e !== enemy);
+            score += 30;
+            updateScore();
+          } else {
+            endGame();
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    function drawRoad() {
+      ctx.fillStyle = '#333';
+      ctx.fillRect(canvas.width * 0.1, 0, canvas.width * 0.8, canvas.height);
+
+      ctx.strokeStyle = 'yellow';
+      ctx.lineWidth = 4;
+      ctx.setLineDash([25, 25]);
+      for (let i = 1; i <= 2; i++) {
+        ctx.beginPath();
+        ctx.moveTo(canvas.width * 0.1 + i * (canvas.width * 0.8 / 3), 0);
+        ctx.lineTo(canvas.width * 0.1 + i * (canvas.width * 0.8 / 3), canvas.height);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+    }
+
+    function drawPlayer() {
+      // গাড়ি
+      ctx.fillStyle = '#ff4444';
+      ctx.fillRect(playerX - 25, canvas.height - 100, 50, 80);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(playerX - 20, canvas.height - 95, 40, 20);
+
+      // শিল্ড ইফেক্ট
+      if (shieldActive > 0) {
+        ctx.save();
+        ctx.translate(playerX, canvas.height - 60);
+        ctx.shadowColor = '#00ffff';
+        ctx.shadowBlur = 20;
+        ctx.fillStyle = 'rgba(0, 255, 255, 0.3)';
+        ctx.beginPath();
+        ctx.arc(0, 0, 40, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function drawEnemies() {
+      enemies.forEach(e => {
+        ctx.fillStyle = '#4444ff';
+        ctx.fillRect(e.x - 25, e.y, 50, 80);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(e.x - 20, e.y + 5, 40, 20);
+      });
+    }
+
+    function drawPowerUps() {
+      powerUps.forEach(pu => {
+        ctx.font = '30px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        switch (pu.type) {
+          case 'shield':
+            ctx.shadowColor = '#00ffff';
+            ctx.shadowBlur = 15;
+            ctx.fillText('⭐', pu.x, pu.y);
+            break;
+          case 'speed':
+            ctx.shadowColor = '#ff4444';
+            ctx.shadowBlur = 15;
+            ctx.fillText('⚡', pu.x, pu.y);
+            break;
+          case 'coin':
+            ctx.shadowColor = '#ffd700';
+            ctx.shadowBlur = 15;
+            ctx.fillText('💎', pu.x, pu.y);
+            break;
+        }
+        ctx.shadowBlur = 0;
+      });
+    }
+
+    function gameLoop() {
+      if (!gameActive) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const currentSpeed = speedBoostActive ? gameSpeed * 1.5 : gameSpeed;
+
+      movePlayer();
+      createEnemy();
+      createPowerUp();
+      moveEnemies();
+      movePowerUps();
+      updatePowerUps();
+      updateShield();
+      updateSpeedBoost();
+
+      if (checkCollision()) return;
+
+      drawRoad();
+      drawPowerUps();
+      drawEnemies();
+      drawPlayer();
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function endGame() {
+      gameActive = false;
+      gameSpeed = 3; // রিসেট
+      startBtn.disabled = false;
+      startBtn.textContent = 'আবার খেলো';
+      gameOverScreen.style.display = 'block';
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = Math.min(700, window.innerWidth - 40);
+      lanes[0] = canvas.width * 0.2;
+      lanes[1] = canvas.width * 0.5;
+      lanes[2] = canvas.width * 0.8;
+      if (gameActive) playerX = lanes[currentLane];
+    });
+  </script>
+</body>
+  </html>
