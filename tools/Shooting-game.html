@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>শুটিং গেম! 🚀🔥</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom, #000428, #004e92);
+      color: white;
+      text-align: center;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .game-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 10px;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 10px 0;
+      text-shadow: 0 0 15px #ff00ff;
+      color: #fff;
+    }
+
+    #score {
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    #lives {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    #gameCanvas {
+      background: radial-gradient(circle, #001122 0%, #000000 100%);
+      border: 5px solid #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255,0,255,0.5);
+      display: block;
+      margin: 0 auto 10px;
+      width: 100%;
+      max-width: 700px;
+      height: 500px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 20px;
+      gap: 10px;
+    }
+
+    .touch-btn {
+      flex: 1;
+      padding: 20px;
+      font-size: 2rem;
+      background: rgba(255,255,255,0.2);
+      border: 3px solid #fff;
+      border-radius: 15px;
+      color: white;
+      font-weight: bold;
+      backdrop-filter: blur(5px);
+      transition: 0.2s;
+    }
+
+    .touch-btn:active {
+      background: rgba(255,255,255,0.5);
+      transform: scale(0.95);
+    }
+
+    #start-btn {
+      padding: 15px 40px;
+      font-size: 1.4rem;
+      background: #ff00ff;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 10px;
+      box-shadow: 0 5px 15px rgba(255,0,255,0.4);
+    }
+
+    #start-btn:hover, #start-btn:active {
+      background: #cc00cc;
+    }
+
+    #game-over {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 30px;
+      border-radius: 20px;
+      font-size: 1.8rem;
+      display: none;
+      z-index: 100;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      #gameCanvas { height: 400px; }
+      .touch-btn { font-size: 1.8rem; padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>শুটিং গেম! 🚀🔥</h1>
+    <div id="score">স্কোর: 0</div>
+    <div id="lives">জীবন: ❤️❤️❤️</div>
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="controls">
+      <div id="left-btn" class="touch-btn">←</div>
+      <div id="right-btn" class="touch-btn">→</div>
+      <div id="shoot-btn" class="touch-btn">🔫</div>
+    </div>
+
+    <button id="start-btn">শুরু করো</button>
+
+    <div id="game-over">
+      <div>গেম ওভার! 💥</div>
+      <div id="final-score">স্কোর: 0</div>
+      <button onclick="location.reload()" style="margin-top:15px;padding:10px 20px;background:#4CAF50;color:white;border:none;border-radius:10px;cursor:pointer;font-size:1.2rem;">আবার খেলো</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // ক্যানভাস সাইজ
+    canvas.width = Math.min(700, window.innerWidth - 40);
+    canvas.height = 500;
+
+    const scoreDisplay = document.getElementById('score');
+    const livesDisplay = document.getElementById('lives');
+    const startBtn = document.getElementById('start-btn');
+    const gameOverScreen = document.getElementById('game-over');
+    const finalScoreDisplay = document.getElementById('final-score');
+    const leftBtn = document.getElementById('left-btn');
+    const rightBtn = document.getElementById('right-btn');
+    const shootBtn = document.getElementById('shoot-btn');
+
+    // গেম ভ্যারিয়েবল
+    let score = 0;
+    let lives = 3;
+    let gameActive = false;
+    let playerX = canvas.width / 2 - 25;
+    let playerY = canvas.height - 80;
+    let bullets = [];
+    let enemies = [];
+    let particles = []; // এক্সপ্লোশন
+    let keys = {};
+    let touchLeft = false;
+    touchRight = false;
+    let shootPressed = false;
+    let shootCooldown = 0;
+    const SHOOT_COOLDOWN = 10;
+
+    // কন্ট্রোল
+    document.addEventListener('keydown', (e) => { keys[e.key] = true; });
+    document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+    // টাচ
+    leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); touchLeft = true; });
+    leftBtn.addEventListener('touchend', () => { touchLeft = false; });
+    rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); touchRight = true; });
+    rightBtn.addEventListener('touchend', () => { touchRight = false; });
+    shootBtn.addEventListener('touchstart', (e) => { e.preventDefault(); shootPressed = true; });
+    shootBtn.addEventListener('touchend', () => { shootPressed = false; });
+
+    // মাউস (ডেস্কটপ টেস্ট)
+    leftBtn.addEventListener('mousedown', () => touchLeft = true);
+    leftBtn.addEventListener('mouseup', () => touchLeft = false);
+    rightBtn.addEventListener('mousedown', () => touchRight = true);
+    rightBtn.addEventListener('mouseup', () => touchRight = false);
+    shootBtn.addEventListener('mousedown', () => shootPressed = true);
+    shootBtn.addEventListener('mouseup', () => shootPressed = false);
+
+    startBtn.addEventListener('click', startGame);
+
+    function startGame() {
+      gameActive = true;
+      score = 0;
+      lives = 3;
+      playerX = canvas.width / 2 - 25;
+      bullets = [];
+      enemies = [];
+      particles = [];
+      startBtn.disabled = true;
+      startBtn.textContent = 'চলছে...';
+      gameOverScreen.style.display = 'none';
+      updateScore();
+      updateLives();
+      gameLoop();
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = `স্কোর: ${score}`;
+      finalScoreDisplay.textContent = `স্কোর: ${score}`;
+    }
+
+    function updateLives() {
+      livesDisplay.innerHTML = 'জীবন: ' + '❤️'.repeat(lives);
+    }
+
+    function movePlayer() {
+      const speed = 5;
+      if (keys['ArrowLeft'] || touchLeft) playerX = Math.max(20, playerX - speed);
+      if (keys['ArrowRight'] || touchRight) playerX = Math.min(canvas.width - 50, playerX + speed);
+      if (keys['a'] || keys['A']) playerX = Math.max(20, playerX - speed);
+      if (keys['d'] || keys['D']) playerX = Math.min(canvas.width - 50, playerX + speed);
+    }
+
+    function shoot() {
+      if (shootCooldown > 0 || !gameActive) return;
+      bullets.push({
+        x: playerX + 22,
+        y: playerY,
+        speed: 8
+      });
+      shootCooldown = SHOOT_COOLDOWN;
+    }
+
+    function updateShoot() {
+      if (shootCooldown > 0) shootCooldown--;
+      if ((keys[' '] || shootPressed) && shootCooldown === 0) {
+        shoot();
+      }
+    }
+
+    function createEnemy() {
+      if (Math.random() < 0.03 + score / 10000) {
+        enemies.push({
+          x: Math.random() * (canvas.width - 40),
+          y: -40,
+          speed: 1 + Math.random() * 2 + score / 2000,
+          size: 25 + Math.random() * 15
+        });
+      }
+    }
+
+    function updateBullets() {
+      for (let i = bullets.length - 1; i >= 0; i--) {
+        bullets[i].y -= bullets[i].speed;
+        if (bullets[i].y < 0) {
+          bullets.splice(i, 1);
+        }
+      }
+    }
+
+    function updateEnemies() {
+      for (let i = enemies.length - 1; i >= 0; i--) {
+        enemies[i].y += enemies[i].speed;
+        if (enemies[i].y > canvas.height) {
+          enemies.splice(i, 1);
+          if (gameActive) lives--;
+          updateLives();
+          if (lives <= 0) endGame();
+        }
+      }
+    }
+
+    function checkCollisions() {
+      // বুলেট vs এনিমি
+      for (let b = bullets.length - 1; b >= 0; b--) {
+        for (let e = enemies.length - 1; e >= 0; e--) {
+          const dx = bullets[b].x - enemies[e].x;
+          const dy = bullets[b].y - enemies[e].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < enemies[e].size / 2 + 5) {
+            // হিট! এক্সপ্লোশন
+            createExplosion(enemies[e].x, enemies[e].y);
+            bullets.splice(b, 1);
+            enemies.splice(e, 1);
+            score += 10;
+            updateScore();
+            break;
+          }
+        }
+      }
+
+      // প্লেয়ার vs এনিমি
+      for (let e = enemies.length - 1; e >= 0; e--) {
+        const dx = playerX + 25 - enemies[e].x;
+        const dy = playerY + 25 - enemies[e].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 30 + enemies[e].size / 2) {
+          createExplosion(playerX + 25, playerY + 25);
+          enemies.splice(e, 1);
+          lives--;
+          updateLives();
+          if (lives <= 0) endGame();
+        }
+      }
+    }
+
+    function createExplosion(x, y) {
+      for (let i = 0; i < 15; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 10,
+          vy: (Math.random() - 0.5) * 10,
+          life: 30,
+          maxLife: 30
+        });
+      }
+    }
+
+    function updateParticles() {
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].x += particles[i].vx;
+        particles[i].y += particles[i].vy;
+        particles[i].life--;
+        particles[i].vx *= 0.95;
+        particles[i].vy *= 0.95;
+        if (particles[i].life <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+    }
+
+    function drawStars() {
+      ctx.fillStyle = '#fff';
+      for (let i = 0; i < 100; i++) {
+        const x = (i * 123 % canvas.width);
+        const y = (i * 456 % canvas.height);
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+
+    function drawPlayer() {
+      // স্পেসশিপ
+      ctx.fillStyle = '#00ff00';
+      ctx.fillRect(playerX, playerY, 50, 60);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(playerX + 15, playerY + 10, 20, 20); // ককপিট
+      ctx.fillRect(playerX + 5, playerY + 45, 10, 15); // ইঞ্জিন
+      ctx.fillRect(playerX + 35, playerY + 45, 10, 15);
+    }
+
+    function drawBullets() {
+      ctx.fillStyle = '#ffff00';
+      bullets.forEach(b => {
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function drawEnemies() {
+      enemies.forEach(e => {
+        ctx.fillStyle = '#ff0000';
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(e.x - 3, e.y - 8, 6, 6); // চোখ
+      });
+    }
+
+    function drawParticles() {
+      particles.forEach(p => {
+        ctx.save();
+        ctx.globalAlpha = p.life / p.maxLife;
+        ctx.fillStyle = '#ffaa00';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    function gameLoop() {
+      if (!gameActive) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      movePlayer();
+      updateShoot();
+      createEnemy();
+      updateBullets();
+      updateEnemies();
+      updateParticles();
+      checkCollisions();
+
+      drawStars();
+      drawEnemies();
+      drawBullets();
+      drawPlayer();
+      drawParticles();
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function endGame() {
+      gameActive = false;
+      startBtn.disabled = false;
+      startBtn.textContent = 'আবার খেলো';
+      gameOverScreen.style.display = 'block';
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = Math.min(700, window.innerWidth - 40);
+      playerX = canvas.width / 2 - 25;
+    });
+  </script>
+</body>
+  </html>
