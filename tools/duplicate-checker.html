@@ -210,131 +210,150 @@ cat</textarea>
   
     </div>
 
-    <script>
-        let cachedLines = []; // Cache filtered lines for performance
+  <script>
+    let originalLines = []; // Store original lines with case
+    let filteredLines = []; // After regex
 
-        function getLines(textareaId) {
-            const textarea = document.getElementById(textareaId);
-            return textarea.value.trim().split('\n').filter(line => line.trim() !== '');
+    function getLines(textareaId) {
+        const textarea = document.getElementById(textareaId);
+        const lines = textarea.value.trim().split('\n').map(line => line.trim()).filter(line => line !== '');
+        originalLines = lines;
+        return lines;
+    }
+
+    function applyRegexFilter(lines) {
+        const useRegex = document.getElementById('useRegex').checked;
+        if (!useRegex) return lines;
+
+        const pattern = document.getElementById('regexPattern').value.trim();
+        if (!pattern) return lines;
+
+        let regex;
+        try {
+            regex = new RegExp(pattern, 'i'); // Case-insensitive
+        } catch (e) {
+            alert('Invalid regex pattern: ' + e.message);
+            return [];
         }
 
-        function filterByRegex(lines) {
-            const useRegex = document.getElementById('useRegex').checked;
-            if (!useRegex) return lines;
-            const pattern = document.getElementById('regexPattern').value;
-            if (!pattern) return lines;
-            let regex;
-            try {
-                regex = new RegExp(pattern, 'i'); // Case-insensitive regex
-            } catch (e) {
-                alert('Invalid regex pattern!');
-                return [];
+        return lines.filter(line => regex.test(line));
+    }
+
+    function setOutput(lines) {
+        const output = document.getElementById('output');
+        output.value = Array.isArray(lines) ? lines.join('\n') : lines;
+    }
+
+    // Main processing function
+    function processDuplicates(mode) {
+        let lines = getLines('input');
+        if (lines.length === 0) {
+            setOutput('No input provided.');
+            return;
+        }
+
+        // Apply regex filter
+        filteredLines = applyRegexFilter(lines);
+        if (filteredLines.length === 0) {
+            setOutput('No lines match the regex filter.');
+            return;
+        }
+
+        const lowerToOriginal = new Map(); // lower -> first original case
+        const lowerCount = new Map();     // lower -> count
+        const duplicates = new Set();     // lower keys that appear >1
+
+        // First pass: collect counts and first occurrence
+        filteredLines.forEach(line => {
+            const lower = line.toLowerCase();
+            if (!lowerToOriginal.has(lower)) {
+                lowerToOriginal.set(lower, line); // Save first seen case
             }
-            return lines.filter(line => regex.test(line));
-        }
-
-        function setOutput(lines) {
-            document.getElementById('output').value = Array.isArray(lines) ? lines.join('\n') : lines;
-        }
-
-        async function loadFiles(event) {
-            const files = Array.from(event.target.files);
-            if (files.length === 0) return;
-            let combinedContent = '';
-            await Promise.all(files.map(file => {
-                return new Promise(resolve => {
-                    const reader = new FileReader();
-                    reader.onload = e => {
-                        combinedContent += e.target.result + '\n--- FILE SEPARATOR ---\n';
-                        resolve();
-                    };
-                    reader.readAsText(file);
-                });
-            }));
-            document.getElementById('input').value = combinedContent;
-        }
-
-        function processDuplicates(isRemove) {
-            let lines = getLines('input');
-            if (lines.length === 0) return;
-
-            // Filter once and cache
-            if (cachedLines.length === 0 || cachedLines.length !== lines.length) {
-                cachedLines = filterByRegex(lines);
+            lowerCount.set(lower, (lowerCount.get(lower) || 0) + 1);
+            if (lowerCount.get(lower) > 1) {
+                duplicates.add(lower);
             }
-            lines = cachedLines;
+        });
 
-            const lowerMap = new Map(); // Optimized: Map for O(1) lookups
-            const results = [];
-            const seen = new Set();
+        let result = [];
 
-            lines.forEach((line, index) => {
-                const lowerLine = line.toLowerCase();
-                if (!seen.has(lowerLine)) {
-                    seen.add(lowerLine);
-                    if (isRemove) {
-                        results.push(line); // Keep first occurrence
-                    }
-                } else if (!isRemove) {
-                    // For find, collect unique duplicates
-                    if (!lowerMap.has(lowerLine)) {
-                        lowerMap.set(lowerLine, line); // Store original case
-                    }
+        if (mode === 'remove') {
+            // Keep only unique (first occurrence, original case)
+            for (const [lower, original] of lowerToOriginal) {
+                if (!duplicates.has(lower)) {
+                    result.push(original);
+                } else {
+                    // Even if duplicate, keep first occurrence
+                    result.push(original);
                 }
-            });
-
-            if (!isRemove) {
-                results.push(...Array.from(lowerMap.values()));
             }
-
-            // Sort once at end for perf
-            results.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-
-            if (isRemove && results.length === 0) {
-                setOutput('No unique items after filtering.');
-            } else if (!isRemove && results.length === 0) {
-                setOutput('No duplicates found.');
-            } else {
-                setOutput(results);
+        } else if (mode === 'find') {
+            // Show only lines that appear more than once (with original case of first occurrence)
+            for (const lower of duplicates) {
+                result.push(lowerToOriginal.get(lower));
             }
         }
 
-        function removeDuplicates() {
-            processDuplicates(true);
+        // Sort case-insensitively
+        result.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+        if (result.length === 0) {
+            setOutput(mode === 'remove' ? 'No unique items.' : 'No duplicates found.');
+        } else {
+            setOutput(result);
+        }
+    }
+
+    function removeDuplicates() {
+        processDuplicates('remove');
+    }
+
+    function findDuplicates() {
+        processDuplicates('find');
+    }
+
+    function clearAll() {
+        document.getElementById('input').value = '';
+        document.getElementById('output').value = '';
+        document.getElementById('fileInput').value = '';
+        document.getElementById('useRegex').checked = false;
+        document.getElementById('regexPattern').value = '';
+        originalLines = [];
+        filteredLines = [];
+    }
+
+    async function loadFiles(event) {
+        const files = Array.from(event.target.files);
+        if (files.length === 0) return;
+
+        let combinedContent = '';
+        for (const file of files) {
+            const text = await file.text();
+            combinedContent += text + '\n--- FILE SEPARATOR ---\n';
+        }
+        document.getElementById('input').value = combinedContent.trim();
+    }
+
+    function exportToCSV() {
+        const output = document.getElementById('output').value.trim();
+        if (!output) {
+            alert('No output to export!');
+            return;
         }
 
-        function findDuplicates() {
-            processDuplicates(false);
-        }
+        const lines = output.split('\n').filter(line => line.trim() !== '');
+        let csvContent = 'data:text/csv;charset=utf-8,"String"\n';
+        lines.forEach(line => {
+            csvContent += `"${line.replace(/"/g, '""')}"\n`;
+        });
 
-        function clearAll() {
-            document.getElementById('input').value = '';
-            document.getElementById('output').value = '';
-            document.getElementById('fileInput').value = '';
-            document.getElementById('useRegex').checked = false;
-            document.getElementById('regexPattern').value = '';
-            cachedLines = []; // Clear cache
-        }
-
-        function exportToCSV() {
-            const output = document.getElementById('output').value;
-            if (!output.trim()) {
-                alert('No output to export!');
-                return;
-            }
-            const lines = output.split('\n').filter(line => line.trim() !== '');
-            let csvContent = 'data:text/csv;charset=utf-8,"String"\n';
-            lines.forEach(line => {
-                csvContent += `"${line.replace(/"/g, '""')}"\n`;
-            });
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', 'results.csv');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    </script>
+        const link = document.createElement('a');
+        link.setAttribute('href', encodeURI(csvContent));
+        link.setAttribute('download', 'results.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
 </body>
 </html>
