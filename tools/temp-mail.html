@@ -1,121 +1,531 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temporary Email Generator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 20px 0;
-            cursor: pointer;
-            border-radius: 5px;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #emailDisplay {
-            font-size: 18px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            word-break: break-all;
-            text-align: center;
-        }
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-        }
-        .error {
-            color: red;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nurul nc - TempMail Pro</title>
+
+  <!-- Tailwind + CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+
+  <style>
+    :root {
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-1);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 5s ease;
+    }
+
+    .animate-gradient {
+      background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Glassmorphism Card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Neon Glow */
+    .neon-glow {
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.5), 0 0 40px rgba(118, 75, 162, 0.3);
+    }
+
+    /* Circular Timer */
+    .timer-circle {
+      width: 40px;
+      height: 40px;
+      position: relative;
+    }
+    .timer-circle svg {
+      transform: rotate(-90deg);
+    }
+    .timer-circle .circle-bg {
+      fill: none;
+      stroke: rgba(255,255,255,0.2);
+      stroke-width: 4;
+    }
+    .timer-circle .circle-fg {
+      fill: none;
+      stroke: #fff;
+      stroke-width: 4;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    /* Toast with Icon */
+    .toast {
+      min-width: 280px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: white;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Page Transition */
+    .page {
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+    .page-exit { transform: translateX(-100%); opacity: 0; }
+    .page-enter { transform: translateX(100%); opacity: 0; }
+    .page-active { transform: translateX(0); opacity: 1; }
+
+    /* Pull to Refresh */
+    .pull-refresh {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: top 0.3s ease;
+    }
+
+    /* Confetti Trigger */
+    .copy-trigger:active ~ .confetti-canvas { display: block; }
+  </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Temporary Email Generator</h1>
-        <p>Generate a disposable email address for temporary use:</p>
-        
-        <button id="generateBtn">Generate Temporary Email</button>
-        
-        <div class="loading" id="loading">
-            <p>Generating email address...</p>
+<body class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white antialiased animate-gradient">
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- Splash Screen -->
+  <div id="splash-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center glass-card transition-all duration-700">
+    <h1 class="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent animate-pulse">
+      TempMail Pro
+    </h1>
+    <p class="text-gray-300 mt-2">by Nurulnc.site</p>
+    <div class="w-64 h-2 bg-white/20 rounded-full overflow-hidden mt-8">
+      <div id="loading-bar" class="h-full bg-gradient-to-r from-cyan-400 to-pink-500 rounded-full" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- App Container -->
+  <div id="app-container" class="max-w-lg mx-auto h-screen flex flex-col opacity-0">
+
+    <!-- Home Screen -->
+    <div id="home-screen" class="page page-active flex flex-col h-full">
+      <header class="p-4 flex justify-between items-center sticky top-0 glass-card z-10 neon-glow">
+        <div></div>
+        <h1 class="text-xl font-bold">TempMail Pro</h1>
+        <button id="theme-toggle-btn" class="p-2 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-all">
+          <span id="theme-icon" class="material-symbols-outlined text-xl">light_mode</span>
+        </button>
+      </header>
+
+      <main class="p-4 space-y-5 flex-grow overflow-y-auto" id="inbox-container">
+        <div data-tilt class="glass-card p-5 rounded-2xl neon-glow">
+          <p class="text-sm opacity-80 mb-2">Your Temporary Email</p>
+          <div class="flex items-center justify-between gap-3">
+            <span id="email-address" class="font-mono text-lg font-bold truncate">loading...</span>
+            <button id="copy-btn" class="p-2.5 rounded-xl bg-white/20 hover:bg-white/30 transition-all copy-trigger">
+              <span class="material-symbols-outlined">content_copy</span>
+            </button>
+          </div>
         </div>
-        
-        <div id="emailDisplay"></div>
-        <div class="error" id="error"></div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button id="change-mail-btn" data-tilt class="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-cyan-500/50 transform hover:scale-105 transition-all">
+            <span class="material-symbols-outlined">change_circle</span>
+            <span>Change</span>
+          </button>
+          <button id="delete-mail-btn" data-tilt class="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-pink-600 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-red-500/50 transform hover:scale-105 transition-all">
+            <span class="material-symbols-outlined">delete</span>
+            <span>Delete</span>
+          </button>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-lg font-semibold">Inbox</h2>
+            <div class="flex items-center gap-2">
+              <div class="timer-circle">
+                <svg width="40" height="40">
+                  <circle class="circle-bg" cx="20" cy="20" r="16"></circle>
+                  <circle id="timer-circle-fg" class="circle-fg" cx="20" cy="20" r="16" stroke-dasharray="100" stroke-dashoffset="100"></circle>
+                </svg>
+                <span id="timer-display" class="absolute inset-0 flex items-center justify-center text-xs font-bold">10:00</span>
+              </div>
+              <button id="extend-timer-btn" class="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-sm font-bold rounded-lg shadow-md transform hover:scale-105 transition-all">
+                Extend
+              </button>
+              <button id="refresh-btn" class="p-2 rounded-xl bg-white/20 hover:bg-white/30 transition-all">
+                <span class="material-symbols-outlined">refresh</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="empty-inbox" class="text-center py-12 glass-card rounded-2xl">
+            <span class="material-symbols-outlined text-6xl opacity-50">hourglass_empty</span>
+            <p class="mt-3 opacity-80">Waiting for emails...</p>
+          </div>
+
+          <div id="inbox-list" class="space-y-3"></div>
+        </div>
+
+        <footer class="text-center text-xs opacity-70 pb-4">
+          Made with <span class="text-red-400">♥</span> by <b class="text-cyan-300">Nurulnc.site</b>
+        </footer>
+      </main>
     </div>
 
-    <script>
-        document.getElementById('generateBtn').addEventListener('click', generateTempEmail);
+    <!-- Email View Screen -->
+    <div id="email-screen" class="page page-enter hidden flex-col h-full">
+      <header class="p-4 flex items-center gap-3 sticky top-0 glass-card z-10 neon-glow">
+        <button id="back-to-inbox-btn" class="p-2 rounded-xl bg-white/20 hover:bg-white/30 transition-all">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h2 id="email-subject-header" class="text-lg font-bold truncate flex-1">Email</h2>
+      </header>
 
-        async function generateTempEmail() {
-            const apiKey = "fda347ff2amsh47c3467081afabfp12ee9fjsn06f11622b3d9";
-            const url = "https://temp-mail44.p.rapidapi.com/api/v3/email/new";
-            
-            const options = {
-                method: 'POST',
-                headers: {
-                    'X-RapidAPI-Key': apiKey,
-                    'X-RapidAPI-Host': 'temp-mail44.p.rapidapi.com'
-                }
-            };
-            
-            // Show loading, hide previous results
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('emailDisplay').textContent = '';
-            document.getElementById('error').textContent = '';
-            
-            try {
-                const response = await fetch(url, options);
-                
-                if (!response.ok) {
-                    throw new Error(`API request failed with status ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                if (data && data.email) {
-                    document.getElementById('emailDisplay').textContent = data.email;
-                    document.getElementById('emailDisplay').style.display = 'block';
-                } else {
-                    throw new Error('No email address received from API');
-                }
-            } catch (error) {
-                document.getElementById('error').textContent = `Error: ${error.message}`;
-                console.error('Error:', error);
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-            }
+      <main class="p-4 flex-grow overflow-y-auto space-y-4 flex flex-col">
+        <div class="flex items-center gap-3">
+          <div id="email-avatar" class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-pink-500 text-white flex items-center justify-center text-xl font-bold"></div>
+          <div>
+            <p id="email-from" class="font-bold"></p>
+            <p class="text-sm opacity-70">to: <span id="email-to"></span></p>
+          </div>
+          <p id="email-timestamp" class="text-xs opacity-70 ml-auto"></p>
+        </div>
+
+        <div class="glass-card rounded-2xl flex-1 overflow-hidden">
+          <iframe id="email-body" class="w-full h-full" sandbox="allow-same-origin"></iframe>
+        </div>
+
+        <button id="delete-message-btn" class="bg-gradient-to-r from-red-500 to-pink-600 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-red-500/50 transition-all">
+          <span class="material-symbols-outlined inline">delete</span> Delete Message
+        </button>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 space-y-2"></div>
+
+  <script type="module">
+    // --- STATE ---
+    const API_BASE = 'https://api.mail.tm';
+    let currentAccount = { id: null, address: null, password: null, token: null };
+    let inboxInterval = null;
+    let timerInterval = null;
+    let timerSeconds = 600;
+    let isPulling = false;
+
+    // --- DOM ---
+    const $ = (id) => document.getElementById(id);
+    const DOM = {
+      splash: $('splash-screen'),
+      app: $('app-container'),
+      home: $('home-screen'),
+      emailScreen: $('email-screen'),
+      emailAddr: $('email-address'),
+      copyBtn: $('copy-btn'),
+      timerDisplay: $('timer-display'),
+      timerCircle: $('timer-circle-fg'),
+      inboxList: $('inbox-list'),
+      emptyInbox: $('empty-inbox'),
+      refreshBtn: $('refresh-btn'),
+      changeBtn: $('change-mail-btn'),
+      deleteBtn: $('delete-mail-btn'),
+      extendBtn: $('extend-timer-btn'),
+      themeBtn: $('theme-toggle-btn'),
+      themeIcon: $('theme-icon'),
+      backBtn: $('back-to-inbox-btn'),
+      subjectHeader: $('email-subject-header'),
+      from: $('email-from'),
+      to: $('email-to'),
+      timestamp: $('email-timestamp'),
+      avatar: $('email-avatar'),
+      iframe: $('email-body'),
+      deleteMsgBtn: $('delete-message-btn'),
+    };
+
+    // --- API ---
+    const fetchAPI = async (url, opts = {}) => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      try {
+        const res = await fetch(url, { ...opts, signal: controller.signal });
+        clearTimeout(timeout);
+        return res;
+      } catch (e) {
+        clearTimeout(timeout);
+        throw e;
+      }
+    };
+
+    const getNewEmail = async (del = false) => {
+      showSpinner(DOM.changeBtn, true);
+      showSpinner(DOM.deleteBtn, true);
+
+      if (del && currentAccount.id) {
+        try { await fetchAPI(`${API_BASE}/accounts/${currentAccount.id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${currentAccount.token}` } }); }
+        catch (e) { console.error(e); }
+      }
+
+      clearInterval(inboxInterval);
+      clearInterval(timerInterval);
+
+      try {
+        const domains = await (await fetchAPI(`${API_BASE}/domains`)).json();
+        const domain = domains['hydra:member'][0].domain;
+        const address = `${Math.random().toString(36).substr(2, 9)}@${domain}`;
+        const password = Math.random().toString(36).substr(2);
+
+        const acc = await (await fetchAPI(`${API_BASE}/accounts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address, password })
+        })).json();
+
+        const token = await (await fetchAPI(`${API_BASE}/token`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address, password })
+        })).json();
+
+        currentAccount = { id: acc.id, address, password, token: token.token };
+        DOM.emailAddr.textContent = address;
+        showToast('New email ready!', 'success');
+        resetTimer();
+        checkInbox();
+        inboxInterval = setInterval(checkInbox, 8000);
+      } catch (e) {
+        showToast('Failed. Try again.', 'error');
+      } finally {
+        showSpinner(DOM.changeBtn, false);
+        showSpinner(DOM.deleteBtn, false);
+      }
+    };
+
+    const checkInbox = async () => {
+      if (!currentAccount.token) return;
+      showSpinner(DOM.refreshBtn, true);
+      try {
+        const res = await fetchAPI(`${API_BASE}/messages`, { headers: { Authorization: `Bearer ${currentAccount.token}` } });
+        if (res.status === 401) { showToast('Session expired', 'warning'); await getNewEmail(); return; }
+        const data = await res.json();
+        renderInbox(data['hydra:member'] || []);
+      } catch (e) { console.error(e); }
+      finally { showSpinner(DOM.refreshBtn, false); }
+    };
+
+    const openEmail = async (id) => {
+      transitionPage(DOM.home, DOM.emailScreen);
+      try {
+        const msg = await (await fetchAPI(`${API_BASE}/messages/${id}`, { headers: { Authorization: `Bearer ${currentAccount.token}` } })).json();
+        DOM.subjectHeader.textContent = msg.subject || '(no subject)';
+        DOM.from.textContent = msg.from.name || msg.from.address;
+        DOM.to.textContent = currentAccount.address;
+        DOM.timestamp.textContent = formatDate(new Date(msg.createdAt));
+        DOM.avatar.textContent = (msg.from.name || msg.from.address)[0].toUpperCase();
+        DOM.avatar.style.background = `linear-gradient(135deg, ${randomGradient()})`;
+        DOM.iframe.srcdoc = msg.html?.[0] || `<pre style="white-space: pre-wrap;">${escapeHTML(msg.text)}</pre>`;
+      } catch (e) {
+        showToast('Failed to load email', 'error');
+        transitionPage(DOM.emailScreen, DOM.home);
+      }
+    };
+
+    // --- UI ---
+    const renderInbox = (msgs) => {
+      DOM.inboxList.innerHTML = '';
+      if (!msgs.length) {
+        DOM.emptyInbox.style.display = 'block';
+        DOM.inboxList.style.display = 'none';
+        return;
+      }
+      DOM.emptyInbox.style.display = 'none';
+      DOM.inboxList.style.display = 'block';
+      msgs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(m => {
+        const el = document.createElement('div');
+        el.className = 'glass-card p-4 rounded-xl cursor-pointer hover:scale-105 transition-all neon-glow';
+        el.dataset.id = m.id;
+        el.innerHTML = `
+          <div class="flex justify-between items-start">
+            <p class="font-bold truncate flex-1">${escapeHTML(m.from.name || m.from.address)}</p>
+            <p class="text-xs opacity-70">${formatDate(new Date(m.createdAt))}</p>
+          </div>
+          <p class="font-medium mt-1 truncate">${escapeHTML(m.subject)}</p>
+          <p class="text-sm opacity-70 truncate mt-1">${escapeHTML(m.intro)}</p>
+        `;
+        DOM.inboxList.appendChild(el);
+      });
+    };
+
+    const transitionPage = (from, to) => {
+      from.classList.add('page-exit');
+      to.classList.remove('hidden', 'page-enter');
+      setTimeout(() => {
+        from.classList.add('hidden');
+        from.classList.remove('page-exit');
+        to.classList.add('page-active');
+      }, 400);
+    };
+
+    const showToast = (msg, type = 'info') => {
+      const icons = { success: 'check_circle', error: 'error', warning: 'warning', info: 'info' };
+      const colors = { success: 'from-green-400 to-emerald-600', error: 'from-red-400 to-pink-600', warning: 'from-yellow-400 to-orange-600', info: 'from-blue-400 to-cyan-600' };
+      const toast = document.createElement('div');
+      toast.className = `toast bg-gradient-to-r ${colors[type]} text-white shadow-2xl`;
+      toast.innerHTML = `<span class="material-symbols-outlined">${icons[type]}</span> <span>${msg}</span>`;
+      $('toast-container').appendChild(toast);
+      setTimeout(() => toast.classList.add('show'), 10);
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.addEventListener('transitionend', () => toast.remove());
+      }, 3000);
+    };
+
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(currentAccount.address).then(() => {
+        showToast('Copied!', 'success');
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      });
+    };
+
+    const resetTimer = () => {
+      timerSeconds = 600;
+      updateTimer();
+      startTimer();
+    };
+
+    const updateTimer = () => {
+      const min = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const sec = String(timerSeconds % 60).padStart(2, '0');
+      DOM.timerDisplay.textContent = `${min}:${sec}`;
+      const progress = ((600 - timerSeconds) / 600) * 100;
+      DOM.timerCircle.style.strokeDashoffset = 100 - progress;
+    };
+
+    const startTimer = () => {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (--timerSeconds <= 0) {
+          clearInterval(timerInterval);
+          DOM.timerDisplay.textContent = 'Expired';
+          showToast('Time up! Get new email.', 'warning');
         }
-    </script>
+        updateTimer();
+      }, 1000);
+    };
+
+    const showSpinner = (btn, show) => {
+      if (show) {
+        btn.dataset.html = btn.innerHTML;
+        btn.innerHTML = '<div class="spinner mx-auto"></div>';
+        btn.disabled = true;
+      } else {
+        btn.innerHTML = btn.dataset.html || btn.innerHTML;
+        btn.disabled = false;
+      }
+    };
+
+    const escapeHTML = (s) => s.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+    const formatDate = (d) => {
+      const diff = (Date.now() - d) / 1000;
+      if (diff < 60) return 'now';
+      if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+      if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+      return `${Math.floor(diff/86400)}d ago`;
+    };
+
+    const randomGradient = () => {
+      const grads = ['#667eea,#764ba2', '#f093fb,#f5576c', '#4facfe,#00f2fe', '#43e97b,#38f9d7'];
+      return grads[Math.floor(Math.random() * grads.length)].split(',').map(c => `#${c}`).join(',');
+    };
+
+    // --- INIT ---
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Theme
+      const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', saved === 'dark');
+      DOM.themeIcon.textContent = saved === 'dark' ? 'light_mode' : 'dark_mode';
+
+      // Splash
+      const bar = $('loading-bar');
+      let w = 0;
+      const loading = setInterval(() => {
+        if (w >= 100) {
+          clearInterval(loading);
+          DOM.splash.style.opacity = '0';
+          DOM.app.style.opacity = '1';
+          setTimeout(() => DOM.splash.style.display = 'none', 700);
+        } else w += 2;
+        bar.style.width = w + '%';
+      }, 40);
+
+      // Tilt
+      VanillaTilt.init(document.querySelectorAll("[data-tilt]"), { max: 15, speed: 400, glare: true, "max-glare": 0.3 });
+
+      // Events
+      DOM.copyBtn.addEventListener('click', copyToClipboard);
+      DOM.changeBtn.addEventListener('click', () => getNewEmail(false));
+      DOM.deleteBtn.addEventListener('click', () => getNewEmail(true));
+      DOM.refreshBtn.addEventListener('click', checkInbox);
+      DOM.extendBtn.addEventListener('click', resetTimer);
+      DOM.themeBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        DOM.themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
+      });
+      DOM.backBtn.addEventListener('click', () => transitionPage(DOM.emailScreen, DOM.home));
+      DOM.inboxList.addEventListener('click', e => {
+        const id = e.target.closest('[data-id]')?.dataset.id;
+        if (id) openEmail(id);
+      });
+      DOM.deleteMsgBtn.addEventListener('click', () => {
+        showToast('Message hidden', 'info');
+        transitionPage(DOM.emailScreen, DOM.home);
+      });
+
+      // Pull to refresh
+      let startY = 0;
+      $('inbox-container').addEventListener('touchstart', e => startY = e.touches[0].clientY);
+      $('inbox-container').addEventListener('touchmove', e => {
+        const diff = e.touches[0].clientY - startY;
+        if (diff > 100 && !isPulling) {
+          isPulling = true;
+          checkInbox().then(() => { isPulling = false; });
+        }
+      });
+
+      // Start
+      await getNewEmail();
+      updateTimer();
+      startTimer();
+    });
+  </script>
 </body>
-</html>
+    </html>
