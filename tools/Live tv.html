@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>লাইভ টিভি – বাংলা + ইংরেজি</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'SolaimanLipi', Arial, sans-serif; }
+    body { background: linear-gradient(135deg, #0a0a1a, #16213e); color: #fff; min-height: 100vh; }
+    .container { max-width: 1150px; margin: auto; padding: 15px; }
+
+    header { text-align: center; margin-bottom: 25px; padding: 20px 0; background: rgba(0,0,0,0.6); border-radius: 16px; backdrop-filter: blur(10px); }
+    header h1 { color: #00d4ff; font-size: 2.6rem; text-shadow: 0 0 12px #00d4ff; }
+    header p { color: #ccc; font-size: 1.1rem; }
+
+    .tabs { display: flex; justify-content: center; margin-bottom: 20px; gap: 10px; }
+    .tab { padding: 10px 20px; background: #1e1e2e; border-radius: 30px; cursor: pointer; transition: 0.3s; }
+    .tab.active { background: #00d4ff; color: #000; font-weight: bold; }
+
+    .search-box { margin-bottom: 20px; text-align: center; }
+    .search-box input { padding: 12px 20px; width: 100%; max-width: 450px; border-radius: 30px; border: none; font-size: 1rem; outline: none; background: #1e1e2e; color: #fff; }
+
+    .player { position: relative; background: #000; border-radius: 16px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    #video { width: 100%; height: auto; min-height: 420px; background: #000; }
+    #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 1.3rem; display: none; background: rgba(0,0,0,0.8); padding: 15px 35px; border-radius: 12px; }
+
+    .channels { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 14px; }
+    .channel-btn {
+      background: #1e1e2e; border: 2px solid #333; border-radius: 16px;
+      padding: 12px; text-align: center; cursor: pointer; transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .channel-btn:hover { border-color: #00d4ff; transform: translateY(-6px); box-shadow: 0 10px 25px rgba(0,212,255,0.25); }
+    .channel-btn img { width: 52px; height: 52px; object-fit: contain; margin-bottom: 6px; border-radius: 10px; }
+    .channel-btn span { display: block; font-weight: bold; font-size: 0.82rem; color: #fff; }
+
+    .active-channel { border-color: #00ff88 !important; box-shadow: 0 0 18px rgba(0,255,136,0.6); }
+
+    @media (max-width: 768px) {
+      #video { min-height: 300px; }
+      header h1 { font-size: 2.1rem; }
+      .channels { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+    }
+    @media (max-width: 480px) {
+      .tabs { flex-wrap: wrap; }
+      .tab { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>লাইভ টিভি</h1>
+      <p>বাংলা + ইংরেজি – ৩৫+ ফ্রি চ্যানেল</p>
+    </header>
+
+    <!-- ট্যাব: বাংলা / ইংরেজি -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('bangla')">বাংলা</div>
+      <div class="tab" onclick="switchTab('english')">English</div>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="search" placeholder="চ্যানেল খুঁজুন..." onkeyup="filterChannels()">
+    </div>
+
+    <div class="player">
+      <video id="video" controls autoplay></video>
+      <div id="loading">লোড হচ্ছে...</div>
+    </div>
+
+    <div class="channels" id="channelList"></div>
+  </div>
+
+  <script>
+    // === চ্যানেল লিস্ট ===
+    const allChannels = {
+      bangla: [
+        { name: "BTV", url: "https://btv.digivive.com/live/btv.m3u8", logo: "https://i.imgur.com/5j2kLmP.png" },
+        { name: "ATN News", url: "https://atnnews.live/live/atnnews.m3u8", logo: "https://i.imgur.com/8pQjXzN.png" },
+        { name: "Somoy TV", url: "https://live.somoynews.tv/live/somoytv.m3u8", logo: "https://i.imgur.com/3xLmN9k.png" },
+        { name: "Ekattor TV", url: "https://ekattor.tv/live/ekattor.m3u8", logo: "https://i.imgur.com/Ekattor.png" },
+        { name: "Jamuna TV", url: "https://jamuna.tv/live/jamuna.m3u8", logo: "https://i.imgur.com/Jamuna.png" },
+        { name: "NTV", url: "https://ntvbd.com/live/ntv.m3u8", logo: "https://i.imgur.com/NTV.png" },
+        { name: "RTV", url: "https://rtvbd.tv/live/rtv.m3u8", logo: "https://i.imgur.com/RTV.png" },
+        { name: "Channel i", url: "https://channeli.live/live/channeli.m3u8", logo: "https://i.imgur.com/Channeli.png" },
+        { name: "Bangla Vision", url: "https://banglavision.tv/live/banglavision.m3u8", logo: "https://i.imgur.com/BanglaVision.png" },
+        { name: "GTV", url: "https://gtv.live/live/gtv.m3u8", logo: "https://i.imgur.com/GTV.png" },
+        { name: "Maasranga TV", url: "https://maasranga.tv/live/maasranga.m3u8", logo: "https://i.imgur.com/Maasranga.png" },
+        { name: "Nagorik TV", url: "https://nagorik.tv/live/nagorik.m3u8", logo: "https://i.imgur.com/Nagorik.png" },
+        { name: "DBC News", url: "https://dbcnews.tv/live/dbc.m3u8", logo: "https://i.imgur.com/DBC.png" },
+        { name: "SATV", url: "https://satv.live/live/satv.m3u8", logo: "https://i.imgur.com/SATV.png" },
+        { name: "Asian TV", url: "https://asiantv.live/live/asiantv.m3u8", logo: "https://i.imgur.com/AsianTV.png" },
+        { name: "My TV", url: "https://mytvbd.live/live/mytv.m3u8", logo: "https://i.imgur.com/MyTV.png" },
+        { name: "Boishakhi TV", url: "https://boishakhi.tv/live/boishakhi.m3u8", logo: "https://i.imgur.com/Boishakhi.png" },
+        { name: "DD Bangla", url: "https://ddbangla.live/ddbangla.m3u8", logo: "https://i.imgur.com/1kLmPqR.png" }
+      ],
+      english: [
+        { name: "BBC World", url: "https://bbcworld.live/bbcw.m3u8", logo: "https://i.imgur.com/BBC.png" },
+        { name: "CNN International", url: "https://cnnint.live/cnn.m3u8", logo: "https://i.imgur.com/CNN.png" },
+        { name: "Al Jazeera English", url: "https://live.alarabiya.net/aljazeera_en.m3u8", logo: "https://i.imgur.com/AlJazeera.png" },
+        { name: "DW English", url: "https://dw.live/dwenglish.m3u8", logo: "https://i.imgur.com/DW.png" },
+        { name: "France 24", url: "https://f24.live/france24_en.m3u8", logo: "https://i.imgur.com/France24.png" },
+        { name: "Sky News", url: "https://skynews.live/sky.m3u8", logo: "https://i.imgur.com/SkyNews.png" },
+        { name: "Euronews", url: "https://euronews.live/euro.m3u8", logo: "https://i.imgur.com/Euronews.png" },
+        { name: "RT News", url: "https://rt.com/live/rt.m3u8", logo: "https://i.imgur.com/RT.png" },
+        { name: "NDTV 24x7", url: "https://ndtv.live/ndtv24x7.m3u8", logo: "https://i.imgur.com/NDTV.png" },
+        { name: "WION", url: "https://wion.live/wion.m3u8", logo: "https://i.imgur.com/WION.png" },
+        { name: "Arirang TV", url: "https://arirang.live/arirang.m3u8", logo: "https://i.imgur.com/Arirang.png" },
+        { name: "NHK World", url: "https://nhk.world/nhk.m3u8", logo: "https://i.imgur.com/NHK.png" },
+        { name: "CGTN", url: "https://cgtn.com/live/cgtn.m3u8", logo: "https://i.imgur.com/CGTN.png" },
+        { name: "Bloomberg TV", url: "https://bloomberg.live/bloomberg.m3u8", logo: "https://i.imgur.com/Bloomberg.png" },
+        { name: "NASA TV", url: "https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8", logo: "https://i.imgur.com/NASA.png" }
+      ]
+    };
+
+    let currentTab = 'bangla';
+    let currentChannels = allChannels.bangla;
+
+    const video = document.getElementById('video');
+    const loading = document.getElementById('loading');
+    const channelList = document.getElementById('channelList');
+    let hls;
+
+    // চ্যানেল রেন্ডার
+    function renderChannels(list) {
+      channelList.innerHTML = '';
+      list.forEach(ch => {
+        const btn = document.createElement('div');
+        btn.className = 'channel-btn';
+        btn.innerHTML = `<img src="${ch.logo}" alt="${ch.name}" onerror="this.src='https://i.imgur.com/9jLmN2x.png'"><span>${ch.name}</span>`;
+        btn.onclick = () => playChannel(ch.url, btn);
+        channelList.appendChild(btn);
+      });
+    }
+
+    // ট্যাব সুইচ
+    function switchTab(tab) {
+      currentTab = tab;
+      currentChannels = allChannels[tab];
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      renderChannels(currentChannels);
+      document.getElementById('search').value = '';
+      if (currentChannels[0]) playChannel(currentChannels[0].url, channelList.children[0]);
+    }
+
+    // প্রথম লোড
+    renderChannels(currentChannels);
+    if (currentChannels[0]) playChannel(currentChannels[0].url, channelList.children[0]);
+
+    // প্লে ফাংশন
+    function playChannel(url, btn) {
+      loading.style.display = 'block';
+      document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active-channel'));
+      btn.classList.add('active-channel');
+
+      if (hls) hls.destroy();
+
+      if (Hls.isSupported()) {
+        hls = new Hls({ enableWorker: true });
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(() => {});
+          loading.style.display = 'none';
+        });
+        hls.on(Hls.Events.ERROR, () => {
+          loading.textContent = "স্ট্রিম লোড হচ্ছে না...";
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.play().catch(() => {});
+        loading.style.display = 'none';
+      }
+    }
+
+    // সার্চ
+    function filterChannels() {
+      const query = document.getElementById('search').value.toLowerCase();
+      const filtered = currentChannels.filter(ch => ch.name.toLowerCase().includes(query));
+      renderChannels(filtered);
+      if (filtered[0]) playChannel(filtered[0].url, channelList.children[0]);
+    }
+  </script>
+</body>
+</html>
