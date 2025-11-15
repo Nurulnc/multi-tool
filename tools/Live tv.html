@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>লাইভ টিভি – বাংলা + ইংরেজি</title>
+  <title>লাইভ টিভি – বাংলা + ইন্ডিয়ান + ইংরেজি</title>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <style>
@@ -53,12 +53,13 @@
   <div class="container">
     <header>
       <h1>লাইভ টিভি</h1>
-      <p>বাংলা + ইংরেজি – ৩৫+ ফ্রি চ্যানেল</p>
+      <p>বাংলা + ইন্ডিয়ান + ইংরেজি – ৫০+ ফ্রি চ্যানেল</p>
     </header>
 
-    <!-- ট্যাব: বাংলা / ইংরেজি -->
+    <!-- ট্যাব: বাংলা / ইন্ডিয়ান / ইংরেজি -->
     <div class="tabs">
       <div class="tab active" onclick="switchTab('bangla')">বাংলা</div>
+      <div class="tab" onclick="switchTab('indian')">ইন্ডিয়ান</div>
       <div class="tab" onclick="switchTab('english')">English</div>
     </div>
 
@@ -78,24 +79,41 @@
     // === চ্যানেল লিস্ট ===
     const allChannels = {
       bangla: [
-        { name: "BTV", url: "https://btv.digivive.com/live/btv.m3u8", logo: "https://i.imgur.com/5j2kLmP.png" },
-        { name: "ATN News", url: "https://atnnews.live/live/atnnews.m3u8", logo: "https://i.imgur.com/8pQjXzN.png" },
-        { name: "Somoy TV", url: "https://live.somoynews.tv/live/somoytv.m3u8", logo: "https://i.imgur.com/3xLmN9k.png" },
-        { name: "Ekattor TV", url: "https://ekattor.tv/live/ekattor.m3u8", logo: "https://i.imgur.com/Ekattor.png" },
-        { name: "Jamuna TV", url: "https://jamuna.tv/live/jamuna.m3u8", logo: "https://i.imgur.com/Jamuna.png" },
-        { name: "NTV", url: "https://ntvbd.com/live/ntv.m3u8", logo: "https://i.imgur.com/NTV.png" },
-        { name: "RTV", url: "https://rtvbd.tv/live/rtv.m3u8", logo: "https://i.imgur.com/RTV.png" },
-        { name: "Channel i", url: "https://channeli.live/live/channeli.m3u8", logo: "https://i.imgur.com/Channeli.png" },
-        { name: "Bangla Vision", url: "https://banglavision.tv/live/banglavision.m3u8", logo: "https://i.imgur.com/BanglaVision.png" },
-        { name: "GTV", url: "https://gtv.live/live/gtv.m3u8", logo: "https://i.imgur.com/GTV.png" },
-        { name: "Maasranga TV", url: "https://maasranga.tv/live/maasranga.m3u8", logo: "https://i.imgur.com/Maasranga.png" },
-        { name: "Nagorik TV", url: "https://nagorik.tv/live/nagorik.m3u8", logo: "https://i.imgur.com/Nagorik.png" },
-        { name: "DBC News", url: "https://dbcnews.tv/live/dbc.m3u8", logo: "https://i.imgur.com/DBC.png" },
-        { name: "SATV", url: "https://satv.live/live/satv.m3u8", logo: "https://i.imgur.com/SATV.png" },
-        { name: "Asian TV", url: "https://asiantv.live/live/asiantv.m3u8", logo: "https://i.imgur.com/AsianTV.png" },
-        { name: "My TV", url: "https://mytvbd.live/live/mytv.m3u8", logo: "https://i.imgur.com/MyTV.png" },
-        { name: "Boishakhi TV", url: "https://boishakhi.tv/live/boishakhi.m3u8", logo: "https://i.imgur.com/Boishakhi.png" },
-        { name: "DD Bangla", url: "https://ddbangla.live/ddbangla.m3u8", logo: "https://i.imgur.com/1kLmPqR.png" }
+        { name: "BTV", url: "https://btv.digivive.com/live/btv.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/btv_bd.png" },
+        { name: "ATN News", url: "https://atnnews.live/live/atnnews.m3u8", logo: "https://www.lyngsat.com/logo/tv/aa/atn_news_bd.png" },
+        { name: "Somoy TV", url: "https://live.somoynews.tv/live/somoytv.m3u8", logo: "https://www.lyngsat.com/logo/tv/ss/somoy_tv_bd.png" },
+        { name: "Ekattor TV", url: "https://ekattor.tv/live/ekattor.m3u8", logo: "https://www.lyngsat.com/logo/tv/ee/ekattor_tv_bd.png" },
+        { name: "Jamuna TV", url: "https://jamuna.tv/live/jamuna.m3u8", logo: "https://www.lyngsat.com/logo/tv/jj/jamuna_tv_bd.png" },
+        { name: "NTV", url: "https://ntvbd.com/live/ntv.m3u8", logo: "https://www.lyngsat.com/logo/tv/nn/ntv_bd.png" },
+        { name: "RTV", url: "https://rtvbd.tv/live/rtv.m3u8", logo: "https://www.lyngsat.com/logo/tv/rr/rtv_bd.png" },
+        { name: "Channel i", url: "https://channeli.live/live/channeli.m3u8", logo: "https://www.lyngsat.com/logo/tv/cc/channel_i_bd.png" },
+        { name: "Bangla Vision", url: "https://banglavision.tv/live/banglavision.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/bangla_vision_bd.png" },
+        { name: "GTV", url: "https://gtv.live/live/gtv.m3u8", logo: "https://www.lyngsat.com/logo/tv/gg/gtv_bd.png" },
+        { name: "Maasranga TV", url: "https://maasranga.tv/live/maasranga.m3u8", logo: "https://www.lyngsat.com/logo/tv/mm/maasranga_tv_bd.png" },
+        { name: "Nagorik TV", url: "https://nagorik.tv/live/nagorik.m3u8", logo: "https://www.lyngsat.com/logo/tv/nn/nagorik_tv_bd.png" },
+        { name: "DBC News", url: "https://dbcnews.tv/live/dbc.m3u8", logo: "https://www.lyngsat.com/logo/tv/dd/dbc_news_bd.png" },
+        { name: "SATV", url: "https://satv.live/live/satv.m3u8", logo: "https://www.lyngsat.com/logo/tv/ss/satv_bd.png" },
+        { name: "Asian TV", url: "https://asiantv.live/live/asiantv.m3u8", logo: "https://www.lyngsat.com/logo/tv/aa/asian_tv_bd.png" },
+        { name: "My TV", url: "https://mytvbd.live/live/mytv.m3u8", logo: "https://www.lyngsat.com/logo/tv/mm/my_tv_bd.png" },
+        { name: "Boishakhi TV", url: "https://boishakhi.tv/live/boishakhi.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/boishakhi_tv_bd.png" },
+        { name: "DD Bangla", url: "https://ddbangla.live/ddbangla.m3u8", logo: "https://www.lyngsat.com/logo/tv/dd/dd_bangla_in.png" }
+      ],
+      indian: [
+        { name: "DD National", url: "http://103.199.161.254/Content/ddnational/Live/Channel(DDNational)/index.m3u8", logo: "https://www.lyngsat.com/logo/tv/dd/dd_national_in.png" },
+        { name: "DD News", url: "http://nicls1-lh.akamaihd.net/i/ddnews_1@409133/master.m3u8", logo: "https://www.lyngsat.com/logo/tv/dd/dd_news_in.png" },
+        { name: "DD Sports", url: "http://103.199.161.254/Content/ddsports/Live/Channel(DDSPORTS)/index.m3u8", logo: "https://www.lyngsat.com/logo/tv/dd/dd_sports_in.png" },
+        { name: "B4U Music", url: "http://103.199.161.254/Content/b4umusic/Live/Channel(B4Umusic)/Stream(01)/index.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/b4u_music_in.png" },
+        { name: "B4U Movies", url: "http://103.199.160.85/Content/b4umovies/Live/Channel(B4UMovies)/index.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/b4u_movies_in.png" },
+        { name: "B4U Kadak", url: "http://103.199.160.85/Content/moviehouse/Live/Channel(MovieHouse)/index.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/b4u_kadak_in.png" },
+        { name: "B4U Plus", url: "http://livecdnh3.tvanywhere.ae/hls/b4uplus/04.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/b4u_plus_in.png" },
+        { name: "Bollywood TV", url: "https://a.jsrdn.com/broadcast/d4dba2e3/+0000/hi/c.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/bollywood_tv_in.png" },
+        { name: "CNBC TV18", url: "https://cnbctv18-lh.akamaihd.net/i/cnbctv18_1@174868/index_5_av-p.m3u8", logo: "https://www.lyngsat.com/logo/tv/cc/cnbc_tv18_in.png" },
+        { name: "India Today", url: "https://indiatoday.live/playlist.m3u8", logo: "https://www.lyngsat.com/logo/tv/ii/india_today_in.png" },
+        { name: "NDTV 24x7", url: "https://ndtv.live/ndtv24x7.m3u8", logo: "https://www.lyngsat.com/logo/tv/nn/ndtv_24x7_in.png" },
+        { name: "WION", url: "https://wion.live/wion.m3u8", logo: "https://www.lyngsat.com/logo/tv/ww/wion_in.png" },
+        { name: "BBC World News", url: "http://103.199.161.254/Content/bbcworld/Live/Channel(BBCworld)/index.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/bbc_world_news_eu.png" },
+        { name: "CGTN", url: "https://cgtn.com/live/cgtn.m3u8", logo: "https://www.lyngsat.com/logo/tv/cc/cgtn_cn.png" },
+        { name: "Bloomberg TV", url: "https://bloomberg.live/bloomberg.m3u8", logo: "https://www.lyngsat.com/logo/tv/bb/bloomberg_tv_us.png" }
       ],
       english: [
         { name: "BBC World", url: "https://bbcworld.live/bbcw.m3u8", logo: "https://i.imgur.com/BBC.png" },
@@ -117,7 +135,7 @@
     };
 
     let currentTab = 'bangla';
-    let currentChannels = allChannels.bangla;
+    let currentChannels = allChannels[currentTab];
 
     const video = document.getElementById('video');
     const loading = document.getElementById('loading');
