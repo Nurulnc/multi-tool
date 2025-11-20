@@ -9,18 +9,13 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Tabler Icons (সব আইকন এখান থেকে, কখনো ভাঙবে না) -->
+  <!-- Tabler Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
 
   <style>
     :root {
       --primary: #6366f1;
-      --primary-dark: #4f46e5;
       --secondary: #8b5cf6;
-      --accent: #ec4899;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,217 +24,178 @@
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
       color: #1e293b;
       line-height: 1.6;
-      transition: all 0.4s;
-    }
-    body.dark-mode {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #e2e8f0;
+      min-height: 100vh;
     }
 
-    /* Header - Premium Look */
+    /* Header */
     header {
       position: relative;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
       text-align: center;
-      padding: 130px 20px 90px;
+      padding: 120px 20px 100px;
       overflow: hidden;
-      border-bottom-left-radius: 50% 12%;
-      border-bottom-right-radius: 50% 12%;
     }
     header::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      height: 120px;
+      height: 100px;
       background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,160L48,176C96,192,192,224,288,224C384,224,480,192,576,160C672,128,768,96,864,112C960,128,1056,192,1152,213.3C1248,234.7,1344,213.3,1392,202.7L1440,192L1440,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") bottom/cover no-repeat;
     }
 
     .logo {
-      font-size: 4.2rem;
+      font-size: clamp(2.5rem, 8vw, 5rem);
       font-weight: 800;
       letter-spacing: -2px;
       background: linear-gradient(90deg, #fff, #e0f2fe);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .tagline {
-      font-size: 1.4rem;
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
       opacity: 0.95;
-      margin-bottom: 30px;
-      font-weight: 400;
+      max-width: 800px;
+      margin: 0 auto;
     }
-
-    .search-container {
-      max-width: 650px;
-      margin: 0 auto 35px;
-      position: relative;
-    }
-    .search-input {
-      width: 100%;
-      padding: 18px 60px 18px 24px;
-      border: none;
-      border-radius: 50px;
-      font-size: 1.2rem;
-      background: white;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-      transition: all 0.4s;
-    }
-    .search-input:focus {
-      outline: none;
-      transform: scale(1.03);
-      box-shadow: 0 20px 50px rgba(99,102,241,0.3);
-    }
-    .search-icon {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.6rem;
-      color: var(--primary);
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 18px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .btn {
-      padding: 14px 32px;
-      border-radius: 50px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.4s;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .btn-primary {
-      background: rgba(255,255,255,0.25);
-      color: white;
-    }
-    .btn-primary:hover {
-      background: white;
-      color: var(--primary);
-      transform: translateY(-4px);
-    }
-    .theme-toggle {
-      width: 60px; height: 60px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      border: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      transition: all 0.4s;
-    }
-    .theme-toggle:hover { transform: rotate(360deg); }
 
     /* Category Title */
     .category-title {
       text-align: center;
-      font-size: 2.5rem;
-      margin: 70px 20px 40px;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      margin: 80px 20px 40px;
       color: var(--primary);
       font-weight: 700;
     }
     .category-title::after {
       content: '';
       display: block;
-      width: 100px;
+      width: 90px;
       height: 5px;
       background: linear-gradient(90deg, var(--primary), var(--secondary));
       margin: 15px auto;
       border-radius: 3px;
     }
 
-    /* Tool Grid */
+    /* Tool Grid - Super Responsive */
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: clamp(20px, 3vw, 32px);
       padding: 20px;
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
     }
+
     .tool-card {
       background: white;
       border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.1);
       transition: all 0.4s ease;
       text-decoration: none;
       color: inherit;
       display: flex;
       flex-direction: column;
-    }
-    body.dark-mode .tool-card {
-      background: #1e293b;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      height: 100%;
     }
     .tool-card:hover {
-      transform: translateY(-15px) scale(1.04);
-      box-shadow: 0 25px 60px rgba(99,102,241,0.3);
+      transform: translateY(-12px) scale(1.04);
+      box-shadow: 0 30px 70px rgba(99,102,241,0.35);
     }
+
     .tool-icon {
-      height:  160px;
+      height: clamp(140px, 25vw, 180px);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 4.5rem;
-      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-      transition: all 0.4s;
+      font-size: clamp(3.5rem, 10vw, 5.5rem);
+      background: linear-gradient(135deg, #f8faff, #e0e7ff);
     }
-    body.dark-mode .tool-icon {
-      background: linear-gradient(135deg, #1e293b, #312e81);
-    }
+
     .tool-title {
       text-align: center;
       padding: 20px;
-      font-size: 1.25rem;
+      font-size: clamp(1.1rem, 3.5vw, 1.35rem);
       font-weight: 600;
       color: #1e293b;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    body.dark-mode .tool-title { color: #e2e8f0; }
 
     /* Footer */
     footer {
-      margin-top: 100px;
+      margin-top: 120px;
       background: #0f172a;
       color: white;
-      padding: 70px 20px 40px;
+      padding: 80px 20px 40px;
       text-align: center;
     }
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
+    .footer-content h2 {
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      margin-bottom: 15px;
+    }
+    .footer-content p {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      opacity: 0.8;
+      font-size: clamp(0.95rem, 3vw, 1.1rem);
+    }
+    .social-links {
+      margin: 30px 0;
     }
     .social-links a {
       display: inline-flex;
-      width: 55px; height: 55px;
+      width: clamp(50px, 12vw, 60px);
+      height: clamp(50px, 12vw, 60px);
       background: rgba(255,255,255,0.1);
       border-radius: 50%;
       align-items: center;
       justify-content: center;
-      margin: 0 12px;
-      font-size: 1.5rem;
+      margin: 0 10px;
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
       transition: 0.4s;
     }
     .social-links a:hover {
       background: var(--primary);
-      transform: translateY(-8px);
+      transform: translateY(-10px);
     }
 
-    @media (max-width: 768px) {
-      .logo { font-size: 3rem; }
-      .tool-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 22px; }
-      .category-title { font-size: 2rem; }
-    }
+    /* Extra Small Devices */
     @media (max-width: 480px) {
-      .tool-grid { grid-template-columns: 1fr 1fr; }
-      .header-actions { flex-direction: column; align-items: center; }
-      .btn { width: 80%; justify-content: center; }
+      header { padding: 100px 15px 80px; }
+      .tool-grid { 
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        padding: 15px;
+      }
+      .tool-icon { height: 120px; }
+    }
+
+    /* Tablets */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .tool-grid { 
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+    }
+
+    /* Large Tablets & Small Laptops */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .tool-grid { 
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    /* Desktops */
+    @media (min-width: 1025px) {
+      .tool-grid { 
+        grid-template-columns: repeat(5, 1fr);
+      }
     }
   </style>
 </head>
@@ -248,17 +204,7 @@
   <!-- Header -->
   <header>
     <h1 class="logo">NurulNC.Site</h1>
-    <p class="tagline">এক ক্লিকে ৫০+ ফ্রি প্রিমিয়াম টুলস — কোনো রেজিস্ট্রেশন লাগবে না</p>
-    
-    <div class="search-container">
-      <input type="text" class="search-input" id="searchInput" placeholder="টুল খুঁজুন... (যেমন: password, game, mail)">
-      <span class="search-icon">Search</span>
-    </div>
-
-    <div class="header-actions">
-      <a href="tools/portfolio.html" class="btn btn-primary">ডেভেলপারের সাথে যোগাযোগ</a>
-      <button class="theme-toggle" id="themeToggle">Moon</button>
-    </div>
+    <p class="tagline">৫০+ ফ্রি প্রিমিয়াম টুলস — এক ক্লিকে সব সমাধান</p>
   </header>
 
   <main>
@@ -267,27 +213,27 @@
     <h2 class="category-title">জেনারেটর টুলস</h2>
     <div class="tool-grid">
       <a href="tools/password-generator.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-shield-lock"></i></div>
+        <div class="tool-icon">Lock</div>
         <div class="tool-title">Password Generator</div>
       </a>
       <a href="tools/random-name.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-user-plus"></i></div>
+        <div class="tool-icon">User Plus</div>
         <div class="tool-title">Random Name Generator</div>
       </a>
       <a href="tools/temp-mail.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-mail-fast"></i></div>
+        <div class="tool-icon">Mail Fast</div>
         <div class="tool-title">Temp Mail</div>
       </a>
       <a href="tools/cc.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-credit-card"></i></div>
+        <div class="tool-icon">Credit Card</div>
         <div class="tool-title">CC Generator (Demo)</div>
       </a>
       <a href="tools/2fa-generator.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-2fa"></i></div>
+        <div class="tool-icon">2FA</div>
         <div class="tool-title">2FA Code Generator</div>
       </a>
       <a href="tools/Favicon.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-world-www"></i></div>
+        <div class="tool-icon">World</div>
         <div class="tool-title">Favicon Generator</div>
       </a>
     </div>
@@ -296,40 +242,40 @@
     <h2 class="category-title">ইউটিলিটি টুলস</h2>
     <div class="tool-grid">
       <a href="tools/duplicate-checker.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-copy-check"></i></div>
+        <div class="tool-icon">Copy Check</div>
         <div class="tool-title">Duplicate Checker</div>
       </a>
       <a href="tools/url-shortener.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-link"></i></div>
+        <div class="tool-icon">Link</div>
         <div class="tool-title">URL Shortener</div>
       </a>
       <a href="tools/txt-to-excel.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-file-spreadsheet"></i></div>
+        <div class="tool-icon">File Spreadsheet</div>
         <div class="tool-title">TXT to Excel</div>
       </a>
       <a href="tools/play-button.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-playstation-circle"></i></div>
-        <div class="tool-title">Add Play Icon on Photo</div>
+        <div class="tool-icon">Play Circle</div>
+        <div class="tool-title">Add Play Icon</div>
       </a>
     </div>
 
-    <!-- Entertainment -->
+    <!-- Games & Entertainment -->
     <h2 class="category-title">গেম ও বিনোদন</h2>
     <div class="tool-grid">
       <a href="tools/catch-the-star.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-star"></i></div>
+        <div class="tool-icon">Star</div>
         <div class="tool-title">Catch The Star</div>
       </a>
       <a href="tools/Racing-car.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-car"></i></div>
+        <div class="tool-icon">Car</div>
         <div class="tool-title">Racing Car Game</div>
       </a>
       <a href="tools/Shooting-game.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-target-arrow"></i></div>
+        <div class="tool-icon">Target Arrow</div>
         <div class="tool-title">Shooting Game</div>
       </a>
       <a href="tools/Live tv.html" class="tool-card">
-        <div class="tool-icon"><i class="ti ti-device-tv"></i></div>
+        <div class="tool-icon">TV</div>
         <div class="tool-title">Live TV Channels</div>
       </a>
     </div>
@@ -339,13 +285,11 @@
   <footer>
     <div class="footer-content">
       <h2>NurulNC.Site</h2>
-      <p style="max-width: 600px; margin: 15px auto; opacity: 0.8;">
-        তোমার দৈনন্দিন সব অনলাইন কাজের জন্য ১০০% ফ্রি, দ্রুত ও নিরাপদ টুলস
-      </p>
+      <p>সব টুলস সম্পূর্ণ ফ্রি • কোনো রেজিস্ট্রেশন লাগবে না • মেড ইন বাংলাদেশ</p>
       <div class="social-links">
-        <a href="https://facebook.com/nurulnc" target="_blank"><i class="ti ti-brand-facebook"></i></a>
-        <a href="https://t.me/nurulnc" target="_blank"><i class="ti ti-brand-telegram"></i></a>
-        <a href="https://youtube.com/@nurulnc" target="_blank"><i class="ti ti-brand-youtube"></i></a>
+        <a href="https://facebook.com/nurulnc" target="_blank">Facebook</a>
+        <a href="https://t.me/nurulnc" target="_blank">Telegram</a>
+        <a href="https://youtube.com/@nurulnc" target="_blank">YouTube</a>
       </div>
       <p style="margin-top: 40px; opacity: 0.7;">
         © 2025 NurulNC.Site • Made with Love in Bangladesh
@@ -353,30 +297,5 @@
     </div>
   </footer>
 
-  <script>
-    // Dark Mode
-    const themeToggle = document.getElementById('themeToggle');
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add('dark-mode');
-      themeToggle.innerHTML = 'Sun';
-    }
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      themeToggle.innerHTML = isDark ? 'Sun' : 'Moon';
-      localStorage.setItem('darkMode', isDark);
-    });
-
-    // Search
-    const searchInput = document.getElementById('searchInput');
-    const cards = document.querySelectorAll('.tool-card');
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      cards.forEach(card => {
-        const text = card.textContent.toLowerCase();
-        card.style.display = text.includes(query) ? 'flex' : 'none';
-      });
-    });
-  </script>
 </body>
 </html>
