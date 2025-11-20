@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NurulNC.Site - ফ্রি অনলাইন টুলস</title>
   <link rel="icon" href="https://nurulnc.site/favicon.ico" type="image/x-icon"/>
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Tabler Icons CDN -->
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tabler Icons (সব আইকন এখান থেকে, কখনো ভাঙবে না) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
 
   <style>
@@ -17,210 +18,228 @@
       --primary-dark: #4f46e5;
       --secondary: #8b5cf6;
       --accent: #ec4899;
-      --gray: #64748b;
-      --light: #f8fafc;
-      --dark: #0f172a;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Sora', sans-serif;
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
       color: #1e293b;
       line-height: 1.6;
-      min-height: 100vh;
-      overflow-x: hidden;
+      transition: all 0.4s;
     }
     body.dark-mode {
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: #e2e8f0;
     }
 
-    /* ======== Unique Header ======== */
+    /* Header - Premium Look */
     header {
       position: relative;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
       text-align: center;
-      padding: 120px 20px 80px;
+      padding: 130px 20px 90px;
       overflow: hidden;
-      border-bottom-left-radius: 50% 10%;
-      border-bottom-right-radius: 50% 10%;
+      border-bottom-left-radius: 50% 12%;
+      border-bottom-right-radius: 50% 12%;
     }
-    header::before {
+    header::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      height: 100px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") bottom no-repeat;
-      background-size: cover;
+      height: 120px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,160L48,176C96,192,192,224,288,224C384,224,480,192,576,160C672,128,768,96,864,112C960,128,1056,192,1152,213.3C1248,234.7,1344,213.3,1392,202.7L1440,192L1440,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") bottom/cover no-repeat;
     }
+
     .logo {
-      font-size: 3.8rem;
-      font-weight: 700;
-      letter-spacing: -1px;
+      font-size: 4.2rem;
+      font-weight: 800;
+      letter-spacing: -2px;
+      background: linear-gradient(90deg, #fff, #e0f2fe);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
       margin-bottom: 10px;
-      text-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .tagline { font-size: 1.3rem; opacity: 0.95; margin-bottom: 30, 30px; }
+    .tagline {
+      font-size: 1.4rem;
+      opacity: 0.95;
+      margin-bottom: 30px;
+      font-weight: 400;
+    }
 
     .search-container {
-      max-width: 600px;
-      margin: 0 auto 30px;
+      max-width: 650px;
+      margin: 0 auto 35px;
       position: relative;
     }
     .search-input {
       width: 100%;
-      padding: 16px 55px 16px 20px;
+      padding: 18px 60px 18px 24px;
       border: none;
       border-radius: 50px;
-      font-size: 1.1rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      transition: all 0.3s;
+      font-size: 1.2rem;
+      background: white;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      transition: all 0.4s;
     }
     .search-input:focus {
       outline: none;
-      transform: scale(1.02);
-      box-shadow: 0 15px 40px rgba(99,102,241,0.3);
+      transform: scale(1.03);
+      box-shadow: 0 20px 50px rgba(99,102,241,0.3);
     }
     .search-icon {
       position: absolute;
-      right: 18px;
+      right: 20px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       color: var(--primary);
     }
 
     .header-actions {
       display: flex;
-      gap: 15px;
+      gap: 18px;
       justify-content: center;
       flex-wrap: wrap;
     }
     .btn {
-      padding: 12px 28px;
+      padding: 14px 32px;
       border-radius: 50px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.3s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      transition: all 0.4s;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
     }
     .btn-primary {
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.25);
       color: white;
     }
-    .btn-primary:hover { background: white; color: var(--primary); transform: translateY(-3px); }
-    .theme-toggle {
-      width: 56px; height: 56px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
+    .btn-primary:hover {
+      background: white;
+      color: var(--primary);
+      transform: translateY(-4px);
     }
+    .theme-toggle {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: all 0.4s;
+    }
+    .theme-toggle:hover { transform: rotate(360deg); }
 
-    /* ======== Category Section ======== */
+    /* Category Title */
     .category-title {
       text-align: center;
-      font-size: 2.2rem;
-      margin: 60px 20px 40px;
+      font-size: 2.5rem;
+      margin: 70px 20px 40px;
       color: var(--primary);
-      position: relative;
+      font-weight: 700;
     }
     .category-title::after {
       content: '';
-      width: 80px;
-      height: 4px;
-      background: var(--primary);
       display: block;
+      width: 100px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
       margin: 15px auto;
-      border-radius: 2px;
+      border-radius: 3px;
     }
 
-    /* ======== Tool Grid ======== */
+    /* Tool Grid */
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 28px;
       padding: 20px;
       max-width: 1400px;
       margin: 0 auto;
     }
     .tool-card {
       background: white;
-      border-radius: 20px;
+      border-radius: 24px;
       overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      transition: all 0.4s;
+      transition: all 0.4s ease;
       text-decoration: none;
       color: inherit;
-      position: relative;
+      display: flex;
+      flex-direction: column;
     }
-    body.dark-mode .tool-card { background: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+    body.dark-mode .tool-card {
+      background: #1e293b;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
     .tool-card:hover {
-      transform: translateY(-12px) scale(1.03);
-      box-shadow: 0 20px 50px rgba(99,102,241,0.25);
+      transform: translateY(-15px) scale(1.04);
+      box-shadow: 0 25px 60px rgba(99,102,241,0.3);
     }
     .tool-icon {
-      width: 100%;
-      height: 140px;
-      object-fit: contain;
-      padding: 20px;
-      background: linear-gradient(135deg, #f8fafc, #e0e7ff);
+      height:  160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      transition: all 0.4s;
     }
-    body.dark-mode .tool-icon { background: linear-gradient(135deg, #1e293b, #312e81); }
+    body.dark-mode .tool-icon {
+      background: linear-gradient(135deg, #1e293b, #312e81);
+    }
     .tool-title {
       text-align: center;
-      padding: 15px;
+      padding: 20px;
+      font-size: 1.25rem;
       font-weight: 600;
-      font-size: 1.15rem;
       color: #1e293b;
     }
     body.dark-mode .tool-title { color: #e2e8f0; }
 
-    /* ======== Footer ======== */
+    /* Footer */
     footer {
       margin-top: 100px;
-      background: var(--dark);
+      background: #0f172a;
       color: white;
-      padding: 60px 20px 30px;
+      padding: 70px 20px 40px;
       text-align: center;
     }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
+    .footer-content {
       max-width: 1200px;
-      margin: 0 auto 40px;
+      margin: 0 auto;
     }
     .social-links a {
       display: inline-flex;
-      width: 50px; height: 50px;
+      width: 55px; height: 55px;
       background: rgba(255,255,255,0.1);
       border-radius: 50%;
       align-items: center;
       justify-content: center;
-      margin: 0 10px;
-      font-size: 1.4rem;
-      transition: 0.3s;
+      margin: 0 12px;
+      font-size: 1.5rem;
+      transition: 0.4s;
     }
-    .social-links a:hover { background: var(--primary); transform: translateY(-5px); }
+    .social-links a:hover {
+      background: var(--primary);
+      transform: translateY(-8px);
+    }
 
-    /* Responsive */
     @media (max-width: 768px) {
-      header { padding: 100px 15px 70px; }
-      .logo { font-size: 2.8rem; }
-      .tool-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+      .logo { font-size: 3rem; }
+      .tool-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 22px; }
+      .category-title { font-size: 2rem; }
     }
     @media (max-width: 480px) {
-      .logo { font-size: 2.3rem; }
       .tool-grid { grid-template-columns: 1fr 1fr; }
       .header-actions { flex-direction: column; align-items: center; }
+      .btn { width: 80%; justify-content: center; }
     }
   </style>
 </head>
@@ -229,45 +248,46 @@
   <!-- Header -->
   <header>
     <h1 class="logo">NurulNC.Site</h1>
-    <p class="tagline">১০০+ ফ্রি অনলাইন টুলস — এক ক্লিকে সব সমাধান</p>
+    <p class="tagline">এক ক্লিকে ৫০+ ফ্রি প্রিমিয়াম টুলস — কোনো রেজিস্ট্রেশন লাগবে না</p>
     
     <div class="search-container">
-      <input type="text" class="search-input" id="searchInput" placeholder="টুল খুঁজুন... (যেমন: password, game)">
-      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="টুল খুঁজুন... (যেমন: password, game, mail)">
+      <span class="search-icon">Search</span>
     </div>
 
     <div class="header-actions">
       <a href="tools/portfolio.html" class="btn btn-primary">ডেভেলপারের সাথে যোগাযোগ</a>
-      <button class="theme-toggle" id="themeToggle">🌙</button>
+      <button class="theme-toggle" id="themeToggle">Moon</button>
     </div>
   </header>
 
   <main>
+
     <!-- Generators -->
     <h2 class="category-title">জেনারেটর টুলস</h2>
-    <div class="tool-grid" id="toolGrid">
+    <div class="tool-grid">
       <a href="tools/password-generator.html" class="tool-card">
-        <img src="https://i.ibb.co/7zYP7gJ/password-generator.png" alt="Password" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-shield-lock"></i></div>
         <div class="tool-title">Password Generator</div>
       </a>
       <a href="tools/random-name.html" class="tool-card">
-        <img src="https://i.ibb.co/6nYxY3F/random-name.png" alt="Name" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-user-plus"></i></div>
         <div class="tool-title">Random Name Generator</div>
       </a>
       <a href="tools/temp-mail.html" class="tool-card">
-        <img src="https://i.ibb.co/4pJ4vYV/temp-mail.png" alt="Temp Mail" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-mail-fast"></i></div>
         <div class="tool-title">Temp Mail</div>
       </a>
       <a href="tools/cc.html" class="tool-card">
-        <img src="https://i.ibb.co/3dQbY3g/cc-generator.png" alt="CC" class="tool-icon">
-        <div class="tool-title">CC Generator</div>
+        <div class="tool-icon"><i class="ti ti-credit-card"></i></div>
+        <div class="tool-title">CC Generator (Demo)</div>
       </a>
       <a href="tools/2fa-generator.html" class="tool-card">
-        <img src="https://i.ibb.co/9hY5nYg/2fa.png" alt="2FA" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-2fa"></i></div>
         <div class="tool-title">2FA Code Generator</div>
       </a>
       <a href="tools/Favicon.html" class="tool-card">
-        <img src="https://i.ibb.co/4pQJ3vY/favicon.png" alt="Favicon" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-world-www"></i></div>
         <div class="tool-title">Favicon Generator</div>
       </a>
     </div>
@@ -276,40 +296,40 @@
     <h2 class="category-title">ইউটিলিটি টুলস</h2>
     <div class="tool-grid">
       <a href="tools/duplicate-checker.html" class="tool-card">
-        <img src="https://i.ibb.co/0jZJ3vY/duplicate.png" alt="Duplicate" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-copy-check"></i></div>
         <div class="tool-title">Duplicate Checker</div>
       </a>
       <a href="tools/url-shortener.html" class="tool-card">
-        <img src="https://i.ibb.co/4pQJ3vY/url-shortener.png" alt="URL" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-link"></i></div>
         <div class="tool-title">URL Shortener</div>
       </a>
       <a href="tools/txt-to-excel.html" class="tool-card">
-        <img src="https://i.ibb.co/3dQbY3g/txt-to-excel.png" alt="Excel" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-file-spreadsheet"></i></div>
         <div class="tool-title">TXT to Excel</div>
       </a>
       <a href="tools/play-button.html" class="tool-card">
-        <img src="https://i.ibb.co/7zY7gJ/play-button.png" alt="Play" class="tool-icon">
-        <div class="tool-title">Add Play Icon</div>
+        <div class="tool-icon"><i class="ti ti-playstation-circle"></i></div>
+        <div class="tool-title">Add Play Icon on Photo</div>
       </a>
     </div>
 
-    <!-- Games -->
-    <h2 class="category-title">মজার গেম সমূহ</h2>
+    <!-- Entertainment -->
+    <h2 class="category-title">গেম ও বিনোদন</h2>
     <div class="tool-grid">
       <a href="tools/catch-the-star.html" class="tool-card">
-        <img src="https://i.ibb.co/6nYxY3F/star-game.png" alt="Star" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-star"></i></div>
         <div class="tool-title">Catch The Star</div>
       </a>
       <a href="tools/Racing-car.html" class="tool-card">
-        <img src="https://i.ibb.co/9hY5nYg/racing-car.png" alt="Car" class="tool-icon">
-        <div class="tool-title">Racing Car</div>
+        <div class="tool-icon"><i class="ti ti-car"></i></div>
+        <div class="tool-title">Racing Car Game</div>
       </a>
       <a href="tools/Shooting-game.html" class="tool-card">
-        <img src="https://i.ibb.co/0jZJ3vY/shooting.png" alt="Shooting" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-target-arrow"></i></div>
         <div class="tool-title">Shooting Game</div>
       </a>
       <a href="tools/Live tv.html" class="tool-card">
-        <img src="https://i.ibb.co/4pJ4vYV/live-tv.png" alt="TV" class="tool-icon">
+        <div class="tool-icon"><i class="ti ti-device-tv"></i></div>
         <div class="tool-title">Live TV Channels</div>
       </a>
     </div>
@@ -317,48 +337,44 @@
 
   <!-- Footer -->
   <footer>
-    <div class="footer-grid">
-      <div>
-        <h3>NurulNC.Site</h3>
-        <p>তোমার প্রতিদিনের সকল অনলাইন কাজের সহজ সমাধান</p>
-      </div>
-      <div>
-        <h4>কুইক লিংক</h4>
-        <p><a href="#about" style="color:#94a3b8;">About</a> • <a href="tools/portfolio.html" style="color:#94a3b8;">Contact</a></p>
-      </div>
+    <div class="footer-content">
+      <h2>NurulNC.Site</h2>
+      <p style="max-width: 600px; margin: 15px auto; opacity: 0.8;">
+        তোমার দৈনন্দিন সব অনলাইন কাজের জন্য ১০০% ফ্রি, দ্রুত ও নিরাপদ টুলস
+      </p>
       <div class="social-links">
-        <a href="https://facebook.com/nurulnc" target="_blank">Facebook</a>
-        <a href="https://t.me/nurulnc" target="_blank">Telegram</a>
-        <a href="https://youtube.com/@nurulnc" target="_blank">YouTube</a>
+        <a href="https://facebook.com/nurulnc" target="_blank"><i class="ti ti-brand-facebook"></i></a>
+        <a href="https://t.me/nurulnc" target="_blank"><i class="ti ti-brand-telegram"></i></a>
+        <a href="https://youtube.com/@nurulnc" target="_blank"><i class="ti ti-brand-youtube"></i></a>
       </div>
+      <p style="margin-top: 40px; opacity: 0.7;">
+        © 2025 NurulNC.Site • Made with Love in Bangladesh
+      </p>
     </div>
-    <p style="margin-top:30px; opacity:0.8;">© 2025 NurulNC.Site • সব টুলস সম্পূর্ণ ফ্রি ও প্রাইভেসি ফ্রেন্ডলি</p>
   </footer>
 
-  <!-- Scripts -->
   <script>
-    // Theme Toggle
+    // Dark Mode
     const themeToggle = document.getElementById('themeToggle');
-    const body = document.body;
     if (localStorage.getItem('darkMode') === 'true') {
-      body.classList.add('dark-mode');
-      themeToggle.innerHTML = '☀️';
+      document.body.classList.add('dark-mode');
+      themeToggle.innerHTML = 'Sun';
     }
     themeToggle.addEventListener('click', () => {
-      body.classList.toggle('dark-mode');
-      const isDark = body.classList.contains('dark-mode');
-      themeToggle.innerHTML = isDark ? '☀️' : '🌙';
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeToggle.innerHTML = isDark ? 'Sun' : 'Moon';
       localStorage.setItem('darkMode', isDark);
     });
 
-    // Search Function
+    // Search
     const searchInput = document.getElementById('searchInput');
     const cards = document.querySelectorAll('.tool-card');
     searchInput.addEventListener('input', (e) => {
       const query = e.target.value.toLowerCase();
       cards.forEach(card => {
         const text = card.textContent.toLowerCase();
-        card.style.display = text.includes(query) ? 'block' : 'none';
+        card.style.display = text.includes(query) ? 'flex' : 'none';
       });
     });
   </script>
