@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Editor - NurulNC.Site</title>
+  <meta name="description" content="ফ্রি অনলাইন PDF এডিটর - পেজ ডিলিট, রোটেট, রি-অর্ডার, মার্জ করুন। কোনো রেজিস্ট্রেশন লাগবে না!">
+
+  <!-- তোমার মেইন সাইটের সাথে মিল রাখার জন্য -->
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+
+  <style>
+    :root { --primary: #8b5cf6; --bg: #f8f5ff; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Hind Siliguri', sans-serif;
+      background: var(--bg);
+      color: #1e293b;
+      padding: 20px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 { text-align: center; color: var(--primary); margin: 30px 0; font-size: 2.2rem; }
+    .upload-area {
+      border: 3px dashed var(--primary);
+      border-radius: 20px;
+      padding: 50px;
+      text-align: center;
+      background: white;
+      margin-bottom: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .upload-area:hover { background: #f0e8ff; }
+    .upload-area input { display: none; }
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin: 10px;
+      transition: 0.3s;
+    }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(139,92,246,0.3); }
+    .btn-success { background: #10b981; }
+    .controls { text-align: center; margin: 30px 0; }
+    .pages {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .page-item {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+      transition: 0.3s;
+    }
+    .page-item:hover { transform: translateY(-8px); }
+    .page-item canvas { width: 100%; height: auto; border-bottom: 1px solid #eee; }
+    .page-actions {
+      padding: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .page-actions button {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .page-actions button:hover { background: #f0e8ff; color: var(--primary); }
+    .delete-btn { color: #ef4444; }
+    .rotate-left { transform: rotate(-90deg); }
+    .rotate-right { transform: rotate(90deg); }
+    .page-number { padding: 8px; background: var(--primary); color: white; font-weight: bold; }
+    .drag-handle {
+      cursor: move;
+      padding: 10px;
+      background: rgba(139,92,246,0.1);
+      font-size: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .pages { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>PDF Editor — ফ্রি ও পাওয়ারফুল</h1>
+
+  <div class="upload-area" id="dropArea">
+    <input type="file" id="pdfFile" accept=".pdf">
+    <p style="font-size:1.3rem; margin:20px 0;">এখানে ক্লিক করে বা PDF ফাইল টেনে আনুন</p>
+    <button class="btn">PDF নির্বাচন করুন</button>
+  </div>
+
+  <div class="controls" id="controls" style="display:none;">
+    <button class="btn btn-success" onclick="downloadPDF()">Download Edited PDF</button>
+    <button class="btn" onclick="location.reload()">নতুন PDF আপলোড</button>
+  </div>
+
+  <div class="pages" id="pagesContainer"></div>
+</div>
+
+<script>
+  const dropArea = document.getElementById('dropArea');
+  const fileInput = document.getElementById('pdfFile');
+  const pagesContainer = document.getElementById('pagesContainer');
+  const controls = document.getElementById('controls');
+
+  let pdfDoc = null;
+  let pageBlobs = [];
+  let pageRotations = [];
+
+  dropArea.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+  dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.style.background = '#f0e8ff'; });
+  dropArea.addEventListener('dragleave', () => dropArea.style.background = 'white');
+  dropArea.addEventListener('drop', e => {
+    e.preventDefault();
+    dropArea.style.background = 'white';
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+
+  async function handleFile(file) {
+    if (!file || file.type !== 'application/pdf') return alert('শুধু PDF ফাইল দিন');
+    
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+    pdfDoc = pdf;
+    const pages = pdf.getPages();
+    pageBlobs = [];
+    pageRotations = Array(pages.length).fill(0);
+
+    pagesContainer.innerHTML = '';
+    controls.style.display = 'block';
+    dropArea.style.display = 'none';
+
+    for (let i = 0; i < pages.length; i++) {
+      const pagePdf = await PDFLib.PDFDocument.create();
+      const [copiedPage] = await pagePdf.copyPages(pdf, [i]);
+      pagePdf.addPage(copiedPage);
+      const bytes = await pagePdf.save();
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      pageBlobs.push(url);
+      renderPage(i, url);
+    }
+  }
+
+  function renderPage(index, url) {
+    const div = document.createElement('div');
+    div.className = 'page-item';
+    div.draggable = true;
+    div.dataset.index = index;
+
+    div.innerHTML = `
+      <div class="drag-handle">Drag</div>
+      <div class="page-number">পৃষ্ঠা ${index + 1}</div>
+      <iframe src="${url}" width="100%" height="250px" style="border:none;"></iframe>
+      <div class="page-actions">
+        <button onclick="rotatePage(${index}, -90)" title="বামে ঘোরান">Rotate Left</button>
+        <button onclick="rotatePage(${index}, 90)" title="ডানে ঘোরান">Rotate Right</button>
+        <button class="delete-btn" onclick="deletePage(${index})" title="ডিলিট">Delete</button>
+      </div>
+    `;
+
+    div.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', index));
+    div.addEventListener('dragover', e => e.preventDefault());
+    div.addEventListener('drop', e => {
+      e.preventDefault();
+      const from = parseInt(e.dataTransfer.getData('text/plain'));
+      const to = index;
+      if (from !== to) reorderPages(from, to);
+    });
+
+    pagesContainer.appendChild(div);
+  }
+
+  async function rotatePage(index, angle) {
+    pageRotations[index] += angle;
+    const pdf = await PDFLib.PDFDocument.load(await fetch(pageBlobs[index]).then(r => r.arrayBuffer()));
+    const page = pdf.getPages()[0];
+    page.setRotation(PDFLib.degrees(pageRotations[index] % 360));
+    const bytes = await pdf.save();
+    const newBlob = new Blob([bytes], { type: 'application/pdf' });
+    const newUrl = URL.createObjectURL(newBlob);
+    pageBlobs[index] = newUrl;
+    document.querySelectorAll('.page-item')[index].querySelector('iframe').src = newUrl;
+  }
+
+  function deletePage(index) {
+    if (confirm('এই পৃষ্ঠাটি ডিলিট করবেন?')) {
+      pageBlobs.splice(index, 1);
+      pageRotations.splice(index, 1);
+      document.querySelectorAll('.page-item')[index].remove();
+      updatePageNumbers();
+    }
+  }
+
+  function updatePageNumbers() {
+    document.querySelectorAll('.page-item').forEach((el, i) => {
+      el.querySelector('.page-number').textContent = `পৃষ্ঠা ${i + 1}`;
+      el.dataset.index = i;
+    });
+  }
+
+  function reorderPages(from, to) {
+    [pageBlobs[from], pageBlobs[to]] = [pageBlobs[to], pageBlobs[from]];
+    [pageRotations[from], pageRotations[to]] = [pageRotations[to], pageRotations[from]];
+    const items = Array.from(document.querySelectorAll('.page-item'));
+    pagesContainer.innerHTML = '';
+    items.forEach((item, i) => {
+      item.dataset.index = i;
+      pagesContainer.appendChild(item);
+    });
+    updatePageNumbers();
+  }
+
+  async function downloadPDF() {
+    const mergedPdf = await PDFLib.PDFDocument.create();
+    for (let i = 0; i < pageBlobs.length; i++) {
+      const donorPdf = await PDFLib.PDFDocument.load(await fetch(pageBlobs[i]).then(r => r.arrayBuffer()));
+      const [page] = await mergedPdf.copyPages(donorPdf, [0]);
+      mergedPdf.addPage(page);
+      page.setRotation(PDFLib.degrees(pageRotations[i] % 360));
+    }
+    const pdfBytes = await mergedPdf.save();
+    download(pdfBytes, "Edited-PDF-by-NurulNC.pdf", "application/pdf");
+  }
+</script>
+
+</body>
+</html>
