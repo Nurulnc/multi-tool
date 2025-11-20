@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text to Handwriting - হাতের লেখা | NurulNC.Site</title>
+  <style>
+    body{font-family:'Hind Siliguri',sans-serif;background:#f9f9f9;padding:20px}
+    .container{max-width:900px;margin:0 auto;background:white;border-radius:20px;padding:30px;box-shadow:0 15px 40px rgba(0,0,0,.1)}
+    h1{color:#e74c3c;text-align:center}
+    textarea, select, input{width:100%;padding:15px;margin:10px 0;border-radius:10px;border:2px solid #ddd;font-size:18px}
+    button{background:#e74c3c;color:white;padding:15px 30px;border:none;border-radius:50px;font-size:1.2rem;cursor:pointer}
+    button:hover{background:#c0392b}
+    canvas{border:1px solid #ddd;margin:20px 0;border-radius:10px}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Text to Handwriting Converter</h1>
+  <p>টেক্সট লিখুন → হাতের লেখায় রূপান্তর → ডাউনলোড করুন!</p>
+  
+  <textarea id="text" rows="6" placeholder="এখানে আপনার টেক্সট লিখুন..."></textarea>
+  <input type="color" id="color" value="#000000">
+  <select id="font">
+    <option value="0">হাতের লেখা ১</option>
+    <option value="1">হাতের লেখা ২</option>
+    <option value="2">হাতের লেখা ৩</option>
+  </select>
+  <button onclick="generate()">Generate Handwriting</button>
+  <button onclick="download()">Download as Image</button>
+  <canvas id="canvas" width="800" height="1000"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/handwritten.js@1.0.4/dist/handwritten.min.js"></script>
+<script>
+function generate(){
+  const text = document.getElementById("text").value || "এটা হাতের লেখা";
+  const color = document.getElementById("color").value;
+  const font = document.getElementById("font").value;
+  
+  handwritten(text, {
+    font: parseInt(font),
+    color: color,
+    width: 800,
+    height: 1000
+  }).then(img => {
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const image = new Image();
+    image.onload = () => { ctx.drawImage(image, 0, 0); };
+    image.src = img;
+  });
+}
+function download(){
+  const canvas = document.getElementById("canvas");
+  const link = document.createElement("a");
+  link.download = "handwriting.png";
+  link.href = canvas.toDataURL();
+  link.click();
+}
+</script>
+</body>
+</html>
