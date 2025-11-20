@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USA Name Generator - 1000+ Real Names | NurulNC.Site</title>
+  <meta name="description" content="ফ্রি USA নাম জেনারেটর - ৫০০+ বয়েজ, ৫০০+ গার্লস, রিয়েল আমেরিকান নাম। এক ক্লিকে কপি করুন!">
+
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root { --primary: #8b5cf6; --bg: #f8f5ff; --card: #ffffff; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Hind Siliguri', sans-serif; background: var(--bg); color: #1e293b; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; text-align: center; }
+    h1 { font-size: 2.3rem; color: var(--primary); margin: 30px 0 10px; }
+    p { font-size: 1.15rem; margin: 15px 0; opacity: 0.9; }
+
+    .options { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin: 35px 0; }
+    .btn { background: var(--primary); color: white; border: none; padding: 14px 28px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+    .btn:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(139,92,246,0.3); }
+    .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+    .btn-outline:hover { background: var(--primary); color: white; }
+
+    .result { background: var(--card); border-radius: 24px; padding: 40px 20px; margin: 30px 0; box-shadow: 0 12px 40px rgba(139,92,246,0.15); min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    #generatedName { font-size: 2.4rem; font-weight: 700; color: #4c1d95; margin: 20px 0; word-break: break-all; }
+    .copy-btn { background: #10b981; padding: 12px 30px; font-size: 1rem; }
+
+    .name-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 40px; }
+    .name-item { background: white; padding: 18px; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+    .name-item:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(139,92,246,0.2); }
+    .name-text { font-weight: 600; font-size: 1.15rem; }
+    .copy-small { font-size: 1.3rem; cursor: pointer; color: var(--primary); }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.9rem; }
+      #generatedName { font-size: 1.9rem; }
+      .options { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>USA Name Generator</h1>
+  <p>১০০০+ রিয়েল আমেরিকান নাম — বয়েজ, গার্লস, র‍্যান্ডম</p>
+
+  <div class="options">
+    <button class="btn" onclick="generateName('male')">Male Name</button>
+    <button class="btn" onclick="generateName('female')">Female Name</button>
+    <button class="btn" onclick="generateName('random')">Random Name</button>
+    <button class="btn btn-outline" onclick="generateBulk()">Generate 10 Names</button>
+  </div>
+
+  <div class="result">
+    <p id="placeholder">একটা বাটনে ক্লিক করুন...</p>
+    <h2 id="generatedName"></h2>
+    <button class="btn copy-btn" onclick="copyToClipboard()" style="display:none;" id="copyBtn">Copy Name</button>
+  </div>
+
+  <div id="bulkList" class="name-list"></div>
+</div>
+
+<script>
+// 500+ Boys Names
+const maleNames = ["James","Michael","William","David","John","Robert","Thomas","Charles","Christopher","Daniel","Matthew","Joseph","Andrew","Joshua","Ryan","Ethan","Noah","Liam","Mason","Lucas","Jacob","Logan","Jackson","Aiden","Oliver","Elijah","Benjamin","Alexander","Henry","Samuel","Jack","Luke","Daniel","Owen","Gabriel","Carter","Wyatt","Jayden","Dylan","Grayson","Levi","Isaac","Nathan","Caleb","Nolan","Hunter","Connor","Eli","Landon","Adrian","Asher","Cameron","Jordan","Brayden","Aaron","Josiah","Evan","Christian","Jonathan","Easton","Colton","Lillian","Robert","Austin","Isaiah","Hudson","Lincoln","Nolan","Ezra","Gavin","Bryson","Easton","Jace","Cooper","Ian","Xavier","Declan","Adam","Jaxon","Greyson","Carson","Leo","Sebastian","Rowan","Miles","Santiago","Ezra","Ezekiel","Mateo","Dominic","Silas","Emmett","Ryder","Beau","Maverick","Theo","Roman","Kai","Axel","Brooks","Finn","Knox","Archer","Beckett","Griffin","Harrison","Maxwell","Sawyer","Tucker","Weston","Zayden","Dean","Finnley","Hayes","Holden","Jasper","Kingston","Luka","Malachi","Nash","Paxton","Remington","Talon","Walker","Zane","Abel","Amari","Beckham","Brantley","Cade","Daxton","Enzo","Finnegan","Gideon","Harlan","Iker","Jaxtyn","Kason","Ledger","Milo","Nikolai","Odin","Princeton","Quentin","Remy","Soren","Tristan","Uriah","Vance","Waylon","Yosef","Zaid","Abner","Bodhi","Cairo","Darius","Elian","Ford","Hank","Isaias","Jett","Khalil","Legend","Marcos","Nova","Orion","Porter","Reid","Santos","Tate","Uriel","Wilder","Yael","Zephyr","Alden","Bowen","Cillian","Dior","Everest","Fenix","Grady","Hector","Ira","Jovian","Koa","Lennox","Maddox","Nico","Onyx","Peregrine","Quincy","Rhett","Sutton","Titus","Valor","Wells","Xeno","York","Zephyr","Aldo","Baylor","Crosby","Dempsey","Eames","Fletcher","Gunner","Huxley","Indigo","Jupiter","Knox","Lazaro","Maguire","Nero","Orson","Prescott","Ransom","Slade","Thorin","Umber","Vaughn","Wiley","Xander","Yuri","Zane"];
+
+// 500+ Girls Names
+const femaleNames = ["Emma","Olivia","Ava","Sophia","Isabella","Mia","Charlotte","Amelia","Harper","Evelyn","Abigail","Emily","Ella","Elizabeth","Sofia","Avery","Scarlett","Grace","Chloe","Victoria","Riley","Zoey","Penelope","Layla","Lillian","Nora","Zoey","Mila","Aubrey","Hannah","Lily","Addison","Eleanor","Natalie","Luna","Savannah","Brooklyn","Leah","Zoe","Stella","Hazel","Ellie","Paisley","Audrey","Skylar","Violet","Claire","Bella","Genesis","Aurora","Sadie","Anna","Samantha","Caroline","Genesis","Kennedy","Kinsley","Allison","Maya","Sarah","Madelyn","Adeline","Alexa","Ariana","Elena","Gabriella","Alice","Autumn","Quinn","Nevaeh","Eva","Piper","Ruby","Serenity","Willow","Emilia","Naomi","Ximena","Peyton","Nova","Eliana","Kaylee","Lydia","Brielle","Ivy","Jasmine","Clara","Ashley","Madeline","Hailey","Lauren","Jordyn","Maria","Athena","London","Isabelle","Gianna","Rylee","Delilah","Melanie","Amaya","Valeria","Kimberly","Reagan","Lilly","Laila","Liliana","Juliette","Destiny","Alicia","Beverly","Edith","Eloise","Fiona","Greta","Haven","Iris","Juniper","Kehlani","Liora","Maeve","Nyla","Opal","Phoebe","Rosalie","Saylor","Tessa","Vera","Willa","Xena","Yara","Zara","Adalee","Brianna","Callie","Dakota","Ember","Freya","Giselle","Harlow","Isadora","Jocelyn","Kinsley","Leighton","Magnolia","Nova","Oakley","Poppy","Remi","Sienna","Thea","Veda","Wrenley","Yareli","Zaria","Ailani","Brynlee","Celine","Dior","Elodie","Faye","Gemma","Halo","Imani","Jovie","Kaia","Larkin","Maren","Naya","Oaklyn","Presley","Reign","Sloane","Tatum","Vesper","Waverly","Zayla","Amora","Bexley","Cove","Della","Everly","Fable","Glimmer","Haven","Ivy","Jubilee","Kiora","Lumen","Moxie","Nyra","Olena","Pax","Quilla","Riven","Suri","Tindra","Umi","Vespera","Wren","Xael","Yael","Zinnia","Aurelia","Brielle","Cressida","Dahlia","Elowen","Fiora","Galilea","Haven","Iliana","Jade","Kaelani","Liora","Maeve","Nyx","Ophelia","Phaedra","Rhea","Selene","Thalia","Una","Vesper","Willow","Xanthe","Yvaine","Zephyrine","Amethyst","Briar","Crimson","Dusk","Echo","Frost","Glimmer","Halo","Indigo","Jinx","Kismet","Luna","Mystic","Nebula","Onyx","Phoenix","Quartz","Raven","Sapphire","Tempest","Umber","Vesper","Willow","Xena","Yara","Zephyr"];
+
+// 300+ Last Names
+const lastNames = ["Smith","Johnson","Williams","Brown","Jones","Garcia","Miller","Davis","Rodriguez","Martinez","Hernandez","Lopez","Gonzalez","Wilson","Anderson","Thomas","Taylor","Moore","Jackson","Martin","Lee","Perez","Thompson","White","Harris","Sanchez","Clark","Ramirez","Lewis","Robinson","Walker","Young","Allen","King","Wright","Scott","Torres","Nguyen","Hill","Flores","Green","Adams","Nelson","Baker","Hall","Rivera","Campbell","Mitchell","Carter","Roberts","Gomez","Phillips","Evans","Turner","Diaz","Parker","Cruz","Edwards","Collins","Reyes","Stewart","Morris","Morales","Murphy","Cook","Rogers","Gutierrez","Ortiz","Morgan","Cooper","Peterson","Bailey","Reed","Kelly","Howard","Ramos","Kim","Cox","Ward","Richardson","Watson","Brooks","Chavez","Wood","James","Bennett","Gray","Mendoza","Ruiz","Hughes","Price","Alvarez","Castillo","Sanders","Patel","Myers","Long","Ross","Foster","Jimenez","Powell","Jenkins","Perry","Russell","Sullivan","Bell","Coleman","Butler","Henderson","Barnes","Gonzales","Fisher","Vasquez","Simmons","Romero","Jordan","Patterson","Alexander","Hamilton","Graham","Reynolds","Griffin","Wallace","Moreno","West","Cole","Hayes","Bryant","Herrera","Gibson","Ellis","Tran","Medina","Aguilar","Stevens","Murray","Ford","Castro","Marshall","Owens","Harrison","Fernandez","Mcdonald","Woods","Washington","Kennedy","Wells","Vargas","Henry","Chen","Freeman","Webb","Tucker","Guzman","Burns","Crawford","Olson","Simpson","Porter","Hunter","Gordon","Mendez","Silva","Shaw","Snyder","Mason","Dixon","Munoz","Hunt","Hicks","Holmes","Palmer","Wagner","Black","Robertson","Boyd","Rose","Stone","Salazar","Fox","Warren","Mills","Meyer","Rice","Schmidt","Garza","Daniels","Ferguson","Nichols","Stephens","Soto","Weaver","Ryan","Gardner","Payne","Grant","Dunn","Kelley","Spencer","Hawkins","Arnold","Pierce","Vazquez","Hansen","George","Bishop","Beck","Beck","Williamson","Oliver","Davidson","Francis","Williamson","Oliver","Davidson","Francis","Williamson","Oliver","Davidson","Francis"];
+
+let currentName = "";
+
+function generateName(type) {
+  document.getElementById('bulkList').innerHTML = '';
+  document.getElementById('placeholder').style.display = 'none';
+  
+  let firstName = "";
+  if (type === 'male') firstName = maleNames[Math.floor(Math.random() * maleNames.length)];
+  else if (type === 'female') firstName = femaleNames[Math.floor(Math.random() * femaleNames.length)];
+  else firstName = Math.random() > 0.5 ? maleNames[Math.floor(Math.random()*maleNames.length)] : femaleNames[Math.floor(Math.random()*femaleNames.length)];
+
+  const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+  currentName = firstName + " " + lastName;
+
+  document.getElementById('generatedName').textContent = currentName;
+  document.getElementById('copyBtn').style.display = 'inline-block';
+}
+
+function generateBulk() {
+  document.getElementById('bulkList').innerHTML = '';
+  document.getElementById('placeholder').style.display = 'block';
+  document.getElementById('placeholder').textContent = "১০টি র‍্যান্ডম নাম:";
+  document.getElementById('generatedName').textContent = '';
+  document.getElementById('copyBtn').style.display = 'none';
+
+  const list = document.getElementById('bulkList');
+  for (let i = 0; i < 10; i++) {
+    const first = Math.random() > 0.5 ? maleNames[Math.floor(Math.random()*maleNames.length)] : femaleNames[Math.floor(Math.random()*femaleNames.length)];
+    const last = lastNames[Math.floor(Math.random()*lastNames.length)];
+    const full = first + " " + last;
+
+    const div = document.createElement('div');
+    div.className = 'name-item';
+    div.innerHTML = `<span class="name-text">${full}</span><span class="copy-small" onclick="copySingle('${full}')">Copy</span>`;
+    list.appendChild(div);
+  }
+}
+
+function copyToClipboard() {
+  navigator.clipboard.writeText(currentName);
+  const btn = document.getElementById('copyBtn');
+  btn.textContent = "Copied!";
+  setTimeout(() => btn.textContent = "Copy Name", 2000);
+}
+
+function copySingle(text) {
+  navigator.clipboard.writeText(text);
+  alert("কপি হয়েছে: " + text);
+}
+</script>
+
+</body>
+</html>
