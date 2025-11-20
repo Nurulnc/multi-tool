@@ -1,713 +1,366 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <meta name="monetag" content="77d7a7d36f2584e93f6e5a9f7cac0adf">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nurulnc.site</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NurulNC.Site - ফ্রি অনলাইন টুলস</title>
+  <link rel="icon" href="https://nurulnc.site/favicon.ico" type="image/x-icon"/>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Tabler Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+
   <style>
-    /* General Reset */
-    * {
-      box-sizing: border-box;
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #8b5cf6;
+      --accent: #ec4899;
+      --gray: #64748b;
+      --light: #f8fafc;
+      --dark: #0f172a;
     }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #f8f9fa;
-      overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      color: #333;
+      font-family: 'Sora', sans-serif;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      color: #1e293b;
       line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
     body.dark-mode {
-      background-color: #121212;
-      color: #e0e0e0;
-    }
-    body.dark-mode .tool-card {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      border-color: #333;
-    }
-    body.dark-mode .about-section {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      border-color: #333;
-    }
-    body.dark-mode .about-section ul li {
-      background-color: #2a2a2a;
-      color: #e0e0e0;
-      border-left-color: #4a90e2;
-    }
-    body.dark-mode .stats {
-      background-color: #1e1e1e;
-      border-color: #333;
-    }
-    body.dark-mode .stat h3 {
-      color: #4a90e2;
-    }
-    body.dark-mode .stat p {
-      color: #b0b0b0;
-    }
-    body.dark-mode .search-input {
-      background-color: #2a2a2a;
-      color: #e0e0e0;
-      border-color: #333;
-    }
-    body.dark-mode .modal-content {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      border-color: #333;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
     }
 
-    /* Dynamic Header */
+    /* ======== Unique Header ======== */
     header {
-      background-color: #ffffff;
-      color: #333;
-      text-align: center;
-      padding: 60px 20px;
       position: relative;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      transition: background-color 0.3s ease;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      text-align: center;
+      padding: 120px 20px 80px;
+      overflow: hidden;
+      border-bottom-left-radius: 50% 10%;
+      border-bottom-right-radius: 50% 10%;
     }
-    body.dark-mode header {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
+    header::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 100px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") bottom no-repeat;
+      background-size: cover;
     }
-    header h1 {
-      font-size: 3rem;
-      font-weight: 600;
-      animation: slideInDown 1s ease-out;
-      margin: 0;
-      letter-spacing: -0.5px;
+    .logo {
+      font-size: 3.8rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    @keyframes slideInDown {
-      from { transform: translateY(-30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
+    .tagline { font-size: 1.3rem; opacity: 0.95; margin-bottom: 30, 30px; }
 
-    /* Search Bar */
     .search-container {
-      max-width: 500px;
-      margin: 30px auto;
+      max-width: 600px;
+      margin: 0 auto 30px;
       position: relative;
     }
     .search-input {
       width: 100%;
-      padding: 14px 45px 14px 18px;
-      border: 1px solid #e0e0e0;
-      border-radius: 25px;
-      font-size: 1rem;
-      background-color: #ffffff;
-      transition: all 0.3s ease;
-      font-family: 'Inter', sans-serif;
-    }
-    body.dark-mode .search-input {
-      background-color: #2a2a2a;
-      color: #e0e0e0;
-      border-color: #333;
+      padding: 16px 55px 16px 20px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      transition: all 0.3s;
     }
     .search-input:focus {
       outline: none;
-      border-color: #4a90e2;
-      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+      transform: scale(1.02);
+      box-shadow: 0 15px 40px rgba(99,102,241,0.3);
     }
     .search-icon {
       position: absolute;
-      right: 16px;
+      right: 18px;
       top: 50%;
       transform: translateY(-50%);
-      color: #999;
-      font-size: 1.1rem;
-      transition: color 0.3s ease;
-    }
-    .search-input:focus + .search-icon {
-      color: #4a90e2;
+      font-size: 1.4rem;
+      color: var(--primary);
     }
 
-    /* Contact Developer Button and Theme Toggle */
     .header-actions {
       display: flex;
-      justify-content: center;
       gap: 15px;
-      margin-top: 25px;
+      justify-content: center;
       flex-wrap: wrap;
     }
-    .contact-btn, .theme-toggle {
-      display: inline-block;
-      background-color: #4a90e2;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 25px;
-      font-weight: 500;
+    .btn {
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
       text-decoration: none;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      border: none;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
-    .contact-btn:hover, .theme-toggle:hover {
-      background-color: #357abd;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+    .btn-primary {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
     }
+    .btn-primary:hover { background: white; color: var(--primary); transform: translateY(-3px); }
     .theme-toggle {
-      background-color: #6c757d;
-      width: 50px;
-      text-align: center;
-      padding: 12px 0;
-    }
-    .theme-toggle.dark {
-      background-color: #4a90e2;
-    }
-
-    /* Tool Grid */
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-      padding: 50px 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-      animation: fadeInUp 1s ease-out 0.5s both;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .tool-card {
-      display: block;
-      background-color: #ffffff;
-      color: #333;
-      padding: 30px 20px;
-      border-radius: 12px;
-      text-align: center;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      border: 1px solid #e0e0e0;
-      position: relative;
-      cursor: pointer;
-    }
-    body.dark-mode .tool-card {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      border-color: #333;
-    }
-    .tool-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      border-color: #4a90e2;
-    }
-    .tool-card:nth-child(1) { border-top: 3px solid #4a90e2; }
-    .tool-card:nth-child(2) { border-top: 3px solid #50c878; }
-    .tool-card:nth-child(3) { border-top: 3px solid #f39c12; }
-    .tool-card:nth-child(4) { border-top: 3px solid #e74c3c; }
-    .tool-card:nth-child(5) { border-top: 3px solid #9b59b6; }
-	 .tool-card:nth-child(6) { border-top: 3px solid #4a90e2; }
-	 .tool-card:nth-child(7) { border-top: 3px solid #4a90e2; }
-	  .tool-card:nth-child(8) { border-top: 3px solid #4a90e2; }
-    .tool-card.hidden {
-      display: none;
-    }
-
-    /* Modal for Tool Description */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      animation: fadeIn 0.3s ease;
-    }
-    .modal-content {
-      background-color: #ffffff;
-      margin: 10% auto;
-      padding: 32px;
-      border-radius: 12px;
-      width: 80%;
-      max-width: 500px;
-      text-align: center;
-      position: relative;
-      animation: slideInDown 0.3s ease;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      border: 1px solid #e0e0e0;
-    }
-    body.dark-mode .modal-content {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      border-color: #333;
-    }
-    .close {
-      color: #999;
-      float: right;
-      font-size: 24px;
-      font-weight: 500;
-      cursor: pointer;
-      position: absolute;
-      right: 16px;
-      top: 12px;
-      transition: color 0.3s ease;
-    }
-    .close:hover {
-      color: #4a90e2;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* Scroll to Top Button */
-    .scroll-top {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background-color: #4a90e2;
-      color: white;
-      border: none;
+      width: 56px; height: 56px;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 18px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      font-size: 1.5rem;
       cursor: pointer;
-      display: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
-      font-weight: 500;
-    }
-    .scroll-top:hover {
-      background-color: #357abd;
-      transform: scale(1.1);
+      backdrop-filter: blur(10px);
     }
 
-    /* Stats Section for Animated Counter */
-    .stats {
-      display: flex;
-      justify-content: space-around;
-      background-color: #ffffff;
-      padding: 32px;
-      border-radius: 12px;
-      margin: 30px auto;
-      max-width: 800px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      border: 1px solid #e0e0e0;
-      animation: fadeInUp 1s ease-out 1.2s both;
-    }
-    body.dark-mode .stats {
-      background-color: #1e1e1e;
-      border-color: #333;
-    }
-    .stat {
+    /* ======== Category Section ======== */
+    .category-title {
       text-align: center;
-      transition: transform 0.3s ease;
-    }
-    .stat:hover {
-      transform: translateY(-2px);
-    }
-    .stat h3 {
-      font-size: 2.5rem;
-      margin: 0;
-      color: #4a90e2;
-      font-weight: 600;
-    }
-    .stat p {
-      margin: 8px 0 0;
-      color: #666;
-      font-size: 1rem;
-      font-weight: 400;
-    }
-
-    /* About Section */
-    .about-section {
-      padding: 50px 30px;
-      background-color: #ffffff;
-      text-align: center;
-      border-radius: 12px;
-      margin: 40px auto;
-      max-width: 1000px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      animation: fadeInUp 1s ease-out 1s both;
-      transition: background-color 0.3s ease;
-      border: 1px solid #e0e0e0;
-    }
-    body.dark-mode .about-section {
-      background-color: #1e1e1e;
-      border-color: #333;
-    }
-    .about-section h2 {
-      color: #333;
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+      font-size: 2.2rem;
+      margin: 60px 20px 40px;
+      color: var(--primary);
       position: relative;
-      font-weight: 600;
     }
-    body.dark-mode .about-section h2 {
-      color: #e0e0e0;
-    }
-    .about-section h2::after {
+    .category-title::after {
       content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 3px;
-      background-color: #4a90e2;
+      width: 80px;
+      height: 4px;
+      background: var(--primary);
+      display: block;
+      margin: 15px auto;
       border-radius: 2px;
     }
-    .about-section p {
-      color: #666;
-      font-size: 1.1rem;
-      line-height: 1.7;
-      max-width: 800px;
-      margin: auto;
-      transition: color 0.3s ease;
-    }
-    body.dark-mode .about-section p {
-      color: #b0b0b0;
-    }
-    .about-section ul {
-      list-style: none;
-      padding: 0;
-      margin: 30px auto;
-      max-width: 600px;
-      text-align: left;
-    }
-    .about-section ul li {
-      background-color: #f8f9fa;
-      margin-bottom: 16px;
-      padding: 16px;
-      border-radius: 8px;
-      font-size: 1rem;
-      color: #333;
-      transition: all 0.3s ease;
-      border-left: 4px solid #4a90e2;
-      animation: slideInLeft 0.6s ease-out forwards;
-      opacity: 0;
-      transform: translateX(-30px);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-    body.dark-mode .about-section ul li {
-      background-color: #2a2a2a;
-      color: #e0e0e0;
-    }
-    .about-section ul li:nth-child(1) { animation-delay: 0.2s; }
-    .about-section ul li:nth-child(2) { animation-delay: 0.4s; }
-    .about-section ul li:nth-child(3) { animation-delay: 0.6s; }
-    @keyframes slideInLeft {
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .about-section ul li:hover {
-      transform: translateX(5px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    .about-section .goal {
-      margin-top: 30px;
-      font-style: italic;
-      color: #555;
-      font-size: 1.1rem;
-      background-color: #f8f9fa;
-      padding: 16px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-    body.dark-mode .about-section .goal {
-      background-color: #2a2a2a;
-      color: #b0b0b0;
-    }
-    .about-section .goal:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
 
-    /* Footer */
-    .site-footer {
-      background-color: #333;
-      color: white;
+    /* ======== Tool Grid ======== */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .tool-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.4s;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+    }
+    body.dark-mode .tool-card { background: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+    .tool-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 20px 50px rgba(99,102,241,0.25);
+    }
+    .tool-icon {
+      width: 100%;
+      height: 140px;
+      object-fit: contain;
+      padding: 20px;
+      background: linear-gradient(135deg, #f8fafc, #e0e7ff);
+    }
+    body.dark-mode .tool-icon { background: linear-gradient(135deg, #1e293b, #312e81); }
+    .tool-title {
       text-align: center;
-      padding: 25px 20px;
-      font-size: 0.95rem;
-      margin-top: 40px;
-      animation: fadeInUp 1s ease-out 1.5s both;
-      transition: background-color 0.3s ease;
+      padding: 15px;
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: #1e293b;
     }
-    body.dark-mode .site-footer {
-      background-color: #0d0d0d;
-    }
-    .site-footer p {
-      margin: 6px 0;
-    }
-    .site-footer b {
-      color: #4a90e2;
-      font-weight: 500;
-    }
+    body.dark-mode .tool-title { color: #e2e8f0; }
 
-    /* Responsive Design */
+    /* ======== Footer ======== */
+    footer {
+      margin-top: 100px;
+      background: var(--dark);
+      color: white;
+      padding: 60px 20px 30px;
+      text-align: center;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto 40px;
+    }
+    .social-links a {
+      display: inline-flex;
+      width: 50px; height: 50px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      margin: 0 10px;
+      font-size: 1.4rem;
+      transition: 0.3s;
+    }
+    .social-links a:hover { background: var(--primary); transform: translateY(-5px); }
+
+    /* Responsive */
     @media (max-width: 768px) {
-      header h1 { font-size: 2.2rem; }
-      .tool-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); padding: 40px 15px; gap: 20px; }
-      .about-section { padding: 40px 20px; margin: 30px 10px; }
-      .about-section h2 { font-size: 2rem; }
-      .about-section p, .about-section ul li { font-size: 1rem; }
-      .header-actions { flex-direction: column; align-items: center; gap: 12px; }
-      .stats { flex-direction: column; gap: 20px; padding: 25px; }
-      .stat h3 { font-size: 2rem; }
-      .search-input { padding: 12px 40px 12px 15px; }
+      header { padding: 100px 15px 70px; }
+      .logo { font-size: 2.8rem; }
+      .tool-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
     }
-
     @media (max-width: 480px) {
-      header { padding: 40px 15px; }
-      header h1 { font-size: 1.8rem; }
-      .tool-grid { grid-template-columns: 1fr; padding: 30px 10px; }
-      .about-section { padding: 30px 15px; margin: 20px 5px; border-radius: 8px; }
-      .about-section h2 { font-size: 1.6rem; }
-      .about-section ul li { font-size: 0.95rem; padding: 12px; }
-      .site-footer { font-size: 0.9rem; padding: 20px 10px; }
-      .modal-content { width: 95%; margin: 20% auto; padding: 20px; }
-      .stats { padding: 20px; }
-      .stat h3 { font-size: 1.8rem; }
+      .logo { font-size: 2.3rem; }
+      .tool-grid { grid-template-columns: 1fr 1fr; }
+      .header-actions { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Header -->
   <header>
-    <h1>Nurulnc.site</h1>
+    <h1 class="logo">NurulNC.Site</h1>
+    <p class="tagline">১০০+ ফ্রি অনলাইন টুলস — এক ক্লিকে সব সমাধান</p>
+    
     <div class="search-container">
-      <input type="text" class="search-input" id="searchInput" placeholder="টুলস খুঁজুন... (যেমন: Password)">
+      <input type="text" class="search-input" id="searchInput" placeholder="টুল খুঁজুন... (যেমন: password, game)">
       <span class="search-icon">🔍</span>
     </div>
+
     <div class="header-actions">
-      <a href="tools/portfolio.html" class="contact-btn">Contact Developer</a>
+      <a href="tools/portfolio.html" class="btn btn-primary">ডেভেলপারের সাথে যোগাযোগ</a>
       <button class="theme-toggle" id="themeToggle">🌙</button>
     </div>
-	  <script type="text/javascript">
-	atOptions = {
-		'key' : '08bb9d9fe36d7c284b411a59b359d241',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//lightingshovestature.com/08bb9d9fe36d7c284b411a59b359d241/invoke.js"></script>
   </header>
 
   <main>
+    <!-- Generators -->
+    <h2 class="category-title">জেনারেটর টুলস</h2>
     <div class="tool-grid" id="toolGrid">
-      <a href="tools/duplicate-checker.html" class="tool-card" data-description="ডুপ্লিকেট টেক্সট চেক করুন এবং রিমুভ করুন।">Duplicate Checker</a> 
-		<a href="tools/temp-mail.html" class="tool-card" data-description="টেম্পোরারি ইমেইল জেনেরেটর">Temp Mail </a> 
-				<a href="tools/Live tv.html" class="tool-card" data-description="নম্বর">Live TV Channel</a>
-      <a href="tools/random-name.html" class="tool-card" data-description="র‍্যান্ডম ইউনিক নাম জেনারেট করুন ক্রিয়েটিভ প্রজেক্টের জন্য।">Random Name Generator</a> 
-      <a href="tools/password-generator.html" class="tool-card" data-description="শক্তিশালী এবং নিরাপদ পাসওয়ার্ড তৈরি করুন এক ক্লিকে।">Password Generator</a>
-      <a href="tools/2fa-generator.html" class="tool-card" data-description="টু-ফ্যাক্টর অথেনটিকেশন কোড জেনারেট করুন আপনার অ্যাকাউন্ট সুরক্ষিত রাখতে।">Two Factor Generator</a>
-      <a href="tools/cc.html" class="tool-card" data-description="ক্রেডিট কার্ড নম্বর জেনারেট করুন টেস্টিংয়ের জন্য (শুধু ডেমো)।">CC Generator</a>
-        <a href="tools/Favicon.html" class="tool-card" data-description="নম্বর">Favicon Generator</a>
-      <a href="tools/url-shortener.html" class="tool-card" data-description="নম্বর">URL Shortner</a>
-      <a href="tools/txt-to-excel.html" class="tool-card" data-description="নম্বর">TXT To Exel</a>
-      <a href="tools/play-button.html" class="tool-card" data-description="নম্বর">Add Play Icon on photo</a>
-		<a href="tools/catch-the-star.html" class="tool-card" data-description="নম্বর">Game- Catch The Star</a>
-		<a href="tools/Racing-car.html" class="tool-card" data-description="নম্বর">Game- Racing Car</a>
-		<a href="tools/Shooting-game.html" class="tool-card" data-description="নম্বর">Game- Shooting</a>
+      <a href="tools/password-generator.html" class="tool-card">
+        <img src="https://i.ibb.co/7zYP7gJ/password-generator.png" alt="Password" class="tool-icon">
+        <div class="tool-title">Password Generator</div>
+      </a>
+      <a href="tools/random-name.html" class="tool-card">
+        <img src="https://i.ibb.co/6nYxY3F/random-name.png" alt="Name" class="tool-icon">
+        <div class="tool-title">Random Name Generator</div>
+      </a>
+      <a href="tools/temp-mail.html" class="tool-card">
+        <img src="https://i.ibb.co/4pJ4vYV/temp-mail.png" alt="Temp Mail" class="tool-icon">
+        <div class="tool-title">Temp Mail</div>
+      </a>
+      <a href="tools/cc.html" class="tool-card">
+        <img src="https://i.ibb.co/3dQbY3g/cc-generator.png" alt="CC" class="tool-icon">
+        <div class="tool-title">CC Generator (Demo)</div>
+      </a>
+      <a href="tools/2fa-generator.html" class="tool-card">
+        <img src="https://i.ibb.co/9hY5nYg/2fa.png" alt="2FA" class="tool-icon">
+        <div class="tool-title">2FA Code Generator</div>
+      </a>
+      <a href="tools/Favicon.html" class="tool-card">
+        <img src="https://i.ibb.co/4pQJ3vY/favicon.png" alt="Favicon" class="tool-icon">
+        <div class="tool-title">Favicon Generator</div>
+      </a>
+    </div>
+
+    <!-- Utility Tools -->
+    <h2 class="category-title">ইউটিলিটি টুলস</h2>
+    <div class="tool-grid">
+      <a href="tools/duplicate-checker.html" class="tool-card">
+        <img src="https://i.ibb.co/0jZJ3vY/duplicate.png" alt="Duplicate" class="tool-icon">
+        <div class="tool-title">Duplicate Checker</div>
+      </a>
+      <a href="tools/url-shortener.html" class="tool-card">
+        <img src="https://i.ibb.co/4pQJ3vY/url-shortener.png" alt="URL" class="tool-icon">
+        <div class="tool-title">URL Shortener</div>
+      </a>
+      <a href="tools/txt-to-excel.html" class="tool-card">
+        <img src="https://i.ibb.co/3dQbY3g/txt-to-excel.png" alt="Excel" class="tool-icon">
+        <div class="tool-title">TXT to Excel</div>
+      </a>
+      <a href="tools/play-button.html" class="tool-card">
+        <img src="https://i.ibb.co/7zY7gJ/play-button.png" alt="Play" class="tool-icon">
+        <div class="tool-title">Add Play Icon</div>
+      </a>
+    </div>
+
+    <!-- Games -->
+    <h2 class="category-title">মজার গেম সমূহ</h2>
+    <div class="tool-grid">
+      <a href="tools/catch-the-star.html" class="tool-card">
+        <img src="https://i.ibb.co/6nYxY3F/star-game.png" alt="Star" class="tool-icon">
+        <div class="tool-title">Catch The Star</div>
+      </a>
+      <a href="tools/Racing-car.html" class="tool-card">
+        <img src="https://i.ibb.co/9hY5nYg/racing-car.png" alt="Car" class="tool-icon">
+        <div class="tool-title">Racing Car</div>
+      </a>
+      <a href="tools/Shooting-game.html" class="tool-card">
+        <img src="https://i.ibb.co/0jZJ3vY/shooting.png" alt="Shooting" class="tool-icon">
+        <div class="tool-title">Shooting Game</div>
+      </a>
+      <a href="tools/Live tv.html" class="tool-card">
+        <img src="https://i.ibb.co/4pJ4vYV/live-tv.png" alt="TV" class="tool-icon">
+        <div class="tool-title">Live TV Channels</div>
+      </a>
     </div>
   </main>
-<script type="text/javascript">
-	atOptions = {
-		'key' : '08bb9d9fe36d7c284b411a59b359d241',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//lightingshovestature.com/08bb9d9fe36d7c284b411a59b359d241/invoke.js"></script>
-  <!-- Modal -->
-  <div id="toolModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2 id="modalTitle"></h2>
-      <p id="modalDescription"></p>
-      <button id="goToTool" class="contact-btn" style="margin-top: 20px;">টুলে যান</button>
-    </div>
-  </div>
-
-  <!-- Scroll to Top Button -->
-  <button class="scroll-top" id="scrollTop">↑</button>
-
-  <!-- About Section -->
-  <section id="about" class="about-section">
-    <h2>About this site</h2>
-    <!-- Animated Stats Counter -->
-    <div class="stats">
-      <div class="stat">
-        <h3 id="toolsCount">0</h3>
-        <p>Available Tools</p>
-      </div>
-      <div class="stat">
-        <h3 id="usersCount">1000</h3>
-        <p>Happy Users</p>
-      </div>
-      <div class="stat">
-        <h3 id="updatesCount">6</h3>
-        <p>Updates</p>
-      </div>
-    </div>
-    <p>
-  </section>
-<!-- GoldR.org Currency Widget -->
-<div id="goldr-currency-widget">লোড হচ্ছে...</div>
-<script src="https://www.goldr.org/taka-rate.js" async></script>
-
-<script async="async" data-cfasync="false" src="//lightingshovestature.com/71a970fbab7db464e15e222850ec6497/invoke.js"></script>
-<div id="container-71a970fbab7db464e15e222850ec6497"></div>
-
-
-	
 
   <!-- Footer -->
-  <footer class="site-footer">
-    <p>© 2025 Nurulnc.site | Developed with ❤️ by <b>Nurul Nc</b></p>
-    <p>All tools are free to use | Privacy Friendly | Open Source</p>
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h3>NurulNC.Site</h3>
+        <p>তোমার প্রতিদিনের সকল অনলাইন কাজের সহজ সমাধান</p>
+      </div>
+      <div>
+        <h4>কুইক লিংক</h4>
+        <p><a href="#about" style="color:#94a3b8;">About</a> • <a href="tools/portfolio.html" style="color:#94a3b8;">Contact</a></p>
+      </div>
+      <div class="social-links">
+        <a href="https://facebook.com/nurulnc" target="_blank">Facebook</a>
+        <a href="https://t.me/nurulnc" target="_blank">Telegram</a>
+        <a href="https://youtube.com/@nurulnc" target="_blank">YouTube</a>
+      </div>
+    </div>
+    <p style="margin-top:30px; opacity:0.8;">© 2025 NurulNC.Site • সব টুলস সম্পূর্ণ ফ্রি ও প্রাইভেসি ফ্রেন্ডলি</p>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Scripts -->
   <script>
-    // Dynamic enhancements (keeping previous JS, but simplifying interactions)
-    document.addEventListener('DOMContentLoaded', function() {
-      const toolCards = document.querySelectorAll('.tool-card');
-      const searchInput = document.getElementById('searchInput');
-      const toolGrid = document.getElementById('toolGrid');
-      const modal = document.getElementById('toolModal');
-      const modalTitle = document.getElementById('modalTitle');
-      const modalDescription = document.getElementById('modalDescription');
-      const closeModal = document.querySelector('.close');
-      const goToTool = document.getElementById('goToTool');
-      const themeToggle = document.getElementById('themeToggle');
-      const scrollTop = document.getElementById('scrollTop');
-      let currentToolLink = '';
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    if (localStorage.getItem('darkMode') === 'true') {
+      body.classList.add('dark-mode');
+      themeToggle.innerHTML = '☀️';
+    }
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const isDark = body.classList.contains('dark-mode');
+      themeToggle.innerHTML = isDark ? '☀️' : '🌙';
+      localStorage.setItem('darkMode', isDark);
+    });
 
-      // Animated Counter Function
-      function animateCounter(element, target, duration = 2000) {
-        let start = 0;
-        const increment = target / (duration / 16);
-        const timer = setInterval(() => {
-          start += increment;
-          if (start >= target) {
-            start = target;
-            clearInterval(timer);
-          }
-          element.textContent = Math.floor(start) + (target > 1000 ? 'K+' : '');
-        }, 16);
-      }
-
-      // Observe when stats section is in view
-      const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const toolsCount = document.getElementById('toolsCount');
-            const usersCount = document.getElementById('usersCount');
-            const updatesCount = document.getElementById('updatesCount');
-            
-            animateCounter(toolsCount, 5);
-            animateCounter(usersCount, 1000);
-            animateCounter(updatesCount, 5);
-            
-            statsObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.5 });
-
-      statsObserver.observe(document.querySelector('.stats'));
-
-      // Search Functionality
-      searchInput.addEventListener('input', function(e) {
-        const query = e.target.value.toLowerCase();
-        toolCards.forEach(card => {
-          const text = card.textContent.toLowerCase();
-          card.classList.toggle('hidden', !text.includes(query));
-        });
-        const visibleCards = document.querySelectorAll('.tool-card:not(.hidden)');
-        toolGrid.style.display = visibleCards.length > 0 ? 'grid' : 'none';
-        if (visibleCards.length === 0) {
-          toolGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #666; font-size: 1.1rem;">কোনো টুল পাওয়া যায়নি। অন্য কীওয়ার্ড চেষ্টা করুন!</p>';
-        } else if (query === '') {
-          toolGrid.innerHTML = Array.from(toolCards).map(card => card.outerHTML).join('');
-        }
+    // Search Function
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.tool-card');
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(query) ? 'block' : 'none';
       });
-
-      // Modal Functionality
-      toolCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-          if (e.target.tagName !== 'A') {
-            e.preventDefault();
-            currentToolLink = this.getAttribute('href');
-            modalTitle.textContent = this.textContent;
-            modalDescription.textContent = this.getAttribute('data-description');
-            modal.style.display = 'block';
-          }
-        });
-      });
-
-      closeModal.addEventListener('click', () => modal.style.display = 'none');
-      goToTool.addEventListener('click', () => {
-        window.location.href = currentToolLink;
-      });
-
-      window.addEventListener('click', (e) => {
-        if (e.target === modal) modal.style.display = 'none';
-      });
-
-      // Theme Toggle
-      const isDark = localStorage.getItem('darkMode') === 'true';
-      if (isDark) {
-        document.body.classList.add('dark-mode');
-        themeToggle.textContent = '☀️';
-        themeToggle.classList.add('dark');
-      }
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
-        themeToggle.classList.toggle('dark', isDarkMode);
-        localStorage.setItem('darkMode', isDarkMode);
-      });
-
-      // Scroll to Top
-      window.addEventListener('scroll', () => {
-        scrollTop.style.display = window.pageYOffset > 300 ? 'block' : 'none';
-      });
-      scrollTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      // Simple hover effect for cards (removed 3D/ripple for simplicity)
-      toolCards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-          card.style.transform = 'translateY(-4px)';
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = 'translateY(0)';
-        });
-      });
-
-      // Smooth scroll to about section
-      const aboutLink = document.querySelector('#about');
-      if (aboutLink) {
-        aboutLink.addEventListener('click', function(e) {
-          e.preventDefault();
-          document.querySelector('.about-section').scrollIntoView({ behavior: 'smooth' });
-        });
-      }
     });
   </script>
-
-  
 </body>
 </html>
