@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বাংলা ভয়েস টাইপিং - NurulNC.Site</title>
+  <meta name="description" content="মুখে বলুন, বাংলায় লিখে দেবে! ১০০% ফ্রি ও সঠিক।">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Hind Siliguri',sans-serif;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:20px;min-height:100vh}
+    .container{max-width:900px;margin:0 auto;text-align:center}
+    h1{font-size:2.5rem;margin:20px 0}
+    .mic{background:#fff;color:#764ba2;width:80px;height:80px;border-radius:50%;font-size:40px;border:none;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:0.3s}
+    .mic:active{transform:scale(0.9)}
+    .mic.recording{background:#ff4757;color:white;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,71,87,.7)}70%{box-shadow:0 0 0 20px rgba(255,71,87,0)}100%{box-shadow:0 0 0 0 rgba(255,71,87,0)}}
+    textarea{width:100%;min-height:200px;padding:20px;font-size:1.4rem;border-radius:15px;border:none;margin:20px 0;resize:vertical}
+    .btn{background:#fff;color:#764ba2;padding:15px 30px;border:none;border-radius:50px;font-size:1.2rem;cursor:pointer;margin:10px}
+    .btn:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(0,0,0,.2)}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>বাংলা ভয়েস টাইপিং</h1>
+  <p>মাইক চাপুন → বাংলায় কথা বলুন → লেখা হয়ে যাবে!</p>
+  
+  <button class="mic" id="mic">Microphone</button>
+  <p id="status">মাইক চাপুন এবং কথা বলা শুরু করুন...</p>
+  
+  <textarea id="result" placeholder="এখানে আপনার বাংলা টেক্সট আসবে..."></textarea>
+  
+  <button class="btn" onclick="copyText()">Copy Text</button>
+  <button class="btn" onclick="clearText()">Clear</button>
+</div>
+
+<script>
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'bn-BD';
+recognition.continuous = true;
+recognition.interimResults = true;
+
+let isRecording = false;
+const mic = document.getElementById('mic');
+const result = document.getElementById('result');
+const status = document.getElementById('status');
+
+mic.addEventListener('click', () => {
+  if(isRecording){
+    recognition.stop();
+    mic.classList.remove('recording');
+    status.textContent = "আবার চাপুন শুরু করতে";
+  } else {
+    recognition.start();
+    mic.classList.add('recording');
+    status.textContent = "শুনছি... বলুন!";
+  }
+  isRecording = !isRecording;
+});
+
+recognition.onresult = (e) => {
+  let text = "";
+  for(let i = e.resultIndex; i < e.results.length; i++){
+    text += e.results[i][0].transcript;
+  }
+  result.value = text;
+};
+
+recognition.onerror = () => {
+  status.textContent = "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।";
+  mic.classList.remove('recording');
+  isRecording = false;
+};
+
+function copyText(){ navigator.clipboard.writeText(result.value); alert("কপি হয়েছে!"); }
+function clearText(){ result.value = ""; }
+</script>
+</body>
+</html>
