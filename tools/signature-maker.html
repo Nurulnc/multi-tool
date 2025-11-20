@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signature Maker - হাতের লেখা সিগনেচার</title>
+  <style>
+    body{background:#2c3e50;color:white;text-align:center;padding:30px;font-family:'Hind Siliguri',sans-serif}
+    input{padding:15px;font-size:1.5rem;width:90%;max-width:500px;border-radius:10px;border:none;margin:20px}
+    .signatures{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin:40px}
+    .sig{background:white;color:#2c3e50;padding:20px;border-radius:15px;cursor:pointer;box-shadow:0 10px 20px rgba(0,0,0,.3)}
+    .sig:hover{transform:scale(1.05)}
+    canvas{border:2px dashed #fff;margin:20px auto;display:block}
+  </style>
+</head>
+<body>
+<h1>তোমার নাম দাও → সিগনেচার তৈরি হবে!</h1>
+<input type="text" id="name" placeholder="তোমার নাম লিখো" value="নুরুল ইসলাম">
+<div class="signatures" id="signatures"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script>
+// ১৫টা সুন্দর ফন্ট
+const fonts = ["Dancing Script","Sacramento","Parisienne","Great Vibes","Allura","Satisfy","Marck Script","Pacifico","Kaushan Script","Sofia","Cookie","Tangerine","Cedarville Cursive","Shadows Into Light","Reenie Beanie"];
+
+function generate(){
+  const name = document.getElementById("name").value || "Your Name";
+  const container = document.getElementById("signatures");
+  container.innerHTML = "";
+  
+  fonts.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "sig";
+    div.innerHTML = `<h3 style="font-family:'${f}',cursive;font-size:3rem;margin:20px">${name}</h3><p>${f}</p>`;
+    div.onclick = () => downloadSig(name, f);
+    container.appendChild(div);
+  });
+}
+
+function downloadSig(name, font){
+  const canvas = document.createElement("canvas");
+  canvas.width = 600; canvas.height = 200;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "white";
+  ctx.fillRect(0,0,600,200);
+  ctx.font = `120px '${font}'`;
+  ctx.fillStyle = "black";
+  ctx.textAlign = "center";
+  ctx.fillText(name, 300, 140);
+  
+  const link = document.createElement("a");
+  link.download = "signature.png";
+  link.href = canvas.toDataURL();
+  link.click();
+}
+
+document.getElementById("name").addEventListener("input", generate);
+generate();
+</script>
+</body>
+</html>
