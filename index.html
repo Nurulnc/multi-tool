@@ -1,80 +1,51 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Primary Meta Tags -->
-  <title>NurulNC.Site - ফ্রি অনলাইন টুলস | পাসওয়ার্ড জেনারেটর, টেম্প মেইল, URL শর্টনার</title>
-  <meta name="description" content="NurulNC.Site - বাংলাদেশের সেরা ফ্রি অনলাইন টুলস। পাসওয়ার্ড জেনারেটর, টেম্প মেইল, ডুপ্লিকেট চেকার, URL শর্টনার, গেমসহ ৫০+ টুলস একদম ফ্রি!">
-  <meta name="keywords" content="ফ্রি অনলাইন টুলস, পাসওয়ার্ড জেনারেটর, টেম্প মেইল, ডুপ্লিকেট চেকার, URL শর্টনার, ফেভিকন জেনারেটর, 2FA কোড, লাইভ টিভি, গেমস, NurulNC">
-  <meta name="author" content="Nurul Nc">
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#7c3aed">
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://nurulnc.site/">
-  <meta property="og:title" content="NurulNC.Site - ৫০+ ফ্রি প্রিমিয়াম টুলস">
-  <meta property="og:description" content="পাসওয়ার্ড জেনারেটর, টেম্প মেইল, URL শর্টনার, গেমসহ সব ফ্রি টুলস এক জায়গায়।">
-  <meta property="og:image" content="https://nurulnc.site/og-image.jpg"> <!-- পরে তৈরি করে দিতে পারি -->
-  <meta property="og:site_name" content="NurulNC.Site">
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://nurulnc.site/">
-  <meta property="twitter:title" content="NurulNC.Site - ফ্রি অনলাইন টুলস">
-  <meta property="twitter:description" content="এক ক্লিকে ৫০+ ফ্রি টুলস ব্যবহার করুন। কোনো রে� spunজিস্ট্রেশন লাগবে না।">
-  <meta property="twitter:image" content="https://nurulnc.site/og-image.jpg">
-
-  <!-- Canonical URL -->
+  <!-- SEO Optimized -->
+  <title>NurulNC.Site - ফ্রি অনলাইন টুলস | পাসওয়ার্ড, টেম্প মেইল, গেম</title>
+  <meta name="description" content="NurulNC.Site - ৫০+ ফ্রি টুলস। পাসওয়ার্ড জেনারেটর, টেম্প মেইল, URL শর্টনার, লাইভ টিভি, গেমসহ সব একদম ফ্রি!">
+  <meta name="keywords" content="ফ্রি টুলস, পাসওয়ার্ড জেনারেটর, টেম্প মেইল, URL শর্টনার, গেম, NurulNC">
+  <meta name="theme-color" content="#8b5cf6">
   <link rel="canonical" href="https://nurulnc.site/">
-
-  <!-- Favicon -->
   <link rel="icon" href="https://nurulnc.site/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="https://nurulnc.site/apple-touch-icon.png">
 
-  <!-- Preload Critical Resources -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Bangla Font -->
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Tabler Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-
   <style>
-    :root { --primary: #7c3aed; --secondary: #a78bfa; }
+    :root {
+      --primary: #8b5cf6;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --bg: #f8f5ff;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Hind Siliguri', sans-serif;
-      background: #f8faff;
-      color: #1e293b;
-      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 80px;
     }
 
     header {
-      background: linear-gradient(135deg, #7c3aed, #a78bfa);
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6);
       color: white;
       text-align: center;
-      padding: 90px 20px 70px;
-      position: relative;
-      overflow: hidden;
+      padding: 110px 20px 80px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
     }
-    header::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 60px;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23f8faff' d='M0,160L60,180C120,200,240,240,360,229.3C480,219,600,157,720,138.7C840,120,960,147,1080,165.3C1200,184,1320,195,1380,200L1440,205L1440,320L0,320Z'/%3E%3C/svg%3E") bottom/cover no-repeat;
-    }
-
     .logo {
-      font-size: clamp(2.4rem, 9vw, 4.2rem);
+      font-size: clamp(2.6rem, 9vw, 4.8rem);
       font-weight: 700;
       margin-bottom: 10px;
     }
     .tagline {
-      font-size: clamp(1rem, 4vw, 1.35rem);
+      font-size: clamp(1.1rem, 4vw, 1.45rem);
       opacity: 0.95;
     }
 
@@ -83,64 +54,47 @@
       font-size: 1.8rem;
       font-weight: 600;
       color: var(--primary);
-      margin: 55px 20px 35px;
-      position: relative;
+      margin: 65px 20px 40px;
     }
     .category-title::after {
       content: '';
-      width: 80px;
-      height: 4px;
-      background: linear-gradient(90deg, #7c3aed, #c4b5fd);
       display: block;
-      margin: 12px auto;
-      border-radius: 2px;
+      width: 90px;
+      height: 4.5px;
+      background: var(--primary);
+      margin: 14px auto;
+      border-radius: 3px;
     }
 
+    /* Tool Grid - Pure Minimal */
     .tool-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 20px;
-      padding: 0 16px;
+      padding: 0 20px;
       max-width: 1400px;
       margin: 0 auto;
     }
 
     .tool-card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 8px 30px rgba(124, 58, 237, 0.16);
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.18);
       text-decoration: none;
       color: inherit;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: all 0.35s ease;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 120px;
+      font-weight: 600;
+      font-size: 1.12rem;
+      text-align: center;
+      padding: 16px;
     }
     .tool-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 45px rgba(124, 58, 237, 0.28);
-    }
-
-    .tool-icon {
-      height: 110px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3.4rem;
-      background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-      color: #5b21b6;
-    }
-
-    .tool-title {
-      padding: 18px 12px;
-      text-align: center;
-      font-size: 1.08rem;
-      font-weight: 600;
-      color: #1e293b;
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      transform: translateY(-12px);
+      box-shadow: 0 22px 50px rgba(139, 92, 246, 0.28);
     }
 
     footer {
@@ -150,32 +104,35 @@
       text-align: center;
       padding: 70px 20px 40px;
     }
+    footer h2 { font-size: 1.9rem; margin-bottom: 12px; }
     .social-links a {
       display: inline-flex;
-      width: 52px; height: 52px;
-      background: rgba(255,255,255,0.12);
-      border-radius: 50%;
       align-items: center;
       justify-content: center;
+      width: 54px; height: 54px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 50%;
       margin: 0 12px;
       font-size: 1.6rem;
       transition: 0.3s;
     }
     .social-links a:hover {
-      background: #7c3aed;
-      transform: translateY(-6px);
+      background: var(--primary);
+      transform: translateY(-8px);
     }
 
     /* Responsive */
     @media (min-width: 480px) {
       .tool-grid { grid-template-columns: repeat(3, 1fr); gap: 22px; }
+      .tool-card { height: 130px; font-size: 1.15rem; }
     }
     @media (min-width: 768px) {
-      .tool-grid { grid-template-columns: repeat(4, 1fr); gap: 26px; padding: 0 30px; }
-      header { padding: 110px 20px 90px; }
+      .tool-grid { grid-template-columns: repeat(4, 1fr); gap: 28px; padding: 0 35px; }
+      .tool-card { height: 140px; }
     }
     @media (min-width: 1024px) {
-      .tool-grid { grid-template-columns: repeat(5, 1fr); gap: 30px; }
+      .tool-grid { grid-template-columns: repeat(5, 1fr); gap: 32px; }
+      .tool-card { height: 150px; font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -190,82 +147,40 @@
 
     <h2 class="category-title">জেনারেটর টুলস</h2>
     <div class="tool-grid">
-      <a href="tools/password-generator.html" class="tool-card" aria-label="পাসওয়ার্ড জেনারেটর">
-        <div class="tool-icon">Lock</div>
-        <div class="tool-title">Password Generator</div>
-      </a>
-      <a href="tools/random-name.html" class="tool-card" aria-label="র‍্যান্ডম নাম জেনারেটর">
-        <div class="tool-icon">User Plus</div>
-        <div class="tool-title">Random Name Generator</div>
-      </a>
-      <a href="tools/temp-mail.html" class="tool-card" aria-label="টেম্পোরারি ইমেইল">
-        <div class="tool-icon">Mail Fast</div>
-        <div class="tool-title">Temp Mail</div>
-      </a>
-      <a href="tools/cc.html" class="tool-card" aria-label="ক্রেডিট কার্ড জেনারেটর">
-        <div class="tool-icon">Credit Card</div>
-        <div class="tool-title">CC Generator (Demo)</div>
-      </a>
-      <a href="tools/2fa-generator.html" class="tool-card" aria-label="টু ফ্যাক্টর অথেনটিকেশন">
-        <div class="tool-icon">2FA</div>
-        <div class="tool-title">2FA Code Generator</div>
-      </a>
-      <a href="tools/Favicon.html" class="tool-card" aria-label="ফেভিকন জেনারেটর">
-        <div class="tool-icon">World</div>
-        <div class="tool-title">Favicon Generator</div>
-      </a>
+      <a href="tools/password-generator.html" class="tool-card">Password Generator</a>
+      <a href="tools/random-name.html" class="tool-card">Random Name Generator</a>
+      <a href="tools/temp-mail.html" class="tool-card">Temp Mail</a>
+      <a href="tools/cc.html" class="tool-card">CC Generator</a>
+      <a href="tools/2fa-generator.html" class="tool-card">2FA Code Generator</a>
+      <a href="tools/Favicon.html" class="tool-card">Favicon Generator</a>
     </div>
 
     <h2 class="category-title">ইউটিলিটি টুলস</h2>
     <div class="tool-grid">
-      <a href="tools/duplicate-checker.html" class="tool-card" aria-label="ডুপ্লিকেট চেকার">
-        <div class="tool-icon">Copy Check</div>
-        <div class="tool-title">Duplicate Checker</div>
-      </a>
-      <a href="tools/url-shortener.html" class="tool-card" aria-label="ইউআরএল শর্টনার">
-        <div class="tool-icon">Link</div>
-        <div class="tool-title">URL Shortener</div>
-      </a>
-      <a href="tools/txt-to-excel.html" class="tool-card" aria-label="টেক্সট টু এক্সেল">
-        <div class="tool-icon">File Spreadsheet</div>
-        <div class="tool-title">TXT to Excel</div>
-      </a>
-      <a href="tools/play-button.html" class="tool-card" aria-label="প্লে আইকন যোগ করুন">
-        <div class="tool-icon">Play Circle</div>
-        <div class="tool-title">Add Play Icon</div>
-      </a>
+      <a href="tools/duplicate-checker.html" class="tool-card">Duplicate Checker</a>
+      <a href="tools/url-shortener.html" class="tool-card">URL Shortener</a>
+      <a href="tools/txt-to-excel.html" class="tool-card">TXT to Excel</a>
+      <a href="tools/play-button.html" class="tool-card">Add Play Icon</a>
     </div>
 
     <h2 class="category-title">গেম ও বিনোদন</h2>
     <div class="tool-grid">
-      <a href="tools/catch-the-star.html" class="tool-card" aria-label="ক্যাচ দ্য স্টার গেম">
-        <div class="tool-icon">Star</div>
-        <div class="tool-title">Catch The Star</div>
-      </a>
-      <a href="tools/Racing-car.html" class="tool-card" aria-label="রেসিং কার গেম">
-        <div class="tool-icon">Car</div>
-        <div class="tool-title">Racing Car Game</div>
-      </a>
-      <a href="tools/Shooting-game.html" class="tool-card" aria-label="শুটিং গেম">
-        <div class="tool-icon">Target Arrow</div>
-        <div class="tool-title">Shooting Game</div>
-      </a>
-      <a href="tools/Live tv.html" class="tool-card" aria-label="লাইভ টিভি চ্যানেল">
-        <div class="tool-icon">TV</div>
-        <div class="tool-title">Live TV Channels</div>
-      </a>
+      <a href="tools/catch-the-star.html" class="tool-card">Catch The Star</a>
+      <a href="tools/Racing-car.html" class="tool-card">Racing Car Game</a>
+      <a href="tools/Shooting-game.html" class="tool-card">Shooting Game</a>
+      <a href="tools/Live tv.html" class="tool-card">Live TV Channels</a>
     </div>
   </main>
 
   <footer>
     <h2>NurulNC.Site</h2>
-    <p>সব টুলস ১০০% ফ্রি • কোনো রেজিস্ট্রেশন লাগবে না • মেড ইন বাংলাদেশ</p>
+    <p>সব টুলস ১০০% ফ্রি • কোনো রেজিস্ট্রেশন লাগবে না</p>
     <div class="social-links">
-      <a href="https://facebook.com/nurulnc" target="_blank" aria-label="Facebook">Facebook</a>
-      <a href="https://t.me/nurulnc" target="_blank" aria-label="Telegram">Telegram</a>
-      <a href="https://youtube.com/@nurulnc" target="_blank" aria-label="YouTube">YouTube</a>
+      <a href="https://facebook.com/nurulnc" target="_blank">Facebook</a>
+      <a href="https://t.me/nurulnc" target="_blank">Telegram</a>
+      <a href="https://youtube.com/@nurulnc" target="_blank">YouTube</a>
     </div>
-    <p style="margin-top: 40px; opacity: 0.7;">© 2025 NurulNC.Site • Made with Love in Bangladesh</p>
+    <p style="margin-top: 45px; opacity: 0.7;">© 2025 NurulNC.Site • Made with Love in Bangladesh</p>
   </footer>
 
 </body>
