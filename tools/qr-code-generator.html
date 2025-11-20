@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator - ফ্রি + লোগো যোগ | NurulNC.Site</title>
+  <meta name="description" content="যেকোনো লিংক, টেক্সট, WiFi, ফোন, WhatsApp এর জন্য QR কোড তৈরি করুন। লোগো + রং চেঞ্জ করা যায়!">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/lib/qrcode.min.js"></script>
+  
+  <style>
+    :root { --p: #8b5cf6; --bg: #f8f5ff; --card: #ffffff; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Hind Siliguri',sans-serif; background:var(--bg); color:#1e293b; padding:20px; }
+    .container { max-width:900px; margin:0 auto; text-align:center; }
+    h1 { font-size:2.5rem; color:var(--p); margin:30px 0 10px; }
+    p { font-size:1.2rem; opacity:0.9; margin:15px 0; }
+
+    .input-group { margin:25px 0; }
+    textarea, input, select {
+      width:100%; padding:18px; border-radius:15px; border:2px solid #ddd; font-size:1.2rem; margin:10px 0;
+    }
+    .row { display:flex; gap:15px; flex-wrap:wrap; justify-content:center; align-items:center; margin:15px 0; }
+    .btn {
+      background:var(--p); color:white; padding:16px 35px; border:none; border-radius:50px; font-size:1.2rem; cursor:pointer; transition:0.3s;
+    }
+    .btn:hover { transform:translateY(-5px); box-shadow:0 15px 30px rgba(139,92,246,.3); }
+    .btn-success { background:#10b981; }
+
+    .qr-container {
+      background:var(--card); border-radius:25px; padding:40px; margin:40px auto; max-width:500px;
+      box-shadow:0 20px 50px rgba(139,92,246,.2); display:none;
+    }
+    #qrcode { margin:30px auto; padding:20px; background:white; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,.1); }
+    .options { background:#f0eaff; padding:20px; border-radius:15px; margin:20px 0; }
+
+    @media(max-width:600px){
+      h1{font-size:2rem;}
+      .row{flex-direction:column;}
+      .qr-container{padding:20px;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>QR Code Generator</h1>
+  <p>লিংক, টেক্সট, WiFi, WhatsApp, ফোন — যেকোনো কিছুর জন্য QR কোড তৈরি করুন!</p>
+
+  <div class="input-group">
+    <select id="type" onchange="changeType()">
+      <option value="text">সাধারণ টেক্সট</option>
+      <option value="url">ওয়েবসাইট লিংক</option>
+      <option value="wifi">WiFi QR (অটো কানেক্ট)</option>
+      <option value="whatsapp">WhatsApp মেসেজ</option>
+      <option value="phone">ফোন নম্বর</option>
+      <option value="sms">SMS মেসেজ</option>
+    </select>
+
+    <textarea id="text" rows="4" placeholder="এখানে লিংক বা টেক্সট লিখুন...">https://nurunc.site</textarea>
+    
+    <!-- WiFi Special -->
+    <div id="wifiFields" style="display:none;">
+      <input type="text" id="ssid" placeholder="WiFi নাম (SSID)">
+      <input type="text" id="password" placeholder="WiFi পাসওয়ার্ড">
+      <select id="encryption">
+        <option value="WPA">WPA/WPA2</option>
+        <option value="WEP">WEP</option>
+        <option value="">No Password</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="options">
+    <div class="row">
+      <input type="color" id="fgColor" value="#4c1d95">
+      <input type="color" id="bgColor" value="#ffffff">
+      <input type="range" id="size" min="200" max="600" value="350">
+      <input type="file" id="logo" accept="image/*">
+    </div>
+  </div>
+
+  <button class="btn" onclick="generateQR()">Generate QR Code</button>
+
+  <div class="qr-container" id="qrContainer">
+    <div id="qrcode"></div>
+    <div class="row">
+      <button class="btn" onclick="downloadQR()">Download PNG</button>
+      <button class="btn btn-success" onclick="downloadSVG()">Download SVG</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentQR = null;
+
+function changeType(){
+  const type = document.getElementById("type").value;
+  document.getElementById("wifiFields").style.display = type === "wifi" ? "block" : "none";
+  document.getElementById("text").placeholder = 
+    type === "url" ? "https://example.com" :
+    type === "whatsapp" ? "আপনার WhatsApp নম্বর +88017..." :
+    type === "phone" ? "+88017..." :
+    type === "sms" ? "নম্বর এবং মেসেজ" : "এখানে টেক্সট লিখুন...";
+}
+
+function generateQR(){
+  const type = document.getElementById("type").value;
+  let data = document.getElementById("text").value.trim();
+
+  if(type === "wifi"){
+    const ssid = document.getElementById("ssid").value;
+    const pass = document.getElementById("password").value;
+    const enc = document.getElementById("encryption").value;
+    if(!ssid) return alert("WiFi নাম দিন!");
+    data = `WIFI:T:${enc};S:${ssid};P:${pass};;`;
+  }
+  else if(type === "whatsapp"){
+    const num = data.replace(/\D/g,'');
+    if(!num) return alert("সঠিক নম্বর দিন");
+    data = `https://wa.me/${num}`;
+  }
+  else if(type === "phone"){
+    data = `tel:${data}`;
+  }
+  else if(type === "sms"){
+    data = `SMSTO:${data}`;
+  }
+
+  if(!data) return alert("কিছু লিখুন!");
+
+  document.getElementById("qrcode").innerHTML = "";
+  document.getElementById("qrContainer").style.display = "block";
+
+  currentQR = new QRCode(document.getElementById("qrcode"), {
+    text: data,
+    width: document.getElementById("size").value,
+    height: document.getElementById("size").value,
+    colorDark: document.getElementById("fgColor").value,
+    colorLight: document.getElementById("bgColor").value,
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  // লোগো যোগ (যদি থাকে)
+  const logoInput = document.getElementById("logo");
+  if(logoInput.files[0]){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const img = new Image();
+      img.onload = function(){
+        const canvas = document.querySelector("#qrcode canvas");
+        const ctx = canvas.getContext("2d");
+        const size = canvas.width * 0.2;
+        const x = (canvas.width - size)/2;
+        const y = (canvas.height - size)/2;
+        ctx.drawImage(img, x, y, size, size);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(logoInput.files[0]);
+  }
+}
+
+function downloadQR(){
+  const canvas = document.querySelector("#qrcode canvas");
+  const link = document.createElement("a");
+  link.download = "qr-code.png";
+  link.href = canvas.toDataURL();
+  link.click();
+}
+
+function downloadSVG(){
+  const canvas = document.querySelector("#qrcode canvas");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}">
+    <rect width="100%" height="100%" fill="${document.getElementById("bgColor").value}"/>
+    <image href="${canvas.toDataURL()}" width="${canvas.width}" height="${canvas.height}"/>
+  </svg>`;
+  const blob = new Blob([svg], {type: "image/svg+xml"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.download = "qr-code.svg";
+  link.href = url;
+  link.click();
+}
+
+// প্রথমে একটা দেখাও
+setTimeout(() => generateQR(), 800);
+</script>
+
+</body>
+</html>
