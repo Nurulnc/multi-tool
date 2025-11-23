@@ -7,7 +7,8 @@
   <meta name="description" content="যেকোনো লিংক, টেক্সট, WiFi, ফোন, WhatsApp এর জন্য QR কোড তৈরি করুন। লোগো + রং চেঞ্জ করা যায়!">
   
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/lib/qrcode.min.js"></script>
+  <!-- Updated Working CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   
   <style>
     :root { --p: #8b5cf6; --bg: #f8f5ff; --card: #ffffff; }
@@ -58,7 +59,7 @@
       <option value="sms">SMS মেসেজ</option>
     </select>
 
-    <textarea id="text" rows="4" placeholder="এখানে লিংক বা টেক্সট লিখুন...">https://nurunc.site</textarea>
+    <textarea id="text" rows="4" placeholder="এখানে লিংক বা টেক্সট লিখুন...">https://nurulnc.site</textarea>
     
     <!-- WiFi Special -->
     <div id="wifiFields" style="display:none;">
@@ -133,14 +134,19 @@ function generateQR(){
   document.getElementById("qrcode").innerHTML = "";
   document.getElementById("qrContainer").style.display = "block";
 
-  currentQR = new QRCode(document.getElementById("qrcode"), {
-    text: data,
-    width: document.getElementById("size").value,
-    height: document.getElementById("size").value,
-    colorDark: document.getElementById("fgColor").value,
-    colorLight: document.getElementById("bgColor").value,
-    correctLevel: QRCode.CorrectLevel.H
-  });
+  try {
+    currentQR = new QRCode(document.getElementById("qrcode"), {
+      text: data,
+      width: document.getElementById("size").value,
+      height: document.getElementById("size").value,
+      colorDark: document.getElementById("fgColor").value,
+      colorLight: document.getElementById("bgColor").value,
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  } catch (error) {
+    alert("QR তৈরি করতে সমস্যা হয়েছে। পেজ রিলোড করে আবার চেষ্টা করুন।");
+    console.error("QR Error:", error);
+  }
 
   // লোগো যোগ (যদি থাকে)
   const logoInput = document.getElementById("logo");
@@ -150,11 +156,13 @@ function generateQR(){
       const img = new Image();
       img.onload = function(){
         const canvas = document.querySelector("#qrcode canvas");
-        const ctx = canvas.getContext("2d");
-        const size = canvas.width * 0.2;
-        const x = (canvas.width - size)/2;
-        const y = (canvas.height - size)/2;
-        ctx.drawImage(img, x, y, size, size);
+        if (canvas) {
+          const ctx = canvas.getContext("2d");
+          const size = canvas.width * 0.2;
+          const x = (canvas.width - size)/2;
+          const y = (canvas.height - size)/2;
+          ctx.drawImage(img, x, y, size, size);
+        }
       };
       img.src = e.target.result;
     };
@@ -164,6 +172,7 @@ function generateQR(){
 
 function downloadQR(){
   const canvas = document.querySelector("#qrcode canvas");
+  if (!canvas) return alert("প্রথমে QR তৈরি করুন!");
   const link = document.createElement("a");
   link.download = "qr-code.png";
   link.href = canvas.toDataURL();
@@ -172,9 +181,14 @@ function downloadQR(){
 
 function downloadSVG(){
   const canvas = document.querySelector("#qrcode canvas");
+  if (!canvas) return alert("প্রথমে QR তৈরি করুন!");
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}">
     <rect width="100%" height="100%" fill="${document.getElementById("bgColor").value}"/>
-    <image href="${canvas.toDataURL()}" width="${canvas.width}" height="${canvas.height}"/>
+    <foreignObject width="100%" height="100%">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <img src="${canvas.toDataURL()}" width="${canvas.width}" height="${canvas.height}"/>
+      </div>
+    </foreignObject>
   </svg>`;
   const blob = new Blob([svg], {type: "image/svg+xml"});
   const url = URL.createObjectURL(blob);
