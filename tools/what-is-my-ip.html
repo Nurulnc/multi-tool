@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>আমার আইপি কী? | What is My IP - NurulNC.Site</title>
+  <meta name="description" content="আপনার আইপি এড্রেস, লোকেশন, ISP, ডিভাইস, ব্রাউজার সব এক ক্লিকে দেখুন।">
+
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --p: #8b5cf6; --bg: #f8f5ff; --card: #ffffff; --g1: #667eea; --g2: #764ba2; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Hind Siliguri',sans-serif; background:linear-gradient(135deg, var(--g1), var(--g2)); color:white; min-height:100vh; padding:20px; }
+    .container { max-width:1000px; margin:0 auto; text-align:center; padding-top:50px; }
+    h1 { font-size:3rem; margin-bottom:10px; text-shadow:0 5px 20px rgba(0,0,0,.4); }
+    p { font-size:1.3rem; opacity:0.9; margin:20px 0; }
+
+    .ip-box {
+      background:rgba(255,255,255,0.15);
+      backdrop-filter:blur(15px);
+      border-radius:25px;
+      padding:40px 30px;
+      margin:40px auto;
+      max-width:700px;
+      box-shadow:0 20px 50px rgba(0,0,0,.3);
+      border:1px solid rgba(255,255,255,0.2);
+    }
+    #mainIP {
+      font-size:4.5rem;
+      font-weight:700;
+      margin:20px 0;
+      background:linear-gradient(90deg,#fff,#ccc);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      letter-spacing:3px;
+    }
+
+    .info-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
+      gap:20px;
+      margin-top:30px;
+    }
+    .info-card {
+      background:rgba(255,255,255,0.1);
+      padding:20px;
+      border-radius:18px;
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,0.15);
+    }
+    .label { font-size:1rem; opacity:0.8; }
+    .value { font-size:1.5rem; font-weight:600; margin-top:8px; word-break:break-all; }
+
+    .copy-btn {
+      background:rgba(255,255,255,0.2);
+      color:white;
+      border:none;
+      padding:10px 20px;
+      border-radius:50px;
+      cursor:pointer;
+      margin-top:15px;
+      transition:0.3s;
+    }
+    .copy-btn:hover { background:rgba(255,255,255,0.4); transform:scale(1.05); }
+
+    .refresh { background:var(--p); padding:15px 40px; border:none; border-radius:50px; font-size:1.3rem; cursor:pointer; margin:30px 0; }
+    .refresh:hover { transform:translateY(-5px); box-shadow:0 15px 30px rgba(139,92,246,.5); }
+
+    @media(max-width:768px){
+      h1{font-size:2.3rem;}
+      #mainIP{font-size:3rem;}
+      .info-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>আমার আইপি কী?</h1>
+  <p>আপনার বর্তমান আইপি এড্রেস ও সম্পূর্ণ লোকেশন তথ্য</p>
+
+  <div class="ip-box">
+    <div id="loading">লোড হচ্ছে... একটু অপেক্ষা করুন</div>
+    <div id="mainIP">000.000.000.000</div>
+    <button class="copy-btn" onclick="copyIP()">Copy IP</button>
+  </div>
+
+  <div class="info-grid" id="infoGrid" style="display:none;">
+    <div class="info-card">
+      <div class="label">শহর</div>
+      <div class="value" id="city">-</div>
+    </div>
+    <div class="info-card">
+      <div class="label">এলাকা/রিজিয়ন</div>
+      <div class="value" id="region">-</div>
+    </div>
+    <div class="info-card">
+      <div class="label">দেশ</div>
+      <div class="value" id="country">-</div>
+    </div>
+    <div class="info-card">
+      <div class="label">ISP (ইন্টারনেট প্রোভাইডার)</div>
+      <div class="value" id="isp">-</div>
+    </div>
+    <div class="info-card">
+      <div class="label">অর্গানাইজেশন</div>
+      <div class="value" id="org">-</div>
+    </div>
+    <div class="info-card">
+      <div class="label">টাইমজোন</div>
+      <div class="value" id="timezone">-</div>
+    </div>
+    <div class="info-card">
+      <div class="label">ব্রাউজার</div>
+      <div class="value" id="browser">-</div>
+    </div>
+    <div class="info-card">
+      <div class="label">ডিভাইস / OS</div>
+      <div class="value" id="device">-</div>
+    </div>
+  </div>
+
+  <button class="refresh" onclick="location.reload()">Refresh Information</button>
+</div>
+
+<script>
+// ফ্রি + রিয়েল টাইম IP API (কোনো কী লাগবে না)
+fetch('https://ipapi.co/json/')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("mainIP").textContent = data.ip || "না পাওয়া গেছে";
+    document.getElementById("city").textContent = data.city || "অজানা";
+    document.getElementById("region").textContent = data.region || "অজানা";
+    document.getElementById("country").textContent = data.country_name + " " + (data.country === "BD" ? "Bangladesh" : "");
+    document.getElementById("isp").textContent = data.org || data.asn || "অজানা";
+    document.getElementById("org").textContent = data.org || "অজানা";
+    document.getElementById("timezone").textContent = data.timezone || "অজানা";
+
+    // ব্রাউজার + ডিভাইস
+    const ua = navigator.userAgent;
+    let browser = "অজানা";
+    if(ua.includes("Chrome")) browser = "Chrome";
+    else if(ua.includes("Firefox")) browser = "Firefox";
+    else if(ua.includes("Safari")) browser = "Safari";
+    document.getElementById("browser").textContent = browser;
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    document.getElementById("device").textContent = isMobile ? "মোবাইল" : "কম্পিউটার/ল্যাপটপ";
+
+    document.getElementById("infoGrid").style.display = "grid";
+  })
+  .catch(() => {
+    document.getElementById("loading").textContent = "তথ্য লোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।";
+  });
+
+function copyIP(){
+  const ip = document.getElementById("mainIP").textContent;
+  navigator.clipboard.writeText(ip);
+  alert("আইপি কপি হয়েছে: " + ip);
+}
+</script>
+
+</body>
+</html>
