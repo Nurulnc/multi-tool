@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<title>Outlook/Hotmail Cookie Inbox Reader - NurulNC.Site</title>
+<meta name="description" content="শুধু Outlook-এর Cookie পেস্ট করো → পুরো ইনবক্স + OTP দেখো!">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body{font-family:'Hind Siliguri',sans-serif;background:#0f172a;color:#e2e8f0;padding:20px;margin:0}
+  .container{max-width:900px;margin:0 auto;background:#1e293b;padding:30px;border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+  h1{color:#8b5cf6;text-align:center;font-size:2.5rem;margin-bottom:10px}
+  textarea{width:100%;height:150px;padding:20px;font-size:1.1rem;border-radius:15px;border:2px solid #475569;background:#0f172a;color:#fff;margin:20px 0}
+  button{background:#8b5cf6;color:white;padding:18px 40px;border:none;border-radius:50px;font-size:1.3rem;cursor:pointer;margin:10px}
+  button:hover{background:#7c3aed}
+  .mail{background:#1e293b;padding:padding:15px;border-radius:12px;margin:15px 0;border-left:5px solid #8b5cf6}
+  .otp{background:#dc2626;color:white;padding:8px 15px;border-radius:8px;display:inline-block;margin:5px 0;font-weight:bold}
+  :bold}
+  .link{color:#60a5fa;word-break:break-all}
+  #result{display:none}
+  .warning{background:#7f1d1d;padding:15px;border-radius:12px;margin:20px 0;color:#fca5a5}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Outlook Cookie Inbox Reader</h1>
+  <p style="text-align:center;color:#94a3b8">Outlook.com → লগইন করো → F12 → Application → Cookies → সব কপি করে এখানে পেস্ট করো</p>
+
+  <div class="warning">
+    ⚠️ শুধুমাত্র নিজের অ্যাকাউন্ট ব্যবহার করুন। অন্যের অ্যাকাউন্টে প্রবেশ করা অবৈধ।
+  </div>
+
+  <textarea id="cookies" placeholder="এখানে পুরো Cookie পেস্ট করো (MUID=...; amsc=...; ... )"></textarea><br>
+  <button onclick="readInbox()">Read Inbox + Get OTP</button>
+  <button onclick="document.getElementById('cookies').value=''">Clear</button>
+
+  <div id="result">
+    <h2>ইনবক্স লোড হয়েছে</h2>
+    <div id="mails"></div>
+  </div>
+</div>
+
+<script>
+async function readInbox() {
+  const cookieText = document.getElementById("cookies").value.trim();
+  if (!cookieText) return alert("Cookie পেস্ট করো!");
+
+  document.getElementById("result").style.display = "block";
+  document.getElementById("mails").innerHTML = "<p>লোড হচ্ছে... ১৫-৩০ সেকেন্ড লাগবে</p>";
+
+  // Cookie → Object এ কনভার্ট
+  const cookies = {};
+  cookieText.split(';').forEach(c => {
+    const [key, ...val] = c.trim().split('=');
+    if (key) cookies[key] = val.join('=');
+  });
+
+  const cookieString = Object.keys(cookies).map(k => `\( {k}= \){cookies[k]}`).join('; ');
+
+  try {
+    // প্রথমে চেক করি Cookie কাজ করে কি না
+    const check = await fetch("https://outlook.live.com/mail/inbox", {
+      headers: { "Cookie": cookieString }
+    });
+    if (check.url.includes("login")) {
+      document.getElementById("mails").innerHTML = "<p style='color:red'>Cookie Expired বা ভুল!</p>";
+      return;
+    }
+
+    // আসল API কল
+    const res = await fetch("https://outlook.live.com/api/v2/mail/folders/inbox/messages?$top=20&$orderby=DateTimeReceived%20desc", {
+      headers: {
+        "Cookie": cookieString,
+        "Authorization": "Bearer", // Microsoft কখনো চেক করে না যদি Cookie থাকে
+        "User-Agent": "Mozilla/5.0"
+      }
+    });
+
+    const data = await res.json();
+    let html = "";
+
+    for (let mail of data.value) {
+      const subject = mail.Subject || "No Subject";
+      const from = mail.From?.EmailAddress?.Name || mail.From?.EmailAddress?.Address || "Unknown";
+      const preview = mail.BodyPreview || "";
+
+      // OTP + Link খুঁজি
+      const otps = preview.match(/\b\d{4,10}\b/g) || [];
+      const links = preview.match(/https?:\/\/[^\s<>"{}|\\^`\[\]]+/g) || [];
+
+      html += `<div class="mail">`;
+      html += `<strong>From:</strong> ${from}<br>`;
+      html += `<strong>Subject:</strong> ${subject}<br>`;
+      if (otps.length > 0) {
+        html += otps.map(o => `<span class="otp">${o}</span>`).join(" ");
+      }
+      if (links.length > 0) {
+        html += `<br><span class="link">${links[0]}</span>`;
+      }
+      html += `<hr></div>`;
+    }
+
+    document.getElementById("mails").innerHTML = html || "ইনবক্স খালি";
+
+  } catch (e) {
+    document.getElementById("mails").innerHTML = `<p style='color:red'>এরর: ${e.message}</p>`;
+  }
+}
+</script>
+
+</body>
+</html>
