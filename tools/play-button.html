@@ -1,124 +1,197 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Play Button যোগ করো</title>
-<style>
-  body,html{margin:0;height:100%;font-family:sans-serif;background:#f0f0f0;display:flex;align-items:center;justify-content:center;}
-  .box{max-width:420px;width:90%;background:#fff;padding:20px;border-radius:20px;box-shadow:0 10px 30px #0002;text-align:center;}
-  h2{color:#333;margin:0 0 20px;font-size:1.4rem;}
-  .drop{border:4px dashed #3498db;padding:40px;border-radius:16px;cursor:pointer;transition:.3s;background:#f8fbff;}
-  .drop:hover{background:#e3f2ff;border-color:#2980b9;}
-  .drop.drag{background:#d0ebff;}
-  .icon{font-size:50px;color:#3498db;margin-bottom:10px;}
-  .preview{margin:25px 0;position:relative;display:none;border-radius:16px;overflow:hidden;box-shadow:0 8px 25px #0003;}
-  .preview img{width:100%;display:block;}
-  .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70px;height:70px;background:rgba(0,0,0,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;}
-  .play::before{content:"";border-left:20px solid #fff;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:6px;}
-  button{margin:10px auto;padding:14px 0;width:100%;border:none;border-radius:12px;font-size:1rem;color:#fff;cursor:pointer;}
-  #change{background:#9b59b6;}
-  #down{background:#27ae60;}
-  button:active{transform:scale(0.96);}
-  .ctrl{margin-top:15px;font-size:0.9rem;color:#555;}
-  .ctrl label{display:inline-block;margin:5px 8px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Play Button Overlay - NurulNC.Site</title>
+    
+    <meta name="description" content="যেকোনো ছবিতে প্রফেশনাল ভিডিও প্লে বাটন যোগ করুন। NurulNC-এর প্রিমিয়াম থাম্বনেইল মেকার টুল।">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', 'Hind Siliguri', sans-serif; background-color: #f8fafc; }
+        .premium-card { background: white; border-radius: 2.5rem; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; }
+        .upload-area { border: 2px dashed #e2e8f0; border-radius: 2rem; transition: all 0.3s; cursor: pointer; background: #fafafa; }
+        .upload-area:hover, .upload-area.dragover { border-color: #4f46e5; background: #f5f3ff; }
+        .ad-space { background: #f1f5f9; border: 2px dashed #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        
+        /* Play Button Styles */
+        .play-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+        .play-triangle { border-left: 20px solid white; border-top: 13px solid transparent; border-bottom: 13px solid transparent; margin-left: 6px; }
+        
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #4f46e5; cursor: pointer; margin-top: -6px; border: 2px solid white; }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-<div class="box">
-  <h2>ছবিতে Play Button যোগ করুন</h2>
+    <header class="bg-white border-b py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-4 flex justify-between items-center max-w-7xl">
+            <a href="../index.html" class="text-2xl font-black text-indigo-600 italic tracking-tighter uppercase">NurulINC<span class="text-slate-400">.SITE</span></a>
+            <a href="../index.html" class="text-sm font-bold text-indigo-600 uppercase italic flex items-center">
+                <i data-lucide="home" class="w-4 h-4 mr-1"></i> Home
+            </a>
+        </div>
+    </header>
 
-  <div class="drop" id="drop">
-    <div class="icon">↑</div>
-    <div>ছবি এখানে টেনে আনো<br>অথবা ক্লিক করে দাও</div>
-    <input type="file" id="file" accept="image/*" hidden>
-  </div>
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl flex flex-col items-center">
+        
+        <div class="ad-space w-full max-w-[728px] h-[90px] mb-10">
+            <span class="text-slate-400 text-[10px] tracking-widest uppercase font-black italic">Advertisement Banner</span>
+        </div>
 
-  <div class="preview" id="prev">
-    <img id="img">
-    <div class="play"></div>
-  </div>
+        <div class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-black italic uppercase tracking-tight text-slate-900 leading-tight">
+                Play Button <span class="text-indigo-600">Overlay</span>
+            </h1>
+            <p class="text-slate-500 text-sm mt-3 font-bold tracking-widest uppercase italic">Create Viral Video Thumbnails Instantly</p>
+        </div>
 
-  <button id="change" style="display:none">অন্য ছবি দিন</button>
-  <button id="down" style="display:none">ডাউনলোড করুন</button>
+        <div class="premium-card w-full p-8 md:p-12 shadow-sm border border-slate-100">
+            
+            <div id="drop" class="upload-area p-12 text-center mb-8">
+                <div class="bg-indigo-50 w-16 h-16 rounded-2xl flex items-center justify-center text-indigo-600 mx-auto mb-4">
+                    <i data-lucide="image-plus" class="w-8 h-8"></i>
+                </div>
+                <p class="text-slate-600 font-bold italic mb-2">ছবি এখানে ড্রপ করুন অথবা ক্লিক করুন</p>
+                <p class="text-slate-400 text-[10px] uppercase tracking-widest font-black italic">PNG, JPG or WEBP</p>
+                <input type="file" id="file" accept="image/*" class="hidden" />
+            </div>
 
-  <div class="ctrl">
-    <label>সাইজ: <input type="range" id="size" min="40" max="120" value="70"></label><br>
-    <label>অন্ধকার: <input type="range" id="opa" min="30" max="90" value="70"></label>
-  </div>
-</div>
+            <div id="editor-ui" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-10">
+                
+                <div class="space-y-4">
+                    <label class="block text-[10px] font-black uppercase text-slate-400 tracking-widest italic ml-4">Real-time Preview</label>
+                    <div id="prev" class="relative rounded-[2rem] overflow-hidden shadow-2xl bg-slate-100 border border-slate-200">
+                        <img id="img" class="w-full h-auto block">
+                        <div class="play-overlay bg-black/70">
+                            <div class="play-triangle"></div>
+                        </div>
+                    </div>
+                </div>
 
-<script>
-const drop = document.getElementById('drop');
-const file = document.getElementById('file');
-const prev = document.getElementById('prev');
-const img  = document.getElementById('img');
-const play = document.querySelector('.play');
-const change = document.getElementById('change');
-const down  = document.getElementById('down');
-const size  = document.getElementById('size');
-const opa   = document.getElementById('opa');
+                <div class="flex flex-col justify-center space-y-8">
+                    <div class="space-y-6 bg-slate-50 p-8 rounded-[2rem] border border-slate-100">
+                        <div>
+                            <div class="flex justify-between mb-3 text-[10px] font-black uppercase text-slate-500 italic tracking-widest">
+                                <span>Button Size</span>
+                                <span id="sizeVal">70px</span>
+                            </div>
+                            <input type="range" id="size" min="40" max="150" value="70" class="w-full">
+                        </div>
 
-// ক্লিক করে ফাইল সিলেক্ট
-drop.onclick = () => file.click();
-change.onclick = () => file.click();
+                        <div>
+                            <div class="flex justify-between mb-3 text-[10px] font-black uppercase text-slate-500 italic tracking-widest">
+                                <span>Opacity (অন্ধকার)</span>
+                                <span id="opaVal">70%</span>
+                            </div>
+                            <input type="range" id="opa" min="20" max="100" value="70" class="w-full">
+                        </div>
+                    </div>
 
-// ড্র্যাগ-ড্রপ
-['dragover','dragenter'].forEach(e=>drop.addEventListener(e, p=> (p.preventDefault(), drop.classList.add('drag'))));
-['dragleave','dragend','drop'].forEach(e=>drop.addEventListener(e, p=> (p.preventDefault(), drop.classList.remove('drag'))));
-drop.ondrop = e => { if(e.dataTransfer.files[0]) load(e.dataTransfer.files[0]); }
+                    <div class="grid grid-cols-2 gap-4">
+                        <button id="change" class="bg-slate-900 text-white font-black uppercase tracking-widest py-4 rounded-2xl text-[10px] hover:bg-slate-800 transition shadow-lg flex items-center justify-center gap-2">
+                            <i data-lucide="refresh-ccw" class="w-4 h-4"></i> New Image
+                        </button>
+                        <button id="down" class="bg-indigo-600 text-white font-black uppercase tracking-widest py-4 rounded-2xl text-[10px] hover:bg-indigo-700 transition shadow-lg shadow-indigo-100 flex items-center justify-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-// ফাইল লোড
-file.onchange = () => { if(file.files[0]) load(file.files[0]); }
+        <div class="ad-space w-full max-w-[728px] h-[90px] mt-10">
+            <span class="text-slate-400 text-[10px] tracking-widest uppercase font-black italic">Bottom Ad Banner</span>
+        </div>
+    </main>
 
-function load(f){
-  const r = new FileReader();
-  r.onload = e => {
-    img.src = e.target.result;
-    prev.style.display = 'block';
-    change.style.display = down.style.display = 'block';
-    updatePlay();
-  }
-  r.readAsDataURL(f);
-}
+    <footer class="bg-slate-900 text-slate-500 py-8 text-center text-[10px] font-bold uppercase tracking-widest mt-auto">
+        © 2024 NurulNC | Viral Thumbnail Tools
+    </footer>
 
-// Play Button আপডেট
-function updatePlay(){
-  play.style.width = play.style.height = size.value + 'px';
-  play.style.background = `rgba(0,0,0,${opa.value/100})`;
-}
-size.oninput = opa.oninput = updatePlay;
+    <script>
+        const drop = document.getElementById('drop');
+        const file = document.getElementById('file');
+        const prev = document.getElementById('prev');
+        const img = document.getElementById('img');
+        const play = document.querySelector('.play-overlay');
+        const size = document.getElementById('size');
+        const opa = document.getElementById('opa');
+        const editorUI = document.getElementById('editor-ui');
 
-// ডাউনলোড
-down.onclick = () => {
-  const c = document.createElement('canvas');
-  const x = c.getContext('2d');
-  const i = new Image();
-  i.src = img.src;
-  i.onload = () => {
-    c.width = i.width; c.height = i.height;
-    x.drawImage(i,0,0);
-    // Play আঁকা
-    const s = Math.min(c.width,c.height) * (size.value/400);
-    const cx = c.width/2, cy = c.height/2;
-    x.fillStyle = `rgba(0,0,0,${opa.value/100})`;
-    x.beginPath(); x.arc(cx,cy,s,0,Math.PI*2); x.fill();
-    x.fillStyle = '#fff';
-    x.beginPath();
-    x.moveTo(cx-s/3, cy-s/2.2);
-    x.lineTo(cx-s/3, cy+s/2.2);
-    x.lineTo(cx+s/3.5, cy);
-    x.closePath(); x.fill();
+        drop.onclick = () => file.click();
+        document.getElementById('change').onclick = () => file.click();
 
-    const a = document.createElement('a');
-    a.download = 'video-thumb.png';
-    a.href = c.toDataURL();
-    a.click();
-  }
-}
-</script>
- 
+        // Drag & Drop
+        ['dragover', 'dragenter'].forEach(e => drop.addEventListener(e, p => { p.preventDefault(); drop.classList.add('dragover'); }));
+        ['dragleave', 'dragend', 'drop'].forEach(e => drop.addEventListener(e, p => { p.preventDefault(); drop.classList.remove('dragover'); }));
+        drop.ondrop = e => { if(e.dataTransfer.files[0]) load(e.dataTransfer.files[0]); }
 
+        file.onchange = () => { if(file.files[0]) load(file.files[0]); }
+
+        function load(f){
+            const r = new FileReader();
+            r.onload = e => {
+                img.src = e.target.result;
+                drop.classList.add('hidden');
+                editorUI.classList.remove('hidden');
+                updatePlay();
+            }
+            r.readAsDataURL(f);
+        }
+
+        function updatePlay(){
+            const s = size.value;
+            const o = opa.value / 100;
+            play.style.width = play.style.height = s + 'px';
+            play.style.background = `rgba(0,0,0,${o})`;
+            document.getElementById('sizeVal').textContent = s + 'px';
+            document.getElementById('opaVal').textContent = Math.round(o * 100) + '%';
+            
+            // Scalable Triangle
+            const tri = document.querySelector('.play-triangle');
+            tri.style.borderLeftWidth = (s * 0.28) + 'px';
+            tri.style.borderTopWidth = (s * 0.18) + 'px';
+            tri.style.borderBottomWidth = (s * 0.18) + 'px';
+            tri.style.marginLeft = (s * 0.08) + 'px';
+        }
+
+        size.oninput = opa.oninput = updatePlay;
+
+        document.getElementById('down').onclick = () => {
+            const c = document.createElement('canvas');
+            const x = c.getContext('2d');
+            const i = new Image();
+            i.src = img.src;
+            i.onload = () => {
+                c.width = i.width; c.height = i.height;
+                x.drawImage(i, 0, 0);
+                
+                const s = Math.min(c.width, c.height) * (size.value / 350);
+                const cx = c.width / 2, cy = c.height / 2;
+                
+                x.fillStyle = `rgba(0,0,0,${opa.value/100})`;
+                x.beginPath(); x.arc(cx, cy, s, 0, Math.PI * 2); x.fill();
+                
+                x.fillStyle = '#fff';
+                x.beginPath();
+                x.moveTo(cx - s/3, cy - s/2.2);
+                x.lineTo(cx - s/3, cy + s/2.2);
+                x.lineTo(cx + s/3.5, cy);
+                x.closePath(); x.fill();
+
+                const a = document.createElement('a');
+                a.download = 'nurulinc-play-button-thumb.png';
+                a.href = c.toDataURL();
+                a.click();
+            }
+        }
+
+        lucide.createIcons();
+    </script>
 </body>
 </html>
