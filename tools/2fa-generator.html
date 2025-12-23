@@ -1,259 +1,149 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2FA (TOTP) Generator</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: linear-gradient(135deg,#dbeafe,#e0e7ff);
-  display:flex;justify-content:center;align-items:center;
-  min-height:100vh;
-  padding:20px;
-}
-.card{
-  background:#fff;
-  padding:20px;
-  border-radius:16px;
-  max-width:420px;
-  width:100%;
-  box-shadow:0 8px 24px rgba(0,0,0,0.08);
-}
-h1{
-  font-size:22px;
-  margin-bottom:6px;
-  text-align:center;
-  color:#1e293b;
-}
-.sub{
-  font-size:14px;
-  text-align:center;
-  color:#64748b;
-  margin-bottom:20px;
-}
-label{
-  font-size:14px;
-  font-weight:600;
-  margin-top:12px;
-  display:block;
-  color:#334155;
-}
-input{
-  width:100%;
-  padding:10px;
-  font-size:15px;
-  margin-top:5px;
-  border:1px solid #e2e8f0;
-  border-radius:8px;
-}
-.actions{
-  display:flex;
-  gap:8px;
-  margin-top:8px;
-}
-.actions button{
-  flex:1;
-}
-button{
-  padding:10px;
-  font-size:14px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:600;
-}
-.primary{
-  background:#0ea5e9;
-  color:#fff;
-}
-.primary:hover{background:#0284c7;}
-.secondary{
-  background:#f1f5f9;
-  color:#0f172a;
-}
-.secondary:hover{background:#e2e8f0;}
-.code-box{
-  text-align:center;
-  margin-top:18px;
-}
-.code{
-  font-size:36px;
-  font-weight:700;
-  letter-spacing:8px;
-  color:#0ea5e9;
-}
-.countdown{
-  font-size:14px;
-  color:#64748b;
-  margin-top:5px;
-}
-.progress{
-  height:8px;
-  background:#f1f5f9;
-  border-radius:999px;
-  overflow:hidden;
-  margin-top:8px;
-}
-.bar{
-  height:100%;
-  background:linear-gradient(90deg,#22c55e,#3b82f6);
-  width:0%;
-  transition:width 1s linear;
-}
-.qr{
-  text-align:center;
-  margin-top:15px;
-}
-.qr img{
-  max-width:100%;
-  border-radius:8px;
-}
-.toast{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#16a34a;
-  color:#fff;
-  padding:10px 16px;
-  border-radius:8px;
-  font-size:14px;
-  display:none;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple 2FA Generator - NurulNC.Site</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', 'Hind Siliguri', sans-serif; background-color: #f8fafc; }
+        .premium-card { background: white; border-radius: 2rem; border: 1px solid rgba(0,0,0,0.05); }
+        .code-display { font-family: 'Inter', sans-serif; letter-spacing: 0.2em; }
+        .input-premium { border: 1px solid #e2e8f0; transition: all 0.3s; }
+        .input-premium:focus { border-color: #4f46e5; outline: none; ring: 2px; ring-color: rgba(79, 70, 229, 0.1); }
+        .ad-space { background: #f1f5f9; border: 2px dashed #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    </style>
 </head>
-<body>
-<div class="card">
-  <h1>2FA Generator</h1>
-  <div class="sub">Google Authenticator / Authy style TOTP</div>
-  
-  <label>Secret (Base32)</label>
-  <input id="secret" type="text" value="JBSWY3DPEHPK3PXP">
-  
-  <div class="actions">
-    <button class="primary" id="genSecret">Random Secret</button>
-    <button class="secondary" id="showQR">Show QR</button>
-  </div>
-  
-  <div class="code-box">
-    <div class="code" id="code">------</div>
-    <div class="countdown">Expires in <span id="expires">--</span> sec</div>
-    <div class="progress"><div class="bar" id="bar"></div></div>
-    <button class="primary" style="margin-top:10px;" id="copyCode">Copy Code</button>
-  </div>
-  
-  <div class="qr" id="qrContainer"></div>
-</div>
-<div class="toast" id="toast">Copied!</div>
+<body class="min-h-screen flex flex-col">
 
-<script>
-// Base32 functions
-const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-function base32Decode(str){
-  str = str.replace(/\s+/g, '').replace(/=+$/,'').toUpperCase();
-  let bits = 0, value = 0;
-  const output = [];
-  for (let i=0;i<str.length;i++){
-    const idx = BASE32_ALPHABET.indexOf(str[i]);
-    if (idx === -1) continue;
-    value = (value << 5) | idx;
-    bits += 5;
-    if (bits >= 8){
-      output.push((value >>> (bits - 8)) & 0xFF);
-      bits -= 8;
-    }
-  }
-  return new Uint8Array(output);
-}
-function base32Encode(bytes){
-  let bits = 0, value = 0, output = "";
-  for (let i=0;i<bytes.length;i++){
-    value = (value << 8) | bytes[i];
-    bits += 8;
-    while (bits >= 5){
-      output += BASE32_ALPHABET[(value >>> (bits - 5)) & 31];
-      bits -= 5;
-    }
-  }
-  if (bits > 0){
-    output += BASE32_ALPHABET[(value << (5 - bits)) & 31];
-  }
-  return output;
-}
+    <header class="bg-white border-b py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center max-w-7xl">
+            <a href="../index.html" class="text-2xl font-black text-indigo-600 italic tracking-tighter">NurulINC<span class="text-slate-400">.SITE</span></a>
+            <a href="../index.html" class="text-sm font-bold text-indigo-600 uppercase italic flex items-center">
+                <i data-lucide="home" class="w-4 h-4 mr-1"></i> Home
+            </a>
+        </div>
+    </header>
 
-// TOTP
-async function totp(secretBase32, digits=6, period=30){
-  const keyBytes = base32Decode(secretBase32);
-  const cryptoKey = await crypto.subtle.importKey("raw", keyBytes, { name: "HMAC", hash: "SHA-1" }, false, ["sign"]);
-  const counter = Math.floor(Date.now()/1000/period);
-  const buf = new ArrayBuffer(8);
-  const dv = new DataView(buf);
-  dv.setUint32(4, counter);
-  const hmac = new Uint8Array(await crypto.subtle.sign("HMAC", cryptoKey, buf));
-  const offset = hmac[hmac.length - 1] & 0x0f;
-  const binary = ((hmac[offset] & 0x7f) << 24) |
-                 ((hmac[offset+1] & 0xff) << 16) |
-                 ((hmac[offset+2] & 0xff) << 8) |
-                 (hmac[offset+3] & 0xff);
-  return (binary % (10 ** digits)).toString().padStart(digits, "0");
-}
+    <main class="flex-grow container mx-auto px-4 py-8 flex flex-col items-center">
+        
+        <div class="ad-space w-full max-w-[728px] h-[90px] mb-8">
+            <span class="text-slate-400 text-[10px] tracking-widest uppercase font-bold italic">Advertisement</span>
+        </div>
 
-// Elements
-const codeEl = document.getElementById("code");
-const expiresEl = document.getElementById("expires");
-const barEl = document.getElementById("bar");
-const secretEl = document.getElementById("secret");
-const qrContainer = document.getElementById("qrContainer");
-const toast = document.getElementById("toast");
+        <div class="premium-card w-full max-w-md p-8 md:p-10 shadow-sm border border-slate-100">
+            
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-black italic uppercase tracking-tight text-slate-900">2FA <span class="text-indigo-600">Generator</span></h1>
+                <p class="text-slate-400 text-xs mt-1 italic font-bold tracking-widest uppercase">Paste Key & Get Code</p>
+            </div>
 
-function showToast(msg){
-  toast.textContent = msg;
-  toast.style.display = "block";
-  setTimeout(()=>toast.style.display="none", 1500);
-}
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest italic">Paste Your Secret Key (Base32)</label>
+                    <input id="secret" type="text" placeholder="JBSWY3DPEHPK3PXP..." 
+                    class="input-premium w-full px-5 py-4 rounded-2xl text-sm font-bold text-center tracking-widest">
+                </div>
+            </div>
 
-async function updateCode(){
-  const period = 30;
-  const now = Math.floor(Date.now()/1000);
-  const elapsed = now % period;
-  const remaining = period - elapsed;
-  expiresEl.textContent = remaining;
-  barEl.style.width = (elapsed/period)*100 + "%";
-  try {
-    const otp = await totp(secretEl.value.trim(), 6, period);
-    codeEl.textContent = otp;
-  } catch {
-    codeEl.textContent = "Error";
-  }
-}
-setInterval(updateCode, 1000);
-updateCode();
+            <div class="mt-8 p-6 bg-slate-50 rounded-[2rem] text-center border border-slate-100">
+                <div id="code" class="code-display text-5xl font-black text-indigo-600 mb-2">------</div>
+                
+                <div class="flex items-center justify-center space-x-2 mb-4 font-bold italic">
+                    <span class="text-[10px] text-slate-400 uppercase">Expires in</span>
+                    <span id="expires" class="text-sm text-slate-600">--</span>
+                    <span class="text-[10px] text-slate-400 uppercase">sec</span>
+                </div>
 
-// Events
-document.getElementById("copyCode").addEventListener("click", async ()=>{
-  try {
-    await navigator.clipboard.writeText(codeEl.textContent);
-    showToast("Code copied!");
-  } catch {
-    alert("Copy failed");
-  }
-});
-document.getElementById("genSecret").addEventListener("click", ()=>{
-  const bytes = new Uint8Array(20);
-  crypto.getRandomValues(bytes);
-  secretEl.value = base32Encode(bytes);
-  qrContainer.innerHTML = "";
-});
-document.getElementById("showQR").addEventListener("click", ()=>{
-  const secret = secretEl.value.trim();
-  const label = encodeURIComponent("MyService:User");
-  const issuer = encodeURIComponent("MyService");
-  const otpauth = `otpauth://totp/${label}?secret=${secret}&issuer=${issuer}`;
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(otpauth)}`;
-  qrContainer.innerHTML = `<img src="${qrUrl}" alt="QR Code"><div style="font-size:12px;margin-top:5px;">Scan in Google Authenticator</div>`;
-});
-</script>
+                <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mb-6">
+                    <div id="bar" class="h-full bg-indigo-600 transition-all duration-1000 linear" style="width: 0%"></div>
+                </div>
+
+                <button id="copyCode" class="w-full bg-indigo-600 text-white font-black uppercase tracking-widest py-4 rounded-2xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-100 flex items-center justify-center">
+                    <i data-lucide="copy" class="w-4 h-4 mr-2"></i> Copy Code
+                </button>
+            </div>
+
+        </div>
+
+        <div class="ad-space w-full max-w-[728px] h-[90px] mt-10">
+            <span class="text-slate-400 text-[10px] tracking-widest uppercase font-bold italic">Advertisement Banner</span>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 py-6 text-center text-[10px] font-bold uppercase tracking-widest">
+        © 2024 NurulNC | Fast & Simple 2FA
+    </footer>
+
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-widest hidden">
+        Copied!
+    </div>
+
+    <script>
+        const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+        function base32Decode(str){
+            str = str.replace(/\s+/g, '').replace(/=+$/,'').toUpperCase();
+            let bits = 0, value = 0; const output = [];
+            for (let i=0; i<str.length; i++){
+                const idx = BASE32_ALPHABET.indexOf(str[i]);
+                if (idx === -1) continue;
+                value = (value << 5) | idx; bits += 5;
+                if (bits >= 8){ output.push((value >>> (bits - 8)) & 0xFF); bits -= 8; }
+            }
+            return new Uint8Array(output);
+        }
+        async function totp(secretBase32, digits=6, period=30){
+            try {
+                if(!secretBase32) return "------";
+                const keyBytes = base32Decode(secretBase32);
+                const cryptoKey = await crypto.subtle.importKey("raw", keyBytes, { name: "HMAC", hash: "SHA-1" }, false, ["sign"]);
+                const counter = Math.floor(Date.now()/1000/period);
+                const buf = new ArrayBuffer(8); const dv = new DataView(buf); dv.setUint32(4, counter);
+                const hmac = new Uint8Array(await crypto.subtle.sign("HMAC", cryptoKey, buf));
+                const offset = hmac[hmac.length - 1] & 0x0f;
+                const binary = ((hmac[offset] & 0x7f) << 24) | ((hmac[offset+1] & 0xff) << 16) | ((hmac[offset+2] & 0xff) << 8) | (hmac[offset+3] & 0xff);
+                return (binary % (10 ** digits)).toString().padStart(digits, "0");
+            } catch (e) { return "ERROR"; }
+        }
+
+        const codeEl = document.getElementById("code");
+        const expiresEl = document.getElementById("expires");
+        const barEl = document.getElementById("bar");
+        const secretEl = document.getElementById("secret");
+        const toast = document.getElementById("toast");
+
+        function showToast() {
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2000);
+        }
+
+        async function updateCode(){
+            const period = 30;
+            const now = Math.floor(Date.now()/1000);
+            const remaining = period - (now % period);
+            expiresEl.textContent = remaining;
+            barEl.style.width = ((period - remaining) / period) * 100 + "%";
+            const otp = await totp(secretEl.value.trim());
+            codeEl.textContent = otp;
+        }
+
+        setInterval(updateCode, 1000);
+        secretEl.addEventListener('input', updateCode);
+        updateCode();
+
+        document.getElementById("copyCode").addEventListener("click", () => {
+            if(codeEl.textContent !== "------" && codeEl.textContent !== "ERROR") {
+                navigator.clipboard.writeText(codeEl.textContent);
+                showToast();
+            }
+        });
+
+        lucide.createIcons();
+    </script>
 </body>
 </html>
