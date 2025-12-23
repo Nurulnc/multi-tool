@@ -1,268 +1,158 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>.TXT to Excel Converter</title>
-  <!-- SheetJS Library (XLSX) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 500px;
-    }
-
-    h1 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-    }
-
-    .upload-area {
-      border: 3px dashed #764ba2;
-      border-radius: 10px;
-      padding: 40px;
-      text-align: center;
-      transition: all 0.3s;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
-
-    .upload-area:hover {
-      background-color: #f8f5ff;
-      border-color: #5a3d8a;
-    }
-
-    .upload-area.dragover {
-      background-color: #f0e6ff;
-      border-color: #5a3d8a;
-    }
-
-    .upload-area p {
-      color: #666;
-      margin-top: 10px;
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    .btn {
-      background: #764ba2;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-      transition: 0.3s;
-      margin-top: 10px;
-    }
-
-    .btn:hover {
-      background: #5a3d8a;
-    }
-
-    .btn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    .preview {
-      margin-top: 20px;
-      max-height: 200px;
-      overflow-y: auto;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px;
-      background: #f9f9f9;
-      font-family: monospace;
-      font-size: 0.9rem;
-      display: none;
-      white-space: pre;
-    }
-
-    .delimiter-options {
-      margin: 15px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .delimiter-options label {
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 20px;
-      color: #888;
-      font-size: 0.8rem;
-    }
-
-    @media (max-width: 480px) {
-      .delimiter-options {
-        flex-direction: column;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    <h1>.TXT → Excel Converter</h1>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium .TXT to Excel Converter - NurulNC.Site</title>
     
-    <div class="upload-area" id="uploadArea">
-      <p>ফাইল এখানে টেনে আনুন অথবা ক্লিক করে আপলোড করুন</p>
-      <input type="file" id="fileInput" accept=".txt" />
-    </div>
+    <meta name="description" content="টেক্সট ফাইল থেকে এক্সেল শীটে কনভার্ট করুন সহজে। NurulINC-এর প্রিমিয়াম .TXT to .XLSX কনভার্টার টুল।">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', 'Hind Siliguri', sans-serif; background-color: #f8fafc; }
+        .premium-card { background: white; border-radius: 2.5rem; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; }
+        .upload-area { border: 2px dashed #e2e8f0; border-radius: 2rem; transition: all 0.3s; cursor: pointer; background: #fafafa; }
+        .upload-area:hover, .upload-area.dragover { border-color: #4f46e5; background: #f5f3ff; }
+        .preview-box { font-family: 'Inter', monospace; background: #fafafa; border-radius: 1.5rem; overflow-x: auto; }
+        .ad-space { background: #f1f5f9; border: 2px dashed #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
 
-    <div class="delimiter-options">
-      <label><input type="radio" name="delimiter" value="tab" checked> ট্যাব (Tab)</label>
-      <label><input type="radio" name="delimiter" value="comma"> কমা (,)</label>
-      <label><input type="radio" name="delimiter" value="semicolon"> সেমিকোলন (;)</label>
-      <label><input type="radio" name="delimiter" value="space"> স্পেস (একাধিক স্পেস সহ)</label>
-    </div>
+    <header class="bg-white border-b py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-4 flex justify-between items-center max-w-7xl">
+            <a href="../index.html" class="text-2xl font-black text-indigo-600 italic tracking-tighter uppercase">NurulINC<span class="text-slate-400">.SITE</span></a>
+            <a href="../index.html" class="text-sm font-bold text-indigo-600 uppercase italic flex items-center">
+                <i data-lucide="home" class="w-4 h-4 mr-1"></i> Home
+            </a>
+        </div>
+    </header>
 
-    <button class="btn" id="convertBtn" disabled>Convert to Excel (.xlsx)</button>
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl flex flex-col items-center">
+        
+        <div class="ad-space w-full max-w-[728px] h-[90px] mb-10">
+            <span class="text-slate-400 text-[10px] tracking-widest uppercase font-black italic">Advertisement Banner</span>
+        </div>
 
-    <div id="preview" class="preview"></div>
+        <div class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-black italic uppercase tracking-tight text-slate-900 leading-tight">
+                .TXT → <span class="text-indigo-600">Excel</span>
+            </h1>
+            <p class="text-slate-500 text-sm mt-3 font-bold tracking-widest uppercase italic">Professional Data Format Converter</p>
+        </div>
 
-  </div>
+        <div class="premium-card w-full p-8 md:p-12 shadow-sm border border-slate-100">
+            
+            <div class="upload-area p-10 text-center mb-8" id="uploadArea">
+                <div class="bg-indigo-50 w-16 h-16 rounded-2xl flex items-center justify-center text-indigo-600 mx-auto mb-4">
+                    <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+                </div>
+                <p class="text-slate-600 font-bold italic mb-2">ফাইল এখানে ড্রপ করুন অথবা ক্লিক করুন</p>
+                <p class="text-slate-400 text-xs uppercase tracking-widest font-black italic">Supports .TXT Files Only</p>
+                <input type="file" id="fileInput" accept=".txt" class="hidden" />
+            </div>
 
-  <script>
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-    const convertBtn = document.getElementById('convertBtn');
-    const preview = document.getElementById('preview');
-    let fileContent = '';
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
+                <div class="flex flex-col justify-center">
+                    <label class="block text-[10px] font-black uppercase text-slate-400 mb-4 tracking-widest italic">Select Delimiter (বিচ্ছেদ চিহ্ন)</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center text-xs font-bold text-slate-600 italic cursor-pointer">
+                            <input type="radio" name="delimiter" value="tab" checked class="mr-2 text-indigo-600"> Tab
+                        </label>
+                        <label class="flex items-center text-xs font-bold text-slate-600 italic cursor-pointer">
+                            <input type="radio" name="delimiter" value="comma" class="mr-2 text-indigo-600"> Comma (,)
+                        </label>
+                        <label class="flex items-center text-xs font-bold text-slate-600 italic cursor-pointer">
+                            <input type="radio" name="delimiter" value="semicolon" class="mr-2 text-indigo-600"> Semicolon (;)
+                        </label>
+                        <label class="flex items-center text-xs font-bold text-slate-600 italic cursor-pointer">
+                            <input type="radio" name="delimiter" value="space" class="mr-2 text-indigo-600"> Space
+                        </label>
+                    </div>
+                </div>
+                <button id="convertBtn" disabled class="bg-indigo-600 text-white font-black uppercase tracking-widest py-4 rounded-2xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-100 disabled:bg-slate-300 disabled:shadow-none flex items-center justify-center gap-2">
+                    <i data-lucide="file-check" class="w-5 h-5"></i> Convert & Download
+                </button>
+            </div>
 
-    // Click to upload
-    uploadArea.addEventListener('click', () => fileInput.click());
+            <div id="previewContainer" class="hidden space-y-3">
+                <label class="block text-[10px] font-black uppercase text-slate-400 tracking-widest italic ml-4">Data Preview</label>
+                <pre id="preview" class="preview-box p-6 text-xs text-slate-600 italic leading-relaxed h-40 overflow-y-auto"></pre>
+            </div>
+        </div>
 
-    // Drag & Drop Prevention
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-      uploadArea.addEventListener(eventName, e => {
-        e.preventDefault();
-        e.stopPropagation();
-      }, false);
-    });
+        <div class="ad-space w-full max-w-[728px] h-[90px] mt-10">
+            <span class="text-slate-400 text-[10px] tracking-widest uppercase font-black italic">Bottom Ad Banner</span>
+        </div>
+    </main>
 
-    // Drag Highlight
-    ['dragenter', 'dragover'].forEach(eventName => {
-      uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
-    });
+    <footer class="bg-slate-900 text-slate-500 py-8 text-center text-[10px] font-bold uppercase tracking-widest mt-auto">
+        © 2024 NurulNC | Smart Data Converters
+    </footer>
 
-    ['dragleave', 'drop'].forEach(eventName => {
-      uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
-    });
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const convertBtn = document.getElementById('convertBtn');
+        const preview = document.getElementById('preview');
+        const previewContainer = document.getElementById('previewContainer');
+        let fileContent = '';
 
-    // Handle Drop
-    uploadArea.addEventListener('drop', e => {
-      const files = e.dataTransfer.files;
-      handleFiles(files);
-    });
+        uploadArea.onclick = () => fileInput.click();
 
-    // Handle File Input Change
-    fileInput.addEventListener('change', () => {
-      handleFiles(fileInput.files);
-    });
+        // Drag & Drop
+        uploadArea.ondragover = (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); };
+        uploadArea.ondragleave = () => uploadArea.classList.remove('dragover');
+        uploadArea.ondrop = (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        };
 
-    function handleFiles(files) {
-      if (files.length === 0) return;
-      const file = files[0];
-      if (!file.name.toLowerCase().endsWith('.txt')) {
-        alert('দয়া করে শুধুমাত্র .txt ফাইল আপলোড করুন!');
-        return;
-      }
+        fileInput.onchange = () => handleFiles(fileInput.files);
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        fileContent = e.target.result;
-        const displayText = fileContent.length > 1000 
-          ? fileContent.slice(0, 1000) + '\n...\n(আরও আছে)' 
-          : fileContent;
-        preview.textContent = displayText;
-        preview.style.display = 'block';
-        convertBtn.disabled = false;
-        uploadArea.querySelector('p').textContent = `আপলোড হয়েছে: ${file.name}`;
-      };
-      reader.readAsText(file, 'UTF-8');
-    }
+        function handleFiles(files) {
+            if (!files.length) return;
+            const file = files[0];
+            if (!file.name.toLowerCase().endsWith('.txt')) {
+                alert('দয়া করে শুধুমাত্র .txt ফাইল আপলোড করুন!');
+                return;
+            }
 
-    // Convert Button Click
-    convertBtn.addEventListener('click', () => {
-      if (!fileContent.trim()) {
-        alert('কোনো তথ্য পাওয়া যায়নি!');
-        return;
-      }
-
-      const delimiter = document.querySelector('input[name="delimiter"]:checked').value;
-      let separator = '\t';
-
-      if (delimiter === 'comma') separator = ',';
-      else if (delimiter === 'semicolon') separator = ';';
-      else if (delimiter === 'space') separator = /\s+/;
-
-      // Parse lines
-      const lines = fileContent.trim().split('\n').filter(line => line.trim() !== '');
-      const data = lines.map(line => {
-        if (delimiter === 'space') {
-          return line.trim().split(separator).filter(cell => cell !== '');
-        } else {
-          return line.split(separator);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                fileContent = e.target.result;
+                preview.textContent = fileContent.length > 500 ? fileContent.slice(0, 500) + '...' : fileContent;
+                previewContainer.classList.remove('hidden');
+                convertBtn.disabled = false;
+                uploadArea.querySelector('p').innerHTML = `<span class="text-indigo-600">${file.name}</span> আপলোড হয়েছে`;
+            };
+            reader.readAsText(file, 'UTF-8');
         }
-      }).filter(row => row.length > 0);
 
-      if (data.length === 0) {
-        alert('ফাইলে কোনো বৈধ ডেটা পাওয়া যায়নি!');
-        return;
-      }
+        convertBtn.onclick = () => {
+            if (!fileContent.trim()) return;
 
-      // Create Excel Workbook
-      const ws = XLSX.utils.aoa_to_sheet(data);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Data");
+            const delimiter = document.querySelector('input[name="delimiter"]:checked').value;
+            let separator = delimiter === 'comma' ? ',' : (delimiter === 'semicolon' ? ';' : (delimiter === 'space' ? /\s+/ : '\t'));
 
-      // Generate filename
-      const defaultName = fileInput.files[0]?.name.replace('.txt', '') || 'converted';
-      const fileName = prompt("Excel ফাইলের নাম দিন:", defaultName) || defaultName;
+            const lines = fileContent.trim().split('\n').filter(l => l.trim() !== '');
+            const data = lines.map(line => delimiter === 'space' ? line.trim().split(separator) : line.split(separator));
 
-      // Download
-      XLSX.writeFile(wb, `${fileName}.xlsx`);
+            if (!data.length) { alert('কোনো বৈধ ডেটা পাওয়া যায়নি!'); return; }
 
-      // Reset UI
-      setTimeout(() => {
-        convertBtn.disabled = true;
-        preview.style.display = 'none';
-        uploadArea.querySelector('p').textContent = 'ফাইল এখানে টেনে আনুন অথবা ক্লিক করে আপলোড করুন';
-        fileInput.value = '';
-      }, 1000);
-    });
-  </script>
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "NurulINC_Data");
 
+            const defaultName = fileInput.files[0]?.name.replace('.txt', '') || 'converted_data';
+            XLSX.writeFile(wb, `${defaultName}.xlsx`);
+        };
+
+        lucide.createIcons();
+    </script>
 </body>
 </html>
