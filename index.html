@@ -1,249 +1,179 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NurulNC.Site - ফ্রি অনলাইন টুলস | পাসওয়ার্ড, টেম্প মেইল, গেম</title>
-  <meta name="description" content="NurulNC.Site - ৫০+ ফ্রি টুলস। পাসওয়ার্ড জেনারেটর, টেম্প মেইল, URL শর্টনার, লাইভ টিভি, গেমসহ সব একদম ফ্রি!">
-  <meta name="keywords" content="ফ্রি টুলস, পাসওয়ার্ড জেনারেটর, টেম্প মেইল, URL শর্টনার, গেম, NurulNC">
-  <meta name="theme-color" content="#8b5cf6">
-  <link rel="canonical" href="https://nurulnc.site/">
-  <link rel="icon" href="https://nurulnc.site/favicon.ico" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --primary: #8b5cf6;
-      --card-bg: #ffffff;
-      --text: #1e293b;
-      --bg: #f8f5ff;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Hind Siliguri', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding-bottom: 80px;
-    }
-    header {
-      background: linear-gradient(135deg, #a78bfa, #8b5cf6);
-      color: white;
-      text-align: center;
-      padding: 110px 20px 80px;
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
-    }
-    .logo { font-size: clamp(2.6rem, 9vw, 4.8rem); font-weight: 700; margin-bottom: 10px; }
-    .tagline { font-size: clamp(1.1rem, 4vw, 1.45rem); opacity: 0.95; }
-    .category-title {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin: 65px 20px 40px;
-    }
-    .category-title::after {
-      content: '';
-      display: block;
-      width: 90px;
-      height: 4.5px;
-      background: var(--primary);
-      margin: 14px auto;
-      border-radius: 3px;
-    }
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      padding: 0 20px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .tool-card {
-      background: var(--card-bg);
-      border-radius: 24px;
-      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.18);
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.35s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 120px;
-      font-weight: 600;
-      font-size: 1.12rem;
-      text-align: center;
-      padding: 16px;
-    }
-    .tool-card:hover {
-      transform: translateY(-12px);
-      box-shadow: 0 22px 50px rgba(139, 92, 246, 0.28);
-    }
-    footer {
-      margin-top: 90px;
-      background: #1e1b4b;
-      color: white;
-      text-align: center;
-      padding: 70px 20px 40px;
-    }
-    footer h2 { font-size: 1.9rem; margin-bottom: 12px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    /* Adsterra অ্যাডের জন্য স্টাইল */
-    .adsterra-ad {
-      text-align: center;
-      margin: 45px auto;
-      padding: 0 15px;
-    }
-    .adsterra-ad .ad-label {
-      font-size: 0.75rem;
-      color: #94a3b8;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-    @media (min-width: 480px) {
-      .tool-grid { grid-template-columns: repeat(3, 1fr); gap: 22px; }
-      .tool-card { height: 130px; font-size: 1.15rem; }
-    }
-    @media (min-width: 768px) {
-      .tool-grid { grid-template-columns: repeat(4, 1fr); gap: 28px; padding: 0 35px; }
-      .tool-card { height: 140px; }
-    }
-    @media (min-width: 1024px) {
-      .tool-grid { grid-template-columns: repeat(5, 1fr); gap: 32px; }
-      .tool-card { height: 150px; font-size: 1.2rem; }
-    }
-  </style>
+    <title>NurulINC.Site | ফ্রি প্রিমিয়াম অনলাইন টুলস - 2FA, CC, Temp Mail</title>
+    <meta name="title" content="NurulINC.Site | ফ্রি প্রিমিয়াম অনলাইন টুলস">
+    <meta name="description" content="NurulINC.Site-এ এক ক্লিকে ব্যবহার করুন ৫০+ ফ্রি প্রিমিয়াম টুলস। 2FA Generator, USA Name, CC Generator, Temp Mail এবং আরও অনেক কিছু।">
+    <meta name="keywords" content="2FA generator, cc generator, usa name generator, temp mail, password generator, duplicate checker, NurulINC">
+    <meta name="author" content="NurulINC">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.nurulinc.site/">
+    <meta property="og:title" content="NurulINC.Site - সব প্রিমিয়াম টুলস এক জায়গায়">
+    <meta property="og:description" content="নিরাপদ এবং দ্রুত ফ্রি অনলাইন টুলস ব্যবহার করুন।">
+    <link rel="canonical" href="https://www.nurulinc.site/" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', 'Hind Siliguri', sans-serif; scroll-behavior: smooth; }
+        .tool-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.06); }
+        .tool-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.1); border-color: #4f46e5; }
+        .hot-post-anim { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+    </style>
 </head>
-<body>
+<body class="bg-[#f8fafc] text-slate-900">
 
-  <header>
-    <h1 class="logo">NurulNC.Site</h1>
-    <p class="tagline">৫০+ ফ্রি প্রিমিয়াম টুলস — এক ক্লিকে সব সমাধান</p>
-  </header>
+    <header class="bg-white/80 backdrop-blur-md border-b sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black text-indigo-600 tracking-tighter italic uppercase">
+                NurulINC<span class="text-slate-400">.Site</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-6 text-sm font-bold uppercase tracking-wide">
+                <a href="index.html" class="text-indigo-600">Home</a>
+                <a href="#tools" class="hover:text-indigo-600 transition">All Tools</a>
+                <a href="https://t.me/mailmarketplace_bot" target="_blank" class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 shadow-md transition">Buy Mail/VPN</a>
+            </div>
+            <button class="md:hidden text-slate-600"><i data-lucide="menu"></i></button>
+        </nav>
+    </header>
 
-  <!-- অ্যাড ১: হেডারের নিচে (প্রথম স্ক্রিন) -->
-  <div class="adsterra-ad">
-    <div class="ad-label">Advertisement</div>
-    <script type="text/javascript">
-    atOptions = {
-        'key' : '9fcd38558b92fb41c6c0f707ef3f23a7',
-        'format' : 'iframe',
-        'height' : 250,
-        'width' : 300,
-        'params' : {}
-    };
+    <section class="container mx-auto px-4 mt-8">
+        <div class="bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 rounded-2xl p-[2px] shadow-xl">
+            <a href="https://t.me/mailmarketplace_bot" target="_blank" class="bg-white flex flex-col md:flex-row items-center justify-between px-6 py-5 rounded-[15px] hover:bg-orange-50 transition-all group">
+                <div class="flex items-center space-x-4 mb-4 md:mb-0 text-center md:text-left">
+                    <div class="bg-orange-100 p-3 rounded-full text-orange-600 hot-post-anim">
+                        <i data-lucide="flame" class="w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500 block mb-1">Hot Post / Offer</span>
+                        <h2 class="text-slate-900 font-bold text-lg md:text-2xl italic">
+                            Edu mail, Hotmail, VPN কিনুন এখান থেকে।
+                        </h2>
+                    </div>
+                </div>
+                <div class="flex items-center bg-indigo-600 text-white px-8 py-3 rounded-xl font-black text-sm uppercase tracking-widest group-hover:scale-105 transition-transform shadow-lg">
+                    <i data-lucide="shopping-cart" class="w-4 h-4 mr-2"></i>
+                    Click to Buy
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-4 pt-16 pb-8 text-center">
+        <h1 class="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tight uppercase italic">
+            Premium <span class="text-indigo-600">Multi-Tools</span>
+        </h1>
+        <p class="text-slate-500 text-lg md:text-xl italic">এক ক্লিকে আপনার সব সমাধান। দ্রুত, নিরাপদ এবং ফ্রি।</p>
+    </section>
+
+    <main id="tools" class="container mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            
+            <a href="tools/password-generator.html" class="tool-card bg-white p-8 rounded-3xl flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="lock" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 italic">Password Generator</h3>
+                <p class="text-slate-400 text-sm italic">Generate unhackable random passwords.</p>
+            </a>
+
+            <a href="tools/usa-name-generator.html" class="tool-card bg-white p-8 rounded-3xl flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="user-check" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 italic">USA Name Generator</h3>
+                <p class="text-slate-400 text-sm italic">Fake USA identity for developer testing.</p>
+            </a>
+
+            <a href="tools/temp-mail.html" class="tool-card bg-white p-8 rounded-3xl flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="mail" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 italic">Temp Mail</h3>
+                <p class="text-slate-400 text-sm italic">Secure disposable email service.</p>
+            </a>
+
+            <a href="tools/cc.html" class="tool-card bg-white p-8 rounded-3xl flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="credit-card" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 italic">CC Generator</h3>
+                <p class="text-slate-400 text-sm italic">Virtual card generator for dev work.</p>
+            </a>
+
+            <a href="tools/2fa-generator.html" class="tool-card bg-white p-8 rounded-3xl flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="shield-check" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 italic">2FA Generator</h3>
+                <p class="text-slate-400 text-sm italic">Generate 2FA authentication codes.</p>
+            </a>
+
+            <a href="tools/duplicate-checker.html" class="tool-card bg-white p-8 rounded-3xl flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="copy-x" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 italic">Duplicate Checker</h3>
+                <p class="text-slate-400 text-sm italic">Remove duplicate lines from lists.</p>
+            </a>
+
+            <a href="tools/txt-to-excel.html" class="tool-card bg-white p-8 rounded-3xl flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="file-spreadsheet" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 italic">TXT to Excel</h3>
+                <p class="text-slate-400 text-sm italic">Convert text data to excel format.</p>
+            </a>
+
+            <a href="tools/play-button.html" class="tool-card bg-white p-8 rounded-3xl flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-pink-50 text-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="play" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 italic">Add Play Button</h3>
+                <p class="text-slate-400 text-sm italic">Overlay play button on thumbnails.</p>
+            </a>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 pt-20 pb-10">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-2">
+                <h4 class="text-white text-3xl font-black italic mb-6 uppercase tracking-tighter">NurulINC<span class="text-indigo-500">.Site</span></h4>
+                <p class="text-sm leading-8 max-w-sm italic">আমরা ইউজারদের জন্য সেরা অনলাইন ইউটিলিটি টুলস প্রদান করি। আমাদের টুলস নিরাপদ এবং ব্যবহারে খুবই সহজ।</p>
+            </div>
+            <div>
+                <h5 class="text-white font-black uppercase tracking-widest text-xs mb-6">Quick Links</h5>
+                <ul class="space-y-4 text-sm font-bold italic">
+                    <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-white transition">About Us</a></li>
+                    <li><a href="#" class="hover:text-white transition">Contact Support</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-white font-black uppercase tracking-widest text-xs mb-6">Connect</h5>
+                <div class="flex space-x-4">
+                    <a href="#" class="bg-slate-800 p-3 rounded-full hover:bg-indigo-600 transition"><i data-lucide="facebook" class="w-5 h-5 text-white"></i></a>
+                    <a href="https://t.me/mailmarketplace_bot" class="bg-slate-800 p-3 rounded-full hover:bg-indigo-600 transition"><i data-lucide="send" class="w-5 h-5 text-white"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-20 pt-8 border-t border-slate-800 text-center text-[10px] uppercase tracking-[0.3em] font-black">
+            &copy; 2024 NurulINC | Built for the Digital World
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
     </script>
-    <script type="text/javascript" src="//lightingshovestature.com/9fcd38558b92fb41c6c0f707ef3f23a7/invoke.js"></script>
-  </div>
-
-  <main>
-    <h2 class="category-title">জেনারেটর টুলস</h2>
-    <div class="tool-grid">
-      <a href="tools/password-generator.html" class="tool-card">Password Generator</a>
-      <a href="tools/usa-name-generator.html" class="tool-card">Usa Name Generator</a>
-      <a href="tools/temp-mail.html" class="tool-card">Temp Mail</a>
-      <a href="tools/gmail-dot-trick.html" class="tool-card">Gmail Dot Trick Generator</a>
-      <a href="tools/qr-code-generator.html" class="tool-card">QR Code Generator</a>
-      <a href="tools/fake-identity-generator.html" class="tool-card">Fake Identity Generator</a>
-      <a href="tools/cc.html" class="tool-card">CC Generator</a>
-       <a href="tools/cc-checker.html" class="tool-card">CC checker</a>
-      <a href="tools/2fa-generator.html" class="tool-card">2FA Code Generator</a>
-      <a href="tools/Favicon.html" class="tool-card">Favicon Generator</a>
-    </div>
-
-    <!-- অ্যাড ২: প্রথম ক্যাটাগরির পরে -->
-    <div class="adsterra-ad">
-      <div class="ad-label">Advertisement</div>
-      <script type="text/javascript">
-      atOptions = {
-          'key' : '9fcd38558b92fb41c6c0f707ef3f23a7',
-          'format' : 'iframe',
-          'height' : 250,
-          'width' : 300,
-          'params' : {}
-      };
-      </script>
-      <script type="text/javascript" src="//lightingshovestature.com/9fcd38558b92fb41c6c0f707ef3f23a7/invoke.js"></script>
-    </div>
-
-    <h2 class="category-title">ইউটিলিটি টুলস</h2>
-    <div class="tool-grid">
-      <a href="tools/duplicate-checker.html" class="tool-card">Duplicate Checker</a>
-      <a href="tools/outlook-cookie-reader.html" class="tool-card">
-  Outlook Cookie Inbox + OTP Reader
-      </a>
-      <a href="tools/what-is-my-ip.html" class="tool-card">What is My IP?</a>
-      <a href="tools/url-shortener.html" class="tool-card">URL Shortener</a>
-      <a href="tools/txt-to-excel.html" class="tool-card">TXT to Excel</a>
-      <a href="tools/play-button.html" class="tool-card">Add Play Icon</a>
-      <a href="tools/pdf-editor.html" class="tool-card">PDF Editor</a>
-      <a href="tools/bangla-voice-typing.html" class="tool-card">Bangla Voice typing</a>
-      <a href="tools/text-to-handwriting.html" class="tool-card">Text to Handwriting</a>
-      <a href="tools/fake-screenshot.html" class="tool-card">Fake Screenshot</a>
-      <a href="tools/signature-maker.html" class="tool-card">Signature maker</a>
-    </div>
-
-    <!-- অ্যাড ৩: দ্বিতীয় ক্যাটাগরির পরে -->
-    <div class="adsterra-ad">
-      <div class="ad-label">Advertisement</div>
-      <script type="text/javascript">
-      atOptions = {
-          'key' : '9fcd38558b92fb41c6c0f707ef3f23a7',
-          'format' : 'iframe',
-          'height' : 250,
-          'width' : 300,
-          'params' : {}
-      };
-      </script>
-      <script type="text/javascript" src="//lightingshovestature.com/9fcd38558b92fb41c6c0f707ef3f23a7/invoke.js"></script>
-    </div>
-
-    <h2 class="category-title">গেম ও বিনোদন</h2>
-    <div class="tool-grid">
-      <a href="tools/catch-the-star.html" class="tool-card">Catch The Star</a>
-      <a href="tools/Racing-car.html" class="tool-card">Racing Car Game</a>
-      <a href="tools/Shooting-game.html" class="tool-card">Shooting Game</a>
-      <a href="tools/Live tv.html" class="tool-card">Live TV Channels</a>
-    </div>
-
-    <!-- অ্যাড ৪: গেম সেকশনের পরে -->
-    <div class="adsterra-ad">
-      <div class="ad-label">Advertisement</div>
-      <script type="text/javascript">
-      atOptions = {
-          'key' : '9fcd38558b92fb41c6c0f707ef3f23a7',
-          'format' : 'iframe',
-          'height' : 250,
-          'width' : 300,
-          'params' : {}
-      };
-      </script>
-      <script type="text/javascript" src="//lightingshovestature.com/9fcd38558b92fb41c6c0f707ef3f23a7/invoke.js"></script>
-    </div>
-
-  </main>
-
-  <!-- অ্যাড ৫: ফুটারের ঠিক আগে (সবচেয়ে বেশি দেখা হয়) -->
-  <div class="adsterra-ad" style="margin: 60px auto;">
-    <div class="ad-label">Advertisement</div>
-    <script type="text/javascript">
-    atOptions = {
-        'key' : '9fcd38558b92fb41c6c0f707ef3f23a7',
-        'format' : 'iframe',
-        'height' : 250,
-        'width' : 300,
-        'params' : {}
-    };
-    </script>
-    <script type="text/javascript" src="//lightingshovestature.com/9fcd38558b92fb41c6c0f707ef3f23a7/invoke.js"></script>
-  </div>
-
-  <footer>
-    <h2>NurulNC.Site</h2>
-    <p>সব টুলস ১০০% ফ্রি • কোনো রেজিস্ট্রেশন লাগবে না</p>
-    <p style="margin-top: 45px; opacity: 0.7;">© 2025 NurulNC.Site • Made with Love in Bangladesh</p>
-  </footer>
-
 </body>
 </html>
