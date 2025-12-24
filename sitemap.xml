@@ -1,47 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
-
-<url>
-  <loc>https://www.nurulnc.site/</loc>
-  <lastmod>2025-11-04T12:38:17+00:00</lastmod>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://www.nurulnc.site/tools/duplicate-checker.html</loc>
-  <lastmod>2025-11-04T12:38:17+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.nurulnc.site/tools/random-name.html</loc>
-  <lastmod>2025-11-04T12:38:17+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.nurulnc.site/tools/password-generator.html</loc>
-  <lastmod>2025-11-04T12:38:17+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.nurulnc.site/tools/2fa-generator.html</loc>
-  <lastmod>2025-11-04T12:38:17+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.nurulnc.site/tools/cc.html</loc>
-  <lastmod>2025-11-04T12:38:17+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.nurulnc.site/tools/Favicon.html</loc>
-  <lastmod>2025-11-04T12:38:17+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.nurulinc.site/</loc>
+    <lastmod>2024-12-24</lastmod>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://www.nurulinc.site/tools/2fa-generator.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.nurulinc.site/tools/usa-name-generator.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.nurulinc.site/tools/cc.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.nurulinc.site/tools/password-generator.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.nurulinc.site/tools/temp-mail.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.nurulinc.site/tools/duplicate-checker.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.nurulinc.site/tools/txt-to-excel.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.nurulinc.site/tools/play-button.html</loc>
+    <priority>0.80</priority>
+  </url>
 </urlset>
