@@ -36,23 +36,8 @@
         </div>
     </header>
 
-    <main class="flex-grow container mx-auto px-4 py-6 max-w-5xl flex flex-col items-center">
+    <main class="flex-grow container mx-auto px-4 py-12 max-w-5xl flex flex-col items-center">
         
-        <div class="flex justify-center w-full mb-6 min-h-[50px]">
-            <div class="overflow-hidden leading-[0]">
-                <script type="text/javascript">
-                    atOptions = {
-                        'key' : '08bb9d9fe36d7c284b411a59b359d241',
-                        'format' : 'iframe',
-                        'height' : 50,
-                        'width' : 320,
-                        'params' : {}
-                    };
-                </script>
-                <script type="text/javascript" src="https://lightingshovestature.com/08bb9d9fe36d7c284b411a59b359d241/invoke.js"></script>
-            </div>
-        </div>
-
         <div class="premium-card w-full max-w-2xl p-8 md:p-12 shadow-sm border border-slate-100 mb-8">
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-black italic uppercase tracking-tight text-slate-900 leading-none">TempMail <span class="text-indigo-600">Pro</span></h1>
@@ -97,20 +82,6 @@
             </div>
         </div>
 
-        <div class="flex justify-center w-full mt-4 min-h-[250px]">
-            <div class="overflow-hidden leading-[0]">
-                <script type="text/javascript">
-                    atOptions = {
-                        'key' : '9fcd38558b92fb41c6c0f707ef3f23a7',
-                        'format' : 'iframe',
-                        'height' : 250,
-                        'width' : 300,
-                        'params' : {}
-                    };
-                </script>
-                <script type="text/javascript" src="https://lightingshovestature.com/9fcd38558b92fb41c6c0f707ef3f23a7/invoke.js"></script>
-            </div>
-        </div>
     </main>
 
     <div id="email-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
@@ -153,9 +124,11 @@
 
         async function getNewEmail(del = false) {
             if(del && currentAccount.id) {
-                await fetch(`${API_BASE}/accounts/${currentAccount.id}`, {
-                    method: 'DELETE', headers: { Authorization: `Bearer ${currentAccount.token}` }
-                });
+                try {
+                    await fetch(`${API_BASE}/accounts/${currentAccount.id}`, {
+                        method: 'DELETE', headers: { Authorization: `Bearer ${currentAccount.token}` }
+                    });
+                } catch(e) { console.log(e); }
             }
             const domains = await fetchAPI(`${API_BASE}/domains`);
             const domain = domains['hydra:member'][0].domain;
@@ -169,17 +142,19 @@
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ address, password })
             });
-            currentAccount = { id: (await fetchAPI(`${API_BASE}/me`, {headers:{Authorization:`Bearer ${tokenData.token}`}})).id, address, token: tokenData.token };
+            currentAccount = { address, token: tokenData.token };
             DOM.emailAddr.textContent = address;
             startInboxAutoRefresh();
         }
 
         async function checkInbox() {
             if(!currentAccount.token) return;
-            const data = await fetchAPI(`${API_BASE}/messages`, {
-                headers: { Authorization: `Bearer ${currentAccount.token}` }
-            });
-            renderInbox(data['hydra:member'] || []);
+            try {
+                const data = await fetchAPI(`${API_BASE}/messages`, {
+                    headers: { Authorization: `Bearer ${currentAccount.token}` }
+                });
+                renderInbox(data['hydra:member'] || []);
+            } catch(e) { console.log(e); }
         }
 
         function renderInbox(msgs) {
